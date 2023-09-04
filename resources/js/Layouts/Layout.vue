@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <header class="drop-shadow-xl sticky inset-0 z-20 bg-white">
+    <header class="drop-shadow-xl sticky inset-0 z-20 bg-white" v-memo="[user]">
       <div class="flex max-w-2xl md:max-w-[75rem] items-center justify-between px-3 h-16 mx-auto ">
         <Link href="/" class="block">
         <h1 class=" dark:text-indigo-500 text-3xl font-extrabold text-indigo-800">Lalable</h1>
@@ -19,7 +19,7 @@
         </div>
       </div>
     </header>
-    <div class="max-w-2xl md:max-w-[75rem] px-3 mx-auto">
+    <div class="max-w-2xl md:max-w-[75rem] p-3 mx-auto">
       <slot />
     </div>
 
