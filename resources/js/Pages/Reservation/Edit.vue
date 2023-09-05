@@ -80,9 +80,10 @@
     checkin_time: String,
     checkout_time: String,
   })
+  const { available_room, ...editProps } = props
 
   const reservationForm = useForm({
-    ...props
+    ...editProps
   })
 
   const toast = useToast();
