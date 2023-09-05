@@ -7,8 +7,8 @@
         <div class="gap-x-3 flex mb-2">
           <div class="w-52 flex flex-col">
             <label for="room">Room Number</label>
-            <MultiSelect v-model="reservationForm.room_id" :options="availableRooms" filter optionLabel="room"
-              placeholder="Select rooms" :maxSelectedLabels="5" class="md:w-20rem w-full" />
+            <MultiSelect v-model="reservationForm.room_id" :options="availableRooms" filter placeholder="Select rooms"
+              :maxSelectedLabels="5" class="md:w-20rem w-full" />
           </div>
           <div class="flex flex-col">
             <label for="totalPerson">Total Number Of Person</label>
@@ -70,11 +70,7 @@
   import { ref } from 'vue';
 
   const availableRooms = ref([
-    { room: '234' },
-    { room: '126' },
-    { room: '934' },
-    { room: '234' },
-    { room: '092' }
+    "234", "2323", "342", "924", "239", "294", "629"
   ])
 
   const reservationForm = useForm({
