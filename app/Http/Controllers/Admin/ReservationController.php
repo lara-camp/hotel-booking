@@ -28,7 +28,7 @@ class ReservationController extends Controller
     public function create()
     {
         return Inertia::render('Reservation/Create', [
-            'rooms' => Room::all()->map(fn($room) => [
+            'rooms' => Room::where('available', true)->map(fn($room) => [
             'id' => $room->id,
             'room_number' => $room->room_number,
         ])]);
@@ -76,7 +76,6 @@ class ReservationController extends Controller
             }
 
             DB::commit();
-            dd('Save successful');
 
         } catch (\Exception $e) {
             DB::rollback();
@@ -89,7 +88,16 @@ class ReservationController extends Controller
      */
     public function show(string $id)
     {
-        return Inertia::render('Reservation/Show');
+        $data = [
+            'reservation' => Reservation::find($id)->get(),
+            'reservation_details' => ReservationDetail::where('reservation_id', $id)->get(),
+        ];
+
+        dd($data);
+        return Inertia::render('Reservation/Show', [
+            'reservation' => Reservation::find($id),
+            'reservation_details' => ReservationDetail::find($id),
+        ]);
     }
 
     /**
