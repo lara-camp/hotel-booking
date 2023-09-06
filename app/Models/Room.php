@@ -9,6 +9,8 @@ class Room extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function reservationDetails() {
         return $this->hasMany(ReservationDetail::class);
     }
