@@ -16,7 +16,7 @@ class RoomController extends Controller
      */
     public function __construct()
     {
-        $this->authorizeResource(Room::class, 'rooms');
+        $this->authorizeResource(Room::class, 'room');
     }
 
     /**
@@ -68,34 +68,36 @@ class RoomController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Room $room)
     {
         return Inertia::render('Room/Show', [
-            'room' => Room::find($id)
+            'room' => $room->get()
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Room $room)
     {
         return Inertia::render('Room/Edit', [
-            'room' => Room::find($id)
+            'room' => $room->get()
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Room $room)
     {
         $validated = $request->validate([
-            'room_number' => 'required|string|unique:rooms,room_number'.$id,
+            'room_number' => 'required|string|unique:rooms,room_number'.$room->id,
             'room_type_id' => 'required|exists:room_types,id',
             'price' => 'required|integer',
             'available' => 'required|boolean',
         ]);
+
+        $room->update($validated);
 
         return redirect()->route('admin.rooms.index');
     }
@@ -103,9 +105,8 @@ class RoomController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Room $room)
     {
-        $room = Room::find($id);
         $room->delete();
 
         return redirect()->route('admin.rooms.index');
