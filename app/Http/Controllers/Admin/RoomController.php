@@ -27,6 +27,7 @@ class RoomController extends Controller
         return Inertia::render('Room/Index', [
             'rooms' => Room::paginate(5)->through(fn($room) => [
                 'id' => $room->id,
+                'room_number' => $room->room_number,
                 'room_type' => $room->roomType->title,
                 'price' => $room->price,
                 'can' => [
