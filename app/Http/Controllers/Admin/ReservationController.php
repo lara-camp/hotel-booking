@@ -3,7 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Reservation;
+use App\Models\ReservationDetail;
+use App\Models\Room;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class ReservationController extends Controller
@@ -13,6 +18,7 @@ class ReservationController extends Controller
      */
     public function index()
     {
+
         return Inertia::render('Reservation/Index');
     }
 
@@ -21,7 +27,11 @@ class ReservationController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Reservation/Create');
+        return Inertia::render('Reservation/Create', [
+            'rooms' => Room::all()->map(fn($room) => [
+            'id' => $room->id,
+            'room_number' => $room->room_number,
+        ])]);
     }
 
     /**
@@ -29,7 +39,49 @@ class ReservationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        DB::beginTransaction();
+
+        try {
+
+            $validated = $request->validate([
+                'room_id.*' => 'required|exists:rooms,id',
+                'total_person' => 'required|integer|min:1',
+                'total_price' => 'required|integer',
+                'from_date' => 'required|date',
+                'to_date' => 'required|date',
+                'checkin_time' => 'date',
+                'checkout_time' => 'date',
+            ]);
+
+            $reservation = new Reservation();
+            $reservation->user_id = Auth::user()->id;
+            $reservation->total_person = $request->total_person;
+            $reservation->total_price = $request->total_price;
+            $reservation->from_date = date('Y-m-d', strtotime($request->from_date));
+            $reservation->to_date = date('Y-m-d', strtotime($request->to_date));
+
+//            if ($request->checkin_time && $request->checkout_time) {
+//                $reservation->checkin_time = $request->checkin_time;
+//                $reservation->checkout_time = $request->checkout_time;
+//            }
+
+            $reservation->save();
+
+            foreach($request->room_id as $room) {
+                ReservationDetail::create([
+                    'room_id' => $room,
+                    'reservation_id' => $reservation->id,
+                ]);
+            }
+
+            DB::commit();
+            dd('Save successful');
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            dd($e->getMessage());
+        }
     }
 
     /**
@@ -61,6 +113,6 @@ class ReservationController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+
     }
 }
