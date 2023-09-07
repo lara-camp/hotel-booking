@@ -20,6 +20,8 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'role_id' => 1,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         DB::table('users')->insert([
@@ -28,6 +30,8 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'role_id' => 2,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 }

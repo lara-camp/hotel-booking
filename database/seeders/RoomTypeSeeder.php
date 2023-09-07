@@ -14,19 +14,29 @@ class RoomTypeSeeder extends Seeder
     public function run(): void
     {
         DB::table('room_types')->insert([
-            'title' => 'Standard Single'
+            'title' => 'Standard Single',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
         DB::table('room_types')->insert([
-            'title' => 'Standard Double'
+            'title' => 'Standard Double',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
         DB::table('room_types')->insert([
-            'title' => 'Deluxe Single'
+            'title' => 'Deluxe Single',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
         DB::table('room_types')->insert([
-            'title' => 'Deluxe Double'
+            'title' => 'Deluxe Double',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
         DB::table('room_types')->insert([
-            'title' => 'Superior Double'
+            'title' => 'Superior Double',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 }
