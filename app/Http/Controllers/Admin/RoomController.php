@@ -47,10 +47,7 @@ class RoomController extends Controller
     public function create()
     {
         return Inertia::render('Room/Create', [
-            'room_types' => RoomType::all()->map(fn($room_type) => [
-                'id' => $room_type->id,
-                'title' => $room_type->title,
-            ])
+            'room_types' => RoomType::all(['id', 'title'])
         ]);
     }
 
@@ -59,16 +56,17 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
+
         $validated = $request->validate([
-            'room_number' => 'required|string|unique:rooms,room_number',
+            'room_number' => 'required|integer|unique:rooms,room_number',
             'room_type_id' => 'required|exists:room_types,id',
+            'bed_type' => 'required|string',
+            'number_of_bed' => 'required|integer',
             'price' => 'required|integer',
             'available' => 'required|boolean',
         ]);
 
         Room::create($validated);
-
-        return redirect()->route('admin.room.index');
     }
 
     /**
