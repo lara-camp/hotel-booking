@@ -38,10 +38,8 @@ class ReservationController extends Controller
     public function create()
     {
         return Inertia::render('Reservation/Create', [
-            'rooms' => Room::where('available', true)->map(fn($room) => [
-            'id' => $room->id,
-            'room_number' => $room->room_number,
-        ])]);
+            'rooms' => Room::where('available', true)->get(['id', 'room_number'])
+        ]);
     }
 
     /**
@@ -50,19 +48,20 @@ class ReservationController extends Controller
     public function store(Request $request)
     {
 
+        $validated = $request->validate([
+            'room_id.*' => 'required|exists:rooms,id',
+            'total_person' => 'required|integer|min:1',
+            'total_price' => 'required|integer',
+            'from_date' => 'required|date',
+            'to_date' => 'required|date',
+            'checkin_time' => 'date',
+            'checkout_time' => 'date',
+        ]);
+
+
         DB::beginTransaction();
 
         try {
-
-            $validated = $request->validate([
-                'room_id.*' => 'required|exists:rooms,id',
-                'total_person' => 'required|integer|min:1',
-                'total_price' => 'required|integer',
-                'from_date' => 'required|date',
-                'to_date' => 'required|date',
-                'checkin_time' => 'date',
-                'checkout_time' => 'date',
-            ]);
 
             $reservation = new Reservation();
             $reservation->user_id = Auth::user()->id;
