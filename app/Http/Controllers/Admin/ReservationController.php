@@ -19,7 +19,17 @@ class ReservationController extends Controller
     public function index()
     {
 
-        return Inertia::render('Reservation/Index');
+        return Inertia::render('Reservation/Index', [
+            'reservations' => Reservation::with('user', 'reservationDetails')
+                                         ->paginate(10)
+                                         ->through(fn($reservation) => [
+                                             'id' => $reservation->id,
+                                             'total_person' => $reservation->total_person,
+                                             'total_price' => $reservation->total_price,
+                                             'from_date' => $reservation->from_date,
+                                             'to_date' => $reservation->to_date,
+                                         ])
+        ]);
     }
 
     /**
@@ -88,12 +98,7 @@ class ReservationController extends Controller
      */
     public function show(string $id)
     {
-        $data = [
-            'reservation' => Reservation::find($id)->get(),
-            'reservation_details' => ReservationDetail::where('reservation_id', $id)->get(),
-        ];
 
-        dd($data);
         return Inertia::render('Reservation/Show', [
             'reservation' => Reservation::find($id),
             'reservation_details' => ReservationDetail::find($id),

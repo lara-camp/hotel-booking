@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Room;
+use App\Models\RoomType;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +26,7 @@ class RoomController extends Controller
     public function index()
     {
         return Inertia::render('Room/Index', [
-            'rooms' => Room::paginate(5)->through(fn($room) => [
+            'rooms' => Room::with('roomTypes', 'reservationDetails')->paginate(5)->through(fn($room) => [
                 'id' => $room->id,
                 'room_number' => $room->room_number,
                 'room_type' => $room->roomType->title,
@@ -45,7 +46,12 @@ class RoomController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Room/Create');
+        return Inertia::render('Room/Create', [
+            'room_types' => RoomType::all()->map(fn($room_type) => [
+                'id' => $room_type->id,
+                'title' => $room_type->title,
+            ])
+        ]);
     }
 
     /**
