@@ -22,10 +22,10 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             RoleSeeder::class,
+            UserSeeder::class,
+            RoomTypeSeeder::class,
             RoomSeeder::class,
         ]);
-
-        Room::factory(10)->create();
 
     }
 }

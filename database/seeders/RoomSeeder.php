@@ -13,20 +13,49 @@ class RoomSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('room_types')->insert([
-            'title' => 'Standard Single'
+        DB::table('rooms')->insert([
+            'room_number' => '121',
+            'room_type_id' => 1,
+            'bed_type' => 'Single',
+            'number_of_bed' => 1,
+            'price' => 40000,
+            'available' => true,
         ]);
-        DB::table('room_types')->insert([
-            'title' => 'Standard Double'
+
+        DB::table('rooms')->insert([
+            'room_number' => '122',
+            'room_type_id' => 2,
+            'bed_type' => 'Double',
+            'number_of_bed' => 1,
+            'price' => 60000,
+            'available' => true,
         ]);
-        DB::table('room_types')->insert([
-            'title' => 'Deluxe Single'
+
+        DB::table('rooms')->insert([
+            'room_number' => '123',
+            'room_type_id' => 3,
+            'bed_type' => 'Single',
+            'number_of_bed' => 1,
+            'price' => 800000,
+            'available' => true,
         ]);
-        DB::table('room_types')->insert([
-            'title' => 'Deluxe Double'
+
+        DB::table('rooms')->insert([
+            'room_number' => '124',
+            'room_type_id' => 4,
+            'bed_type' => 'Double',
+            'number_of_bed' => 1,
+            'price' => 100000,
+            'available' => true,
         ]);
-        DB::table('room_types')->insert([
-            'title' => 'Superior Double'
+
+        DB::table('rooms')->insert([
+            'room_number' => '125',
+            'room_type_id' => 5,
+            'bed_type' => 'Double',
+            'number_of_bed' => 1,
+            'price' => 150000,
+            'available' => true,
         ]);
     }
 }
