@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="text-2xl my-2">Creat A New Room</h1>
+    <h1 class="my-2 text-2xl">Create A New Room</h1>
     <div class="flex flex-col mb-3">
       <label for="roomnumber" class="my-2">room number</label>
       <InputNumber
@@ -26,7 +26,7 @@
     </div>
     <div class="flex flex-col">
       <label for="integeronly" class="my-2">price</label>
-      <InputNumber v-model="roomForm.price" inputId="integeronly" />
+      <InputNumber v-model="roomForm.price" inputId="integeronly" mode="currency" currency="MMK" />
       <InlineMessage v-if="errors.price" severity="error" class="mt-2">{{
         errors.price
       }}</InlineMessage>
@@ -38,25 +38,17 @@
         errors.bed_type
       }}</InlineMessage>
     </div>
-    <div class="flex flex-wrap gap-3 my-2">
+    <div class="flex flex-col flex-wrap gap-3 my-2">
       <label for="">status</label>
-      <div class="flex align-items-center">
-        <RadioButton
-          v-model="roomForm.status"
-          inputId="available"
-          name="available"
-          value="true"
-        />
+      <div class="flex gap-3">
+        <div class="align-items-center flex">
+          <RadioButton v-model="roomForm.status" inputId="available" name="available" :value="true" />
         <label for="availables" class="ml-2">available</label>
       </div>
-      <div class="flex align-items-center">
-        <RadioButton
-          v-model="roomForm.status"
-          inputId="taken"
-          name="taken"
-          value="false"
-        />
+        <div class="align-items-center flex">
+          <RadioButton v-model="roomForm.status" inputId="taken" name="taken" :value="false" />
         <label for="taken" class="ml-2">taken</label>
+      </div>
       </div>
       <InlineMessage v-if="errors.status" severity="error" class="mt-2">{{
         errors.status
@@ -81,7 +73,7 @@ const props = defineProps({
   errors: Object,
 });
 
-const roomForm = useForm([
+  const roomForm = useForm(
   {
     number: 0,
     price: 0,
@@ -89,7 +81,7 @@ const roomForm = useForm([
     bed_type: "",
     num_of_bed: 0,
   },
-]);
+  );
 
 const toast = useToast();
 
