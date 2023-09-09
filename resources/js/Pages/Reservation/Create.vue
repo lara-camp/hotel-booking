@@ -98,7 +98,7 @@
 
   const toast = useToast();
   function submitForm() {
-    reservationForm.post("/reservation", {
+    reservationForm.post(route("reservation.store"), {
       onSuccess: () => toast.add({ severity: 'success', summary: 'Success', detail: 'Added Reservation Successfully', life: 3000 }),
     })
   }

@@ -49,7 +49,7 @@
     <Column header="Actions">
       <template #body="slotProps">
         <Button icon="pi pi-pencil" aria-label="Submit" size="small" outlined class="mr-2"
-          @click="() => router.visit(`/reservation/edit/${slotProps.data.id}`)" />
+          @click="() => router.visit(route('reservation.edit', slotProps.data.id))" />
         <Button aria-label="Delete" icon="pi pi-trash" severity="danger" size="small" outlined
           @click.prevent=" confirmDelete(slotProps.data.id)" :key="`confirmDialog${slotProps.data.id}`" />
       </template>
@@ -97,7 +97,7 @@
       message: `Are you sure you want to delete reservation #${id}?`,
       header: `Delete Reservation #${id}`,
       accept: () => {
-        axios.delete(`/reservation/${id}`).then(data => {
+        axios.delete(route('reservation.destroy', id)).then(data => {
           toast.add({
             severity: "success",
             summary: "Deleted successfully",
