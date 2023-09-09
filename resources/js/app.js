@@ -1,4 +1,5 @@
 import "primevue/resources/themes/md-light-indigo/theme.css";
+import 'primeicons/primeicons.css';
 import '../css/app.css';
 import './bootstrap';
 
