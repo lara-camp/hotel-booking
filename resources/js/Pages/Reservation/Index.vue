@@ -1,6 +1,6 @@
 <template>
   <DataTable :value="props.reservations" tableStyle="min-width: 50rem" paginator :rows="5"
-    :rows-per-page-options="[5, 10, 15]">
+    :rows-per-page-options="[5, 10, 15]" striped-rows>
     <template #header>
       <div class="align-items-center justify-content-between flex flex-wrap gap-2">
         <span class="text-900 text-2xl font-bold">Reservations</span>
@@ -101,7 +101,8 @@
           toast.add({
             severity: "success",
             summary: "Deleted successfully",
-            detail: `Reservation #${id} is deleted successfully`
+            detail: `Reservation #${id} is deleted successfully`,
+            life: 3000,
           })
         })
       }
