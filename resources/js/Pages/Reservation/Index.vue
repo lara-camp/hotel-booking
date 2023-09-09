@@ -1,6 +1,6 @@
 <template>
-  <DataTable :value="props.reservations" tableStyle="min-width: 50rem" paginator :rows="5"
-    :rows-per-page-options="[5, 10, 15]" striped-rows>
+  <DataTable :value="props.reservations.data" tableStyle="min-width: 50rem" :rows="5" :rows-per-page-options="[5, 10, 15]"
+    striped-rows>
     <template #header>
       <div class="align-items-center justify-content-between flex flex-wrap gap-2">
         <span class="text-900 text-2xl font-bold">Reservations</span>
@@ -54,7 +54,24 @@
           @click.prevent=" confirmDelete(slotProps.data.id)" :key="`confirmDialog${slotProps.data.id}`" />
       </template>
     </Column>
-    <template #footer> In total there are {{ props.reservations ? props.reservations.length : 0 }} reservations
+    <template #footer>
+      <Paginator :rows="5" :totalRecords="props.reservations.total" :pt="{
+        pageButton: ({ props, state, context }) => ({
+          class: context.active ? 'bg-primary' : undefined,
+          onclick: () => {
+            router.visit(route('reservation.index', {
+              _query: {
+                page: props.page + 1
+              }
+            }))
+          }
+        })
+      }" :first="props.reservations.data[0].id">
+        <template #start="slotProps">
+          <span>Showing {{ props.reservations.from }} to {{ props.reservations.to }} of
+            {{ props.reservations.total }} reservations</span>
+        </template>
+      </Paginator>
     </template>
   </DataTable>
   <Toast position="bottom-right" />
@@ -68,12 +85,15 @@
   import Column from 'primevue/column';
   import ConfirmDialog from 'primevue/confirmdialog';
   import DataTable from 'primevue/datatable';
+  import Paginator from 'primevue/paginator';
   import Toast from 'primevue/toast';
   import { useConfirm } from "primevue/useconfirm";
   import { useToast } from 'primevue/usetoast';
 
   const props = defineProps({
-    reservations: Array
+    reservations: {
+      required: true
+    }
   })
 
   // Formatting the data strings
