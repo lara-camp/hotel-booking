@@ -1,5 +1,5 @@
 <template>
-  <DataTable :value="props.reservations.data" tableStyle="min-width: 50rem" :rows="5" :rows-per-page-options="[5, 10, 15]"
+  <DataTable :value="props.reservations.data" tableStyle="min-width: 50rem" :rows="props.reservations.per_page"
     striped-rows>
     <template #header>
       <div class="align-items-center justify-content-between flex flex-wrap gap-2">
@@ -55,7 +55,7 @@
       </template>
     </Column>
     <template #footer>
-      <Paginator :rows="5" :totalRecords="props.reservations.total" :pt="{
+      <Paginator :rows="props.reservations.per_page" :totalRecords="props.reservations.total" :pt="{
         pageButton: ({ props, state, context }) => ({
           class: context.active ? 'bg-primary' : undefined,
           onclick: () => {
