@@ -1,9 +1,11 @@
 <template>
-  <DataTable :value="props.reservations.data" tableStyle="min-width: 50rem" :rows="props.reservations.per_page"
-    striped-rows>
+  <DataTable :value="props.reservations.data" tableStyle="min-width: 50rem" striped-rows>
     <template #header>
-      <div class="align-items-center justify-content-between flex flex-wrap gap-2">
-        <span class="text-900 text-2xl font-bold">Reservations</span>
+      <div class="flex justify-between gap-2">
+        <div class="">
+          <span class="text-900 text-2xl font-bold">Reservations</span>
+        </div>
+        <Button label="Filter" icon="pi pi-filter" @click="showFilter" outlined />
       </div>
     </template>
     <Column field="id" header="id"></Column>
@@ -75,20 +77,25 @@
     </template>
   </DataTable>
   <Toast position="bottom-right" />
+  <DynamicDialog />
   <ConfirmDialog></ConfirmDialog>
 </template>
 
 <script setup>
+  import Filter from "@/Components/Filter.vue";
   import { router } from '@inertiajs/vue3';
   import axios from 'axios';
   import Button from 'primevue/button';
   import Column from 'primevue/column';
   import ConfirmDialog from 'primevue/confirmdialog';
   import DataTable from 'primevue/datatable';
+  import DynamicDialog from 'primevue/dynamicdialog';
   import Paginator from 'primevue/paginator';
   import Toast from 'primevue/toast';
   import { useConfirm } from "primevue/useconfirm";
+  import { useDialog } from 'primevue/usedialog';
   import { useToast } from 'primevue/usetoast';
+  import { reactive } from "vue";
 
   const props = defineProps({
     reservations: {
@@ -128,6 +135,21 @@
       }
     })
   }
+
+  // Filter Dialog
+  const dialog = useDialog();
+  function showFilter() {
+    dialog.open(Filter, {
+      data: {
+        filterForm
+      }
+    })
+  }
+
+  const filterForm = reactive({
+    from_date: "",
+    to_date: ""
+  })
 </script>
 <script>
   import IndexLayout from "../../Layouts/IndexLayout.vue";
