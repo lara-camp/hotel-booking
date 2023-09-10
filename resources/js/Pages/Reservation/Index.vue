@@ -6,7 +6,7 @@
         <span class="text-900 text-2xl font-bold">Reservations</span>
       </div>
     </template>
-    <Column field="id" header="id" sortable></Column>
+    <Column field="id" header="id"></Column>
     <Column field="room_id" header="Room No">
       <template #body="slotProps">
         <span v-for="(room, i) in slotProps.data.room_id" :key="`${slotProps.index}${i}`">
@@ -21,27 +21,27 @@
     </Column>
     <Column header="Total Person" field="total_person">
     </Column>
-    <Column field="total_price" header="Price" sortable>
+    <Column field="total_price" header="Price">
       <template #body="slotProps">
         {{ formatCurrency(slotProps.data.total_price) }}
       </template>
     </Column>
-    <Column field="from_date" sortable header="Reserved From">
+    <Column field="from_date" header="Reserved From">
       <template #body="slotProps">
         {{ getDate(slotProps.data.from_date) }}
       </template>
     </Column>
-    <Column field="to_date" sortable header="Reserved From">
+    <Column field="to_date" header="Reserved To">
       <template #body="slotProps">
         {{ getDate(slotProps.data.to_date) }}
       </template>
     </Column>
-    <Column field="checkin_time" sortable header="Checkin Time">
+    <Column field="checkin_time" header="Checkin Time">
       <template #body="slotProps">
         {{ getDateTime(slotProps.data.checkin_time) }}
       </template>
     </Column>
-    <Column field="checkout_time" sortable header="Checkout Time">
+    <Column field="checkout_time" header="Checkout Time">
       <template #body="slotProps">
         {{ getDateTime(slotProps.data.checkout_time) }}
       </template>
