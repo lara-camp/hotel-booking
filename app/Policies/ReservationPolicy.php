@@ -4,16 +4,34 @@ namespace App\Policies;
 
 use App\Models\Reservation;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+
+use Illuminate\Support\Facades\Auth;
 
 class ReservationPolicy
 {
     /**
-     * Determine whether the user can view any models.
+
+     * Determine whether a person can make reservation.
      */
-    public function viewAny(User $user): bool
+    public function create(User $user): bool
     {
-        return $user->role_id === 1 || $user->role_id === 2;
+        return $user->role_id === 2;
+    }
+
+    /**
+     * Determine whether a person can update reservation.
+     */
+    public function update(User $user,Reservation $reservation): bool
+    {
+        return $user->role_id === 1 || Auth::user()->id === $reservation->user_id;
+    }
+
+    /**
+     * Determine whether the a person can cancel reservation.
+     */
+    public function delete(User $user,Reservation $reservation): bool
+    {
+        return $user->role_id === 1 || Auth::user()->id === $reservation->user_id;
     }
 
     /**
@@ -21,46 +39,16 @@ class ReservationPolicy
      */
     public function view(User $user, Reservation $reservation): bool
     {
-        return $user->role_id === 1 || $user->role_id === 2;
+        return $user->role_id === 1 || Auth::user()->id === $reservation->user_id;
     }
 
     /**
-     * Determine whether the user can create models.
+     * Determine whether the user can view any models.
      */
-    public function create(User $user): bool
+    public function viewAny(User $user): bool
     {
         return $user->role_id === 1;
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, Reservation $reservation): bool
-    {
-        return $user->role_id === 1;
-    }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, Reservation $reservation): bool
-    {
-        return $user->role_id === 1;
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, Reservation $reservation): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, Reservation $reservation): bool
-    {
-        //
-    }
 }
