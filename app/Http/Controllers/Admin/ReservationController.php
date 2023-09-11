@@ -14,6 +14,14 @@ use Inertia\Inertia;
 class ReservationController extends Controller
 {
     /**
+     * Create the controller instance.
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Reservation::class, 'reservation');
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index(Request $request)

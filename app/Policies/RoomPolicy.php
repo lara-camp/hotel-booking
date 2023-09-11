@@ -8,6 +8,13 @@ use Illuminate\Auth\Access\Response;
 
 class RoomPolicy
 {
+    /**
+     * Create the controller instance.
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Room::class, 'room');
+    }
 
     /**
      * Determine whether the user can view any models.
