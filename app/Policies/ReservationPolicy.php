@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Reservation;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class ReservationPolicy
 {
@@ -20,15 +21,15 @@ class ReservationPolicy
      */
     public function update(User $user,Reservation $reservation): bool
     {
-        return $user->role_id===1;
+        return $user->role_id === 1 || Auth::user()->id === $reservation->user_id;
     }
 
     /**
      * Determine whether the a person can cancel reservation.
      */
-    public function delete(User $user): bool
+    public function delete(User $user,Reservation $reservation): bool
     {
-        return $user->role_id === 1 || $user->role_id === 2;
+        return $user->role_id === 1 || Auth::user()->id === $reservation->user_id;
     }
 
     /**
