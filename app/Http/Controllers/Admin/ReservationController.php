@@ -29,7 +29,7 @@ class ReservationController extends Controller
     {
         //Must get from request
         $from_date = Carbon::now();
-        $to_date = Carbon::now()->addDays(4);
+        $to_date = Carbon::now()->addDays(2);
         $status = 'in progress';
         return Inertia::render('Reservation/Index', [
             'reservations' => Reservation::with('user', 'reservationDetails')
