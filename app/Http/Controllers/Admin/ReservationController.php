@@ -7,6 +7,7 @@ use App\Models\Reservation;
 use App\Models\ReservationDetail;
 use App\Models\Room;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -24,13 +25,17 @@ class ReservationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
+        //Must get from request
+        $from_date = Carbon::now();
+        $to_date = Carbon::now()->addDays(4);
+        $status = 'in progress';
         return Inertia::render('Reservation/Index', [
-            'reservations' => Reservation::with('user', 'reservationDetails')::query()
-                ->whereDate('from_date', '<=', $request->from_date)
-                ->whereDate('to_date', '>=', $request->to_date)
-                ->where('status', $request->status)
+            'reservations' => Reservation::with('user', 'reservationDetails')
+                ->whereDate('from_date', '<=', $from_date)
+                ->whereDate('to_date', '>=', $to_date)
+                ->where('status', $status)
                 ->paginate(10)
                 ->withQueryString()
                 ->through(fn($reservation) => [
@@ -120,7 +125,7 @@ class ReservationController extends Controller
      */
     public function edit(string $id)
     {
-        return Inertia::render('reservation/Edit');
+        return Inertia::render('Reservation/Edit');
     }
 
     /**
