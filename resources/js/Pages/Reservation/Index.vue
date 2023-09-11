@@ -1,9 +1,11 @@
 <template>
-  <DataTable :value="props.reservations.data" tableStyle="min-width: 50rem" :rows="props.reservations.per_page"
-    striped-rows>
+  <DataTable :value="props.reservations.data" tableStyle="min-width: 50rem" striped-rows>
     <template #header>
-      <div class="align-items-center justify-content-between flex flex-wrap gap-2">
-        <span class="text-900 text-2xl font-bold">Reservations</span>
+      <div class="flex justify-between gap-2">
+        <div class="">
+          <span class="text-900 text-2xl font-bold">Reservations</span>
+        </div>
+        <Button label="Filter" icon="pi pi-filter" @click="showFilter" outlined />
       </div>
     </template>
     <Column field="id" header="id"></Column>
@@ -55,40 +57,33 @@
       </template>
     </Column>
     <template #footer>
-      <Paginator :rows="props.reservations.per_page" :totalRecords="props.reservations.total" :pt="{
-        pageButton: ({ props, state, context }) => ({
-          class: context.active ? 'bg-primary' : undefined,
-          onclick: () => {
-            router.visit(route('reservation.index', {
-              _query: {
-                page: props.page + 1
-              }
-            }))
-          }
-        })
-      }" :first="props.reservations.data[0].id">
-        <template #start="slotProps">
-          <span>Showing {{ props.reservations.from }} to {{ props.reservations.to }} of
-            {{ props.reservations.total }} reservations</span>
-        </template>
-      </Paginator>
+      <div class="flex justify-between">
+        <div class="">
+          <span>Showing {{ reservations.from }} to {{ reservations.to }} of {{ reservations.total }} results.</span>
+        </div>
+        <CustomPaginator :current-page="reservations.current_page" :total-pages="reservations.last_page" />
+      </div>
     </template>
   </DataTable>
   <Toast position="bottom-right" />
+  <DynamicDialog />
   <ConfirmDialog></ConfirmDialog>
 </template>
 
 <script setup>
+  import Filter from "@/Components/Filter.vue";
   import { router } from '@inertiajs/vue3';
   import axios from 'axios';
   import Button from 'primevue/button';
   import Column from 'primevue/column';
   import ConfirmDialog from 'primevue/confirmdialog';
   import DataTable from 'primevue/datatable';
-  import Paginator from 'primevue/paginator';
+  import DynamicDialog from 'primevue/dynamicdialog';
   import Toast from 'primevue/toast';
   import { useConfirm } from "primevue/useconfirm";
+  import { useDialog } from 'primevue/usedialog';
   import { useToast } from 'primevue/usetoast';
+  import { reactive } from "vue";
 
   const props = defineProps({
     reservations: {
@@ -128,8 +123,32 @@
       }
     })
   }
+
+  // Filter Dialog
+  const dialog = useDialog();
+  function showFilter() {
+    dialog.open(Filter, {
+      data: {
+        filterForm
+      }
+    })
+  }
+
+  const filterForm = reactive({
+    from_date: "",
+    to_date: ""
+  })
+
+  function paginateRouter(prop) {
+    router.visit(route('reservation.index', {
+      _query: {
+        page: prop + 1
+      }
+    }))
+  }
 </script>
 <script>
+  import CustomPaginator from "@/Components/CustomPaginator.vue";
   import IndexLayout from "../../Layouts/IndexLayout.vue";
   export default {
     layout: IndexLayout
