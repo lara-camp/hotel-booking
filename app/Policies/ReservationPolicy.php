@@ -37,7 +37,7 @@ class ReservationPolicy
      */
     public function view(User $user, Reservation $reservation): bool
     {
-        return $user->role_id === 1 || $user->role_id === 2;
+        return $user->role_id === 1 || Auth::user()->id === $reservation->user_id;
     }
 
     /**
@@ -45,7 +45,7 @@ class ReservationPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->role_id === 2;
+        return $user->role_id === 1;
     }
 
 }
