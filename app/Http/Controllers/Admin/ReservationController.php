@@ -16,19 +16,22 @@ class ReservationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-
         return Inertia::render('Reservation/Index', [
-            'reservations' => Reservation::with('user', 'reservationDetails')
-                                         ->paginate(10)
-                                         ->through(fn($reservation) => [
-                                             'id' => $reservation->id,
-                                             'total_person' => $reservation->total_person,
-                                             'total_price' => $reservation->total_price,
-                                             'from_date' => $reservation->from_date,
-                                             'to_date' => $reservation->to_date,
-                                         ])
+            'reservations' => Reservation::with('user', 'reservationDetails')::query()
+                ->whereDate('from_date', '<=', $request->from_date)
+                ->whereDate('to_date', '>=', $request->to_date)
+                ->where('status', $request->status)
+                ->paginate(10)
+                ->withQueryString()
+                ->through(fn($reservation) => [
+                    'id' => $reservation->id,
+                    'total_person' => $reservation->total_person,
+                    'total_price' => $reservation->total_price,
+                    'from_date' => $reservation->from_date,
+                    'to_date' => $reservation->to_date,
+                ])
         ]);
     }
 
