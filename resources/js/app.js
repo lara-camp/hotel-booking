@@ -1,4 +1,5 @@
 import "primevue/resources/themes/md-light-indigo/theme.css";
+import 'primeicons/primeicons.css';
 import '../css/app.css';
 import './bootstrap';
 
@@ -6,6 +7,7 @@ import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import PrimeVue from 'primevue/config';
 import ToastService from 'primevue/toastservice';
+import ConfirmationService from 'primevue/confirmationservice';
 import { createApp, h } from 'vue';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import Layout from "./Layouts/Layout.vue";
@@ -21,6 +23,7 @@ createInertiaApp({
             .use(ZiggyVue, Ziggy)
             .use(PrimeVue)
             .use(ToastService)
+            .use(ConfirmationService)
             .mount(el);
     },
     progress: {

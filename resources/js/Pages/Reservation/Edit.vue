@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="text-3xl font-light">Create New Reservation</h1>
+    <h1 class="text-3xl font-light">Edit Reservation #{{ props.id }}</h1>
     <div class="[&>div]:mt-2">
       <div class="mb-3">
         <h2 class="mb-2 text-2xl">Room</h2>
@@ -60,7 +60,7 @@
         </div>
       </div>
       <div class="mb-3">
-        <Button label="Add Reservation" outlined @click="submitForm" />
+        <Button label="Update Reservation" outlined @click="submitForm" />
       </div>
     </div>
   </div>
@@ -78,6 +78,7 @@
   import { ref } from 'vue';
 
   const props = defineProps({
+    id: Number,
     available_room: Array,
     room_id: Array,
     total_person: Number,
@@ -88,7 +89,7 @@
     checkout_time: String,
     errors: Object,
   })
-  const { available_room, ...editProps } = props
+  const { available_room, errors, id, ...editProps } = props
 
   const reservationForm = useForm({
     ...editProps,
@@ -101,7 +102,7 @@
 
   const toast = useToast();
   function submitForm() {
-    reservationForm.put("/reservation", {
+    reservationForm.put(route("reservation.update", props.id), {
       preserveState: true,
       onSuccess: () => toast.add({ severity: 'success', summary: 'Success', detail: 'Added Reservation Successfully', life: 3000 }),
     })

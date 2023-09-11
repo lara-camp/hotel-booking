@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="text-2xl my-2">Creat A New Room</h1>
+    <h1 class="my-2 text-2xl">Create A New Room</h1>
     <div class="flex flex-col mb-3">
       <label for="roomNumber" class="my-2">room number</label>
       <InputNumber
@@ -33,7 +33,7 @@
     </div>
     <div class="flex flex-col">
       <label for="integeronly" class="my-2">price</label>
-      <InputNumber v-model="roomForm.price" inputId="integeronly" />
+      <InputNumber v-model="roomForm.price" inputId="integeronly" mode="currency" currency="MMK" />
       <InlineMessage v-if="errors.price" severity="error" class="mt-2">{{
         errors.price
       }}</InlineMessage>
@@ -45,28 +45,20 @@
         errors.bed_type
       }}</InlineMessage>
     </div>
-    <div class="flex flex-wrap gap-3 my-2">
+    <div class="flex flex-col flex-wrap gap-3 my-2">
       <label for="">status</label>
-      <div class="flex align-items-center">
-        <RadioButton
-          v-model="roomForm.available"
-          inputId="available"
-          name="available"
-          :value="true"
-        />
-        <label for="available" class="ml-2">available</label>
+      <div class="flex gap-3">
+        <div class="align-items-center flex">
+          <RadioButton v-model="roomForm.status" inputId="available" name="available" :value="true" />
+        <label for="availables" class="ml-2">available</label>
       </div>
-      <div class="flex align-items-center">
-        <RadioButton
-          v-model="roomForm.available"
-          inputId="taken"
-          name="taken"
-          :value="false"
-        />
+        <div class="align-items-center flex">
+          <RadioButton v-model="roomForm.status" inputId="taken" name="taken" :value="false" />
         <label for="taken" class="ml-2">taken</label>
       </div>
-      <InlineMessage v-if="errors.available" severity="error" class="mt-2">{{
-        errors.available
+      </div>
+      <InlineMessage v-if="errors.status" severity="error" class="mt-2">{{
+        errors.status
       }}</InlineMessage>
     </div>
     <div class="my-3">
@@ -90,14 +82,26 @@ const props = defineProps({
   room_types: Object,
 });
 
+<<<<<<< HEAD
 const roomForm = useForm({
     room_number: null,
+=======
+  const roomForm = useForm(
+  {
+    number: 0,
+>>>>>>> 9589a096195a55795efe9c389d8001e96cf7fc06
     price: 0,
     available: true,
     room_type_id: 0,
     bed_type: "",
+<<<<<<< HEAD
     number_of_bed: 0,
   });
+=======
+    num_of_bed: 0,
+  },
+  );
+>>>>>>> 9589a096195a55795efe9c389d8001e96cf7fc06
 
 const toast = useToast();
 

@@ -26,7 +26,7 @@
     </div>
     <div class="flex flex-col">
       <label for="integeronly" class="my-2">price</label>
-      <InputNumber v-model="roomForm.price" inputId="integeronly" />
+      <InputNumber v-model="roomForm.price" inputId="integeronly" mode="currency" currency="MMK" />
       <InlineMessage v-if="errors.price" severity="error" class="mt-2">{{
         errors.price
       }}</InlineMessage>
@@ -38,32 +38,24 @@
         errors.bed_type
       }}</InlineMessage>
     </div>
-    <div class="flex flex-wrap gap-3 my-2">
+    <div class="flex flex-col flex-wrap gap-3 my-2">
       <label for="">status</label>
-      <div class="flex align-items-center">
-        <RadioButton
-          v-model="roomForm.status"
-          inputId="available"
-          name="available"
-          value="true"
-        />
+      <div class="flex gap-3">
+        <div class="align-items-center flex">
+          <RadioButton v-model="roomForm.status" inputId="available" name="available" :value="true" />
         <label for="availables" class="ml-2">available</label>
       </div>
-      <div class="flex align-items-center">
-        <RadioButton
-          v-model="roomForm.status"
-          inputId="taken"
-          name="taken"
-          value="false"
-        />
+        <div class="align-items-center flex">
+          <RadioButton v-model="roomForm.status" inputId="taken" name="taken" :value="false" />
         <label for="taken" class="ml-2">taken</label>
+      </div>
       </div>
       <InlineMessage v-if="errors.status" severity="error" class="mt-2">{{
         errors.status
       }}</InlineMessage>
     </div>
     <div class="my-3">
-      <Button label="Create " outlined @click="submitForm" class="px-5" />
+      <Button label="Update" outlined @click="submitForm" class="px-5" />
     </div>
   </div>
 </template>
@@ -78,23 +70,24 @@ import InlineMessage from "primevue/inlinemessage";
 import { useToast } from "primevue/usetoast";
 
 const props = defineProps({
-  id:Number,
-  number:5,
-  status:Boolean,
-  bed_type:String,
-  num_of_bed:Number,
+    id: Number,
+    number: Number,
+    status: Boolean,
+    bed_type: String,
+    num_of_bed: Number,
+    price: Number,
   errors: Object,
 });
 
-const roomForm = useForm([
+  const roomForm = useForm(
   {
-    number: props.id,
+      number: props.number,
     price: props.price,
     status: props.status,
     bed_type: props.bed_type,
     num_of_bed: props.num_of_bed
   },
-]);
+  );
 
 const toast = useToast();
 
