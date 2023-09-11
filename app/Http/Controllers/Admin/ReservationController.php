@@ -124,9 +124,19 @@ class ReservationController extends Controller
      */
     public function edit(Reservation $reservation)
     {
-        return Inertia::render('reservation/Edit', [
-            'reservation' => $reservation,
+
+        return Inertia::render('Reservation/Edit', [
+            'id' => $reservation->id,
+            'total_person' => $reservation->total_person,
+            'total_price' => $reservation->total_price,
+            'from_date' => $reservation->from_date,
+            'to_date' => $reservation->to_date,
+            'room_id' => $reservation->reservationDetails()->pluck('room_id')->toArray(),
+            'checkin_time' => $reservation->checkin_time ?? Carbon::now(),
+            'checkout_time' => $reservation->checkout_time ?? Carbon::now(),
+            'available_rooms' => Room::where('available', true)->get(['id', 'room_number']),
             'reservation_details' => $reservation->reservationDetails,
+
         ]);
     }
 
@@ -148,15 +158,15 @@ class ReservationController extends Controller
         //update the data from reservation
         $reservation->total_person=$request->total_person;
         $reservation->total_price=$request->total_price;
-        $reservation->from_date=date('Y-m-d', strtotime($request->from_date));
-        $reservation->to_date=date('Y-m-d',strtotime($request->to_date));
+        $reservation->from_date= date('Y-m-d', strtotime($request->from_date));
+        $reservation->to_date= date('Y-m-d',strtotime($request->to_date));
 
         //update the check in and out time if provided
         if($request->has('checkin_time')){
-            $reservation->checkin_time=$request->checkin_time;
+            $reservation->checkin_time= date('Y-m-d H:i:s', strtotime($request->checkin_time));
         }
         if($request->has('checkout_time')){
-            $reservation->checkout_time=$request->checkout_time;
+            $reservation->checkout_time= date('Y-m-d H:i:s', strtotime($request->checkout_time));
         }
 
         //save the changes

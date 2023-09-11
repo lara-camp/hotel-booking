@@ -85,7 +85,12 @@ class RoomController extends Controller
     public function edit(Room $room)
     {
         return Inertia::render('Room/Edit', [
-            'room' => $room->get()
+            'id' => $room->id,
+            'room_number' => $room->room_number,
+            'number_of_bed' => $room->number_of_bed,
+            'price' => $room->price,
+            'bed_type' => $room->bed_type,
+            'available' => $room->available,
         ]);
     }
 

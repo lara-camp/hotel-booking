@@ -16,12 +16,12 @@
     <div class="flex flex-col">
       <label for="numOfBeds" class="my-2">number of beds</label>
       <InputNumber
-        v-model="roomForm.num_of_bed"
+        v-model="roomForm.number_of_bed"
         id="numOfBeds"
         inputId="integeronly"
       />
-      <InlineMessage v-if="errors.num_of_bed" severity="error" class="mt-2">{{
-        errors.num_of_bed
+      <InlineMessage v-if="errors.number_of_bed" severity="error" class="mt-2">{{
+        errors.number_of_bed
       }}</InlineMessage>
     </div>
     <div class="flex flex-col">
@@ -42,16 +42,16 @@
       <label for="">status</label>
       <div class="flex gap-3">
         <div class="align-items-center flex">
-          <RadioButton v-model="roomForm.status" inputId="available" name="available" :value="true" />
+          <RadioButton v-model="roomForm.available" inputId="available" name="available" :value="true" />
         <label for="availables" class="ml-2">available</label>
       </div>
         <div class="align-items-center flex">
-          <RadioButton v-model="roomForm.status" inputId="taken" name="taken" :value="false" />
+          <RadioButton v-model="roomForm.available" inputId="taken" name="taken" :value="false" />
         <label for="taken" class="ml-2">taken</label>
       </div>
       </div>
-      <InlineMessage v-if="errors.status" severity="error" class="mt-2">{{
-        errors.status
+      <InlineMessage v-if="errors.available" severity="error" class="mt-2">{{
+        errors.available
       }}</InlineMessage>
     </div>
     <div class="my-3">
@@ -72,27 +72,27 @@ import { useToast } from "primevue/usetoast";
 const props = defineProps({
     id: Number,
     number: Number,
-    status: Boolean,
+    available: Boolean,
     bed_type: String,
-    num_of_bed: Number,
+    number_of_bed: Number,
     price: Number,
   errors: Object,
 });
 
   const roomForm = useForm(
   {
-      number: props.number,
+    number: props.number,
     price: props.price,
-    status: props.status,
+    available: props.available,
     bed_type: props.bed_type,
-    num_of_bed: props.num_of_bed
+    number_of_bed: props.number_of_bed
   },
   );
 
 const toast = useToast();
 
 function submitForm() {
-  roomForm.post("/room/create", {
+  roomForm.put(route("admin.rooms.update", props.id), {
     onSuccess: () => toast.add({ severity: "success",summary: "Success",detail: "Created a room successfully",life:3000}),
   });
 }
