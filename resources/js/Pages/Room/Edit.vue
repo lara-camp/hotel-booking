@@ -4,12 +4,12 @@
     <div class="flex flex-col mb-3">
       <label for="roomnumber" class="my-2">room number</label>
       <InputNumber
-        v-model="roomForm.number"
+        v-model="roomForm.room_number"
         id="roomnumber"
         inputId="integeronly"
       />
-      <InlineMessage v-if="errors.number" severity="error" class="mt-2">{{
-        errors.number
+      <InlineMessage v-if="errors.room_number" severity="error" class="mt-2">{{
+        errors.room_number
       }}</InlineMessage>
     </div>
 
@@ -71,17 +71,17 @@ import { useToast } from "primevue/usetoast";
 
 const props = defineProps({
     id: Number,
-    number: Number,
+    room_number: String,
     available: Boolean,
     bed_type: String,
     number_of_bed: Number,
     price: Number,
-  errors: Object,
+    errors: Object,
 });
 
   const roomForm = useForm(
   {
-    number: props.number,
+    room_number: props.room_number,
     price: props.price,
     available: props.available,
     bed_type: props.bed_type,

@@ -26,7 +26,7 @@ class RoomController extends Controller
     public function index()
     {
         return Inertia::render('Room/Index', [
-            'rooms' => Room::with('roomTypes', 'reservationDetails')->paginate(5)->through(fn($room) => [
+            'rooms' => Room::with('roomType', 'reservationDetails')->paginate(5)->through(fn($room) => [
                 'id' => $room->id,
                 'room_number' => $room->room_number,
                 'room_type' => $room->roomType->title,
@@ -100,8 +100,10 @@ class RoomController extends Controller
     public function update(Request $request, Room $room)
     {
         $validated = $request->validate([
-            'room_number' => 'required|string|unique:rooms,room_number'.$room->id,
-            'room_type_id' => 'required|exists:room_types,id',
+            'room_number' => 'required|unique:rooms,room_number,'.$room->id,
+//            'room_type_id' => 'required|exists:room_types,id',
+            'bed_type' => 'required|string',
+            'number_of_bed' => 'required|integer',
             'price' => 'required|integer',
             'available' => 'required|boolean',
         ]);
