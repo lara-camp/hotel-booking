@@ -82,31 +82,21 @@ const props = defineProps({
   room_types: Object,
 });
 
-<<<<<<< HEAD
-const roomForm = useForm({
-    room_number: null,
-=======
   const roomForm = useForm(
   {
-    number: 0,
->>>>>>> 9589a096195a55795efe9c389d8001e96cf7fc06
+    room_number: 0,
     price: 0,
     available: true,
     room_type_id: 0,
     bed_type: "",
-<<<<<<< HEAD
     number_of_bed: 0,
-  });
-=======
-    num_of_bed: 0,
   },
   );
->>>>>>> 9589a096195a55795efe9c389d8001e96cf7fc06
 
 const toast = useToast();
 
 function submitForm() {
-  roomForm.post("/admin/rooms", {
+  roomForm.post(route('admin.rooms.store'), {
     onSuccess: () => toast.add({ severity: "success",summary: "Success",detail: "Created a room successfully",life:3000}),
   });
 }
