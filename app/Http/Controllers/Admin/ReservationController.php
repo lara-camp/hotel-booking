@@ -102,30 +102,29 @@ class ReservationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Reservation $reservation)
     {
-
+    $reservation->load('reservationDetails');//also retrieve data from detail
         return Inertia::render('Reservation/Show', [
-            'reservation' => Reservation::find($id),
-            'reservation_details' => ReservationDetail::find($id),
+            'reservation' => $reservation->get(),
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Reservation $reservation)
     {
-        return Inertia::render('reservation/Edit',[
-          'reservation' => Reservation::find($id),
-            'reservation_details' => ReservationDetail::find($id),  
+        return Inertia::render('reservation/Edit', [
+            'reservation' => $reservation,
+            'reservation_details' => $reservation->reservationDetails,  
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Reservation $reservation)
     {
         $validated = $request->validate([
             'room_id.*' => 'required|exists:rooms,id',
@@ -136,8 +135,6 @@ class ReservationController extends Controller
             'checkin_time' => 'date',
             'checkout_time' => 'date',
         ]);
-        //search for reservation
-        $reservation = Reservation::findOrFail($id);
 
         //update the data from reservation
         $reservation->total_person=$request->total_person;
@@ -173,9 +170,8 @@ class ReservationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Reservation $reservation)
     {
-        $reservation=Reservation::findOrFail($id);
         ReservationDetail::where('reservation_id',$reservation->id)->delete();
         $reservation->delete();
 
