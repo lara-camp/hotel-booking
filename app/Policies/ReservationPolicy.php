@@ -15,7 +15,7 @@ class ReservationPolicy
      */
     public function create(User $user): bool
     {
-        return $user->role_id === 2;
+        return $user->role_id === 1;
     }
 
     /**
