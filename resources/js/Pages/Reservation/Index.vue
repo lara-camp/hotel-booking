@@ -57,23 +57,12 @@
       </template>
     </Column>
     <template #footer>
-      <Paginator :rows="props.reservations.per_page" :totalRecords="props.reservations.total" :pt="{
-        pageButton: ({ props, state, context }) => ({
-          class: context.active ? 'bg-primary' : undefined,
-          onclick: () => {
-            router.visit(route('reservation.index', {
-              _query: {
-                page: props.page + 1
-              }
-            }))
-          }
-        })
-      }" :first="props.reservations.data[0].id">
-        <template #start="slotProps">
-          <span>Showing {{ props.reservations.from }} to {{ props.reservations.to }} of
-            {{ props.reservations.total }} reservations</span>
-        </template>
-      </Paginator>
+      <div class="flex justify-between">
+        <div class="">
+          <span>Showing {{ reservations.from }} to {{ reservations.to }} of {{ reservations.total }} results.</span>
+        </div>
+        <CustomPaginator :current-page="reservations.current_page" :total-pages="reservations.last_page" />
+      </div>
     </template>
   </DataTable>
   <Toast position="bottom-right" />
@@ -90,7 +79,6 @@
   import ConfirmDialog from 'primevue/confirmdialog';
   import DataTable from 'primevue/datatable';
   import DynamicDialog from 'primevue/dynamicdialog';
-  import Paginator from 'primevue/paginator';
   import Toast from 'primevue/toast';
   import { useConfirm } from "primevue/useconfirm";
   import { useDialog } from 'primevue/usedialog';
@@ -150,8 +138,17 @@
     from_date: "",
     to_date: ""
   })
+
+  function paginateRouter(prop) {
+    router.visit(route('reservation.index', {
+      _query: {
+        page: prop + 1
+      }
+    }))
+  }
 </script>
 <script>
+  import CustomPaginator from "@/Components/CustomPaginator.vue";
   import IndexLayout from "../../Layouts/IndexLayout.vue";
   export default {
     layout: IndexLayout

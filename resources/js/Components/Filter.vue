@@ -4,11 +4,11 @@
     <div class="gap-x-2 flex mb-2">
       <div class=" flex flex-col w-full">
         <label for="checkin">Reserved From</label>
-        <Calendar v-model="dialogRef.data.filterForm.from_date" :minDate="minDate" :manualInput="false" id="checkin" />
+        <Calendar v-model="dialogRef.data.filterForm.from_date" :manualInput="true" id="checkin" />
       </div>
       <div class="flex flex-col w-full">
         <label for="checkin">Reserved To</label>
-        <Calendar v-model="dialogRef.data.filterForm.to_date" :minDate="minDate" :manualInput="false" id="checkout" />
+        <Calendar v-model="dialogRef.data.filterForm.to_date" :manualInput="true" id="checkout" />
       </div>
     </div>
     <div class="flex justify-end">
@@ -31,7 +31,7 @@
     router.visit(route('reservation.index', {
       _query: {
         from_date: dialogRef.value.data.filterForm.from_date,
-        to_date: dialogRef.value.data.filterForm.from_date
+        to_date: dialogRef.value.data.filterForm.to_date
       }
     }))
   }
