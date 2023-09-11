@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('total_price');
             $table->date('from_date');
             $table->date('to_date');
+            $table->enum('status', ['in progress', 'checked in', 'compelete'])->default('in progress');
             $table->dateTime('checkin_time')->nullable();
             $table->dateTime('checkout_time')->nullable();
             $table->timestamps();
