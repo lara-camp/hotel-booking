@@ -1,5 +1,5 @@
 <template>
-  <DataTable :value="props.reservations.data" tableStyle="min-width: 50rem" striped-rows>
+  <DataTable :value="reservations.data" tableStyle="min-width: 50rem" striped-rows>
     <template #header>
       <div class="flex justify-between gap-2">
         <div class="">
@@ -61,7 +61,8 @@
         <div class="">
           <span>Showing {{ reservations.from }} to {{ reservations.to }} of {{ reservations.total }} results.</span>
         </div>
-        <CustomPaginator :current-page="reservations.current_page" :total-pages="reservations.last_page" />
+        <CustomPaginator :current-page="reservations.current_page" :total-pages="reservations.last_page"
+          route-name="reservation.index" />
       </div>
     </template>
   </DataTable>
@@ -134,9 +135,10 @@
     })
   }
 
+  const searchParams = new URLSearchParams(document.location.search);
   const filterForm = reactive({
-    from_date: "",
-    to_date: ""
+    from_date: searchParams.get("from_date") ? new Date(searchParams.get("from_date")) : "",
+    to_date: searchParams.get("to_date") ? new Date(searchParams.get("to_date")) : ""
   })
 
   function paginateRouter(prop) {

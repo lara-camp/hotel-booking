@@ -11,11 +11,12 @@
   const props = defineProps({
     totalPages: Number,
     currentPage: Number,
+    routeName: String
   })
   function goToPage(pageNumber) {
     const searchParams = new URLSearchParams(document.location.search);
     if (pageNumber >= 1 && pageNumber <= props.totalPages) {
-      router.visit(route('reservation.index', {
+      router.visit(route(props.routeName, {
         _query: {
           from_date: searchParams.get("from_date"),
           to_date: searchParams.get("to_date"),
