@@ -7,7 +7,7 @@
         <div class="gap-x-3 flex mb-2 [&>div]:w-60">
           <div class="flex flex-col">
             <label for="room">Room Number</label>
-            <MultiSelect v-model="reservationForm.room_id" :options="availableRooms" filter placeholder="Select rooms"
+            <MultiSelect v-model="reservationForm.room_id" id="room" :options="rooms" optionLabel="room_number" optionValue="id" filter placeholder="Select rooms"
               :maxSelectedLabels="5" class=" w-full" :class="{ 'p-invalid': errors.room_id }" />
             <InlineMessage v-if="errors.room_id" severity="error" class="mt-2">{{ errors.room_id }}</InlineMessage>
           </div>
@@ -78,7 +78,8 @@
 
   const props = defineProps({
     // availableRooms: Array,
-    errors: Object
+    errors: Object,
+    rooms: Object
   })
 
   // Dummy data for props
