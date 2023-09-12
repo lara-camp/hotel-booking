@@ -28,7 +28,7 @@
   const dialogRef = inject('dialogRef');
 
   function filterPage() {
-    router.visit(route('reservation.index', {
+    router.visit(route('admin.reservations.index', {
       _query: {
         from_date: dialogRef.value.data.filterForm.from_date,
         to_date: dialogRef.value.data.filterForm.to_date

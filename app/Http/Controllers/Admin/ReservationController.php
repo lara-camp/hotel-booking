@@ -25,18 +25,13 @@ class ReservationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //Must get from request
-        $from_date = Carbon::now();
-        $to_date = Carbon::now()->addDays(2);
-        $status = 'in progress';
+
         return Inertia::render('Reservation/Index', [
             'reservations' => Reservation::with('user', 'reservationDetails')
-                ->whereDate('from_date', '<=', $from_date)
-                ->whereDate('to_date', '>=', $to_date)
-                ->where('status', $status)
-                ->paginate(10)
+                ->search(request(['from_date', 'to_date']))
+                ->paginate(5)
                 ->withQueryString()
                 ->through(fn($reservation) => [
                     'id' => $reservation->id,
@@ -115,7 +110,15 @@ class ReservationController extends Controller
     {
     $reservation->load('reservationDetails');//also retrieve data from detail
         return Inertia::render('Reservation/Show', [
-            'reservation' => $reservation->get(),
+            'id' => $reservation->id,
+            'total_person' => $reservation->total_person,
+            'total_price' => $reservation->total_price,
+            'from_date' => $reservation->from_date,
+            'to_date' => $reservation->to_date,
+            'room_id' => $reservation->reservationDetails()->pluck('room_id')->toArray(),
+            'checkin_time' => $reservation->checkin_time ?? Carbon::now(),
+            'checkout_time' => $reservation->checkout_time ?? Carbon::now(),
+            'reservation_details' => $reservation->reservationDetails,
         ]);
     }
 

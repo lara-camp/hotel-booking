@@ -11,6 +11,16 @@ class Reservation extends Model
 
     protected $guarded = [];
 
+    public function scopeSearch($query, array $filters) {
+        $query->when($filters['from_date'] ?? false, function($query, $from_date) {
+            $query->whereDate('from_date', '<=', $from_date);
+        });
+
+        $query->when($filters['to_date'] ?? false, function($query, $to_date) {
+            $query->whereDate('to_date', '>=', $to_date);
+        });
+    }
+
     public function reservationDetails() {
         return $this->hasMany(ReservationDetail::class);
     }
