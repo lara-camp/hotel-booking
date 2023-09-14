@@ -4,11 +4,11 @@
     <div class="gap-x-2 flex mb-2">
       <div class=" flex flex-col w-full">
         <label for="checkin">Room Type</label>
-        <InputText type="text" v-model="roomTypeForm.name" />
+        <InputText type="text" v-model="roomTypeForm.name" autofocus />
       </div>
     </div>
     <div class="flex justify-end">
-      <Button label="Filter" outlined @click="() => roomTypeForm.putW(route('roomtype.update', dialogRef.data.id))" />
+      <Button label="Update" outlined @click="() => roomTypeForm.put(route('admin.room-types.update', dialogRef.data.id))" />
     </div>
   </div>
 </template>
