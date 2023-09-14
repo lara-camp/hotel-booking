@@ -56,10 +56,7 @@
   // Create Dialog
   const dialog = useDialog();
   function showCreate() {
-    dialog.open(CreateDialog, {
-      data: {
-      }
-    })
+    dialog.open(CreateDialog)
   }
 
   // Edit Dialog
