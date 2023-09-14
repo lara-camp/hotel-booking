@@ -24,7 +24,7 @@
           <span>Showing {{ room_types.from }} to {{ room_types.to }} of {{ room_types.total }} results.</span>
         </div>
         <CustomPaginator :current-page="room_types.current_page" :total-pages="room_types.last_page"
-          route-name="roomtype.index" />
+          route-name="admin.room-types.index" />
       </div>
     </template>
   </DataTable>
@@ -79,7 +79,7 @@
       message: `Are you sure you want to delete room type #${id}?`,
       header: `Delete room type #${id}`,
       accept: () => {
-        axios.delete(route('roomtype.destroy', id)).then(data => {
+        axios.delete(route('admin.room-types.destroy', id)).then(data => {
           toast.add({
             severity: "success",
             summary: "Deleted successfully",
