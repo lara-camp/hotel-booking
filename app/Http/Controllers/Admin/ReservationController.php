@@ -22,6 +22,28 @@ class ReservationController extends Controller
         $this->authorizeResource(Reservation::class, 'reservation');
     }
 
+    public function filterAvailableRoom(Request $request){
+        $validated = $request->validate([
+            'from_date' => 'required|date',
+            'to_date' => 'required|date|after_or_equal:from_date',
+        ]);
+
+        //get the selected date
+        $from_date = Carbon::parse($request->from_date);
+        $to_date = Carbon::parse($request->to_date);
+
+        //function has query, put the params to look for the reservations between the form and to date
+        //go inside the reservation_details table based on that result(reservations)
+        //get the room that are not in the reservation_details
+        $availableRoom = Room::whereDoesntHave('reservation_details.reservations',function($query) use ($from_date,$to_date){
+            $query->where('from_date','<',$to_date)
+            ->where('to_date','>',$from_date);
+        })->get('id','room_number');
+        
+        //return the response, modify according to the UI, for now returning JSON
+        return response()->json(['available_rooms'=>$availableRoom]);
+    }
+
     /**
      * Display a listing of the resource.
      */
