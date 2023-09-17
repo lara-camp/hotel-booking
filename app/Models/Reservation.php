@@ -13,11 +13,11 @@ class Reservation extends Model
 
     public function scopeSearch($query, array $filters) {
         $query->when($filters['from_date'] ?? false, function($query, $from_date) {
-            $query->whereDate('from_date', '<=', $from_date);
+            $query->whereDate('from_date', '>=', date('Y-m-d', strtotime($from_date)));
         });
 
         $query->when($filters['to_date'] ?? false, function($query, $to_date) {
-            $query->whereDate('to_date', '>=', $to_date);
+            $query->whereDate('to_date', '<=', date('Y-m-d', strtotime($to_date)));
         });
     }
 
