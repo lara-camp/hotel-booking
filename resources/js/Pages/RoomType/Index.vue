@@ -58,7 +58,11 @@
   const dialog = useDialog();
   const CreateDialog = defineAsyncComponent(() => import("../../Components/RoomType/CreateDialog.vue"))
   function showCreate() {
-    dialog.open(CreateDialog)
+    dialog.open(CreateDialog, {
+      props: {
+        modal: true
+      }
+    })
   }
 
   // Edit Dialog
@@ -68,6 +72,9 @@
       data: {
         name,
         id
+      },
+      props: {
+        modal: true
       }
     })
   }
