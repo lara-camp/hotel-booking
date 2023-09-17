@@ -1,5 +1,5 @@
 <template>
-  <DataTable :value="room_types.data" tableStyle="min-width: 50rem" striped-rows>
+  <DataTable :value="room_types.data" tableStyle="min-width: 50rem" striped-rows v-memo="[room_types]">
     <template #header>
       <div class="flex justify-between gap-2">
         <div class="">
@@ -50,7 +50,8 @@
   const toast = useToast();
 
   const props = defineProps({
-    room_types: Object
+    room_types: Object,
+    errors: Object
   })
 
   // Create Dialog
@@ -85,6 +86,7 @@
             detail: `Room type #${id} is deleted successfully`,
             life: 3000,
           })
+          router.reload();
         })
       }
     })
