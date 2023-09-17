@@ -33,19 +33,19 @@
   <DynamicDialog />
 </template>
 <script setup>
-  import Toast from "primevue/toast";
   import CustomPaginator from "@/Components/CustomPaginator.vue";
+  import { router } from "@inertiajs/vue3";
   import axios from 'axios';
   import Button from 'primevue/button';
   import Column from 'primevue/column';
   import ConfirmDialog from 'primevue/confirmdialog';
   import DataTable from 'primevue/datatable';
   import DynamicDialog from 'primevue/dynamicdialog';
+  import Toast from "primevue/toast";
   import { useConfirm } from "primevue/useconfirm";
   import { useDialog } from 'primevue/usedialog';
-  import CreateDialog from "../../Components/RoomType/CreateDialog.vue";
   import { useToast } from "primevue/usetoast";
-  import EditDialog from "../../Components/RoomType/EditDialog.vue";
+  import { defineAsyncComponent } from "vue";
 
   const toast = useToast();
 
@@ -55,11 +55,13 @@
 
   // Create Dialog
   const dialog = useDialog();
+  const CreateDialog = defineAsyncComponent(() => import("../../Components/RoomType/CreateDialog.vue"))
   function showCreate() {
     dialog.open(CreateDialog)
   }
 
   // Edit Dialog
+  const EditDialog = defineAsyncComponent(() => import("../../Components/RoomType/EditDialog.vue"));
   function editDialog(name, id) {
     dialog.open(EditDialog, {
       data: {

@@ -4,44 +4,45 @@
     <div class="gap-x-2 flex mb-2">
       <div class=" flex flex-col w-full">
         <label for="checkin">Room Type</label>
-        <InputText type="text" v-model="name" />
+        <InputText type="text" v-model="nameForm.name" />
+        <InlineMessage v-if="nameForm.errors.name" severity="error" class="mt-2">
+          {{ nameForm.errors.name }}
+        </InlineMessage>
       </div>
     </div>
     <div class="flex justify-end">
-      <Button label="Create" outlined @click="submitRoomTypeForm" />
+      <Button label="Create" outlined @click="submitForm" />
     </div>
   </div>
   <Toast position="bottom-right" />
 </template>
 <script setup>
-  import InputText from 'primevue/inputtext';
+  import { useForm } from '@inertiajs/vue3';
   import Button from 'primevue/button';
+  import InlineMessage from 'primevue/inlinemessage';
+  import InputText from 'primevue/inputtext';
   import Toast from "primevue/toast";
   import { useToast } from "primevue/usetoast";
-  import { router, useForm } from '@inertiajs/vue3';
-  import { ref } from 'vue';
-  import axios from 'axios';
   import { inject } from 'vue';
 
   const toast = useToast();
-  const name = ref("");
 
-  const dialogRef = inject("dialogRef")
+  const nameForm = useForm({
+    name: ""
+  })
 
-  function submitRoomTypeForm() {
-    axios.post(route('roomtype.store'), {
-      data: {
-        name: name.value
+  const dialogRef = inject("dialogRef");
+  function submitForm() {
+    nameForm.post(route('roomtype.store'), {
+      onSuccess() {
+        toast.add({
+          severity: "success",
+          summary: "Create Success",
+          detail: "Room type is created successfully",
+          life: 3000,
+        })
+        dialogRef.value.close();
       }
-    }).then(response => {
-      dialogRef.value.close();
-      toast.add({
-        life: 3000,
-        severity: "success",
-        summary: "Created successfully",
-        detail: "A room type is created successfully",
-      })
-      router.reload();
     })
   }
 </script>
