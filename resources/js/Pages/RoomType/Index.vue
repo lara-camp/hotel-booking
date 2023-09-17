@@ -15,7 +15,7 @@
         <Button icon="pi pi-pencil" aria-label="Submit" size="small" outlined class="mr-2"
           @click="() => editDialog(slotProps.data.name, slotProps.data.id)" />
         <Button aria-label="Delete" icon="pi pi-trash" severity="danger" size="small" outlined
-          @click.prevent=" confirmDelete(slotProps.data.id)" :key="`confirmDialog${slotProps.data.id}`" />
+          @click.prevent="() => confirmDelete(slotProps.data.id)" :key="`confirmDialog${slotProps.data.id}`" />
       </template>
     </Column>
     <template #footer>
@@ -34,8 +34,7 @@
 </template>
 <script setup>
   import CustomPaginator from "@/Components/CustomPaginator.vue";
-  import { router } from "@inertiajs/vue3";
-  import axios from 'axios';
+  import { router, useForm } from "@inertiajs/vue3";
   import Button from 'primevue/button';
   import Column from 'primevue/column';
   import ConfirmDialog from 'primevue/confirmdialog';
@@ -74,19 +73,30 @@
 
   // Delete confirmation and actions
   const confirm = useConfirm();
+  const deleteRoomType = useForm({});
   function confirmDelete(id) {
     confirm.require({
       message: `Are you sure you want to delete room type #${id}?`,
       header: `Delete room type #${id}`,
       accept: () => {
-        axios.delete(route('roomtype.destroy', id)).then(data => {
-          toast.add({
-            severity: "success",
-            summary: "Deleted successfully",
-            detail: `Room type #${id} is deleted successfully`,
-            life: 3000,
-          })
-          router.reload();
+        deleteRoomType.delete(route('roomtype.destroy', id), {
+          onError() {
+            toast.add({
+              severity: "error",
+              summary: "Cannot Delete",
+              detail: `Room type #${id} is not deleted`,
+              life: 3000,
+            })
+          },
+          onSuccess() {
+            toast.add({
+              severity: "success",
+              summary: "Deleted successfully",
+              detail: `Room type #${id} is deleted successfully`,
+              life: 3000,
+            })
+            router.reload({ preserveState: true });
+          }
         })
       }
     })
