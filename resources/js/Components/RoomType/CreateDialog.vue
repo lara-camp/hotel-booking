@@ -17,7 +17,7 @@
   <Toast position="bottom-right" />
 </template>
 <script setup>
-  import { useForm } from '@inertiajs/vue3';
+  import { useForm, router } from '@inertiajs/vue3';
   import Button from 'primevue/button';
   import InlineMessage from 'primevue/inlinemessage';
   import InputText from 'primevue/inputtext';
@@ -41,6 +41,7 @@
           detail: "Room type is created successfully",
           life: 3000,
         })
+        router.reload({ preserveState: true });
         dialogRef.value.close();
       }
     })

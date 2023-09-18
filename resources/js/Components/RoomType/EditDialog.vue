@@ -35,7 +35,7 @@
 
   function updateRoomType() {
     roomTypeForm.put(route("roomtype.update", dialogRef.value.data.id), {
-      onSuccess(data) {
+      onSuccess() {
         toast.add({
           severity: "success",
           summary: "Update Success",
