@@ -1,28 +1,29 @@
 <template>
-  <div class="">
-    <header class="drop-shadow-xl sticky inset-0 z-20 bg-white" v-memo="[user]">
-      <div class="flex max-w-2xl md:max-w-[75rem] items-center justify-between px-3 h-16 mx-auto ">
-        <Link href="/" class="block">
-        <h1 class=" dark:text-indigo-500 text-3xl font-extrabold text-indigo-800">Lalable</h1>
-        </Link>
-        <div class="flex items-center justify-end w-auto">
-          <div class="mr-3">
-
-          </div>
-          <div class="mr-3" v-if="user">
-            <span class="font-bold">{{ user.name }}</span>
-          </div>
-          <div class="mx-3" v-else>
-            <Button @click="router.visit('/login')" outlined label="Login" class="mr-2" />
-            <Button @click="router.visit('/register')" outlined label="Register" />
-          </div>
-        </div>
+  <div class=" flex h-screen">
+    <!-- Left side bar -->
+    <div class="w-1/6 p-3 m-3 bg-indigo-600 rounded">
+      <!-- Logo -->
+      <div class=" mb-6">
+        <Link class="text-5xl font-extrabold text-center text-white" href="/">Laracamp Booking</Link>
       </div>
-    </header>
-    <div class="max-w-2xl md:max-w-[75rem] p-3 mx-auto">
+      <!-- Options -->
+      <div class="">
+        <NavigationButton route-name="roomtype.index" icon="pi pi-calendar">Reservations</NavigationButton>
+        <NavigationExpand>
+          <template #default>
+            Rooms
+          </template>
+          <template #contents>
+            <NavigationButton icon="pi pi-user" route-name="room.index">View</NavigationButton>
+            <NavigationButton icon=" pi pi-plus" route-name="room.create">Create</NavigationButton>
+          </template>
+        </NavigationExpand>
+        <NavigationButton route-name="roomtype.index" icon="pi pi-calendar">Reservations</NavigationButton>
+      </div>
+    </div>
+    <div class="w-5/6">
       <slot />
     </div>
-
   </div>
 </template>
 <script setup>
@@ -30,6 +31,8 @@
   import Button from 'primevue/button';
   import { computed } from 'vue';
   import { router } from '@inertiajs/vue3';
+  import NavigationButton from "../Components/Dashboard/NavigationButton.vue"
+  import NavigationExpand from '@/Components/Dashboard/NavigationExpand.vue';
 
 
   const user = computed(() => usePage().props.auth.user)
