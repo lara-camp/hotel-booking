@@ -21,5 +21,5 @@
     url: String
   })
   const page = usePage();
-  const isCurrentRoute = computed(() => page.url === props.url);
+  const isCurrentRoute = computed(() => page.url.split("?")[0] === props.url);
 </script>
