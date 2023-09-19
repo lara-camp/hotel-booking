@@ -24,13 +24,14 @@
           <InlineMessage v-if="form.errors.email" severity="error" class="mt-2">{{ form.errors.email }}</InlineMessage>
         </div>
       </div>
-      <div class="relative w-1/2 h-auto max-h-[18rem]">
+      <div class="relative w-1/2 h-auto max-h-[18rem] bg-slate-200/50 rounded">
         <input type="file" accept="image/jpeg,image/png" class="hidden" id="profilePicture" ref="profilePictureInputRef"
           @input="handleProfileInput">
         <img class="object-cover w-full h-full rounded" :src="form.profile_img" alt=""
           v-if="form.profile_img && !previewProfilePhoto">
         <img class="object-cover w-full h-full rounded" :src="previewProfilePhoto" alt="" v-if="previewProfilePhoto">
-        <div class="w-full h-full text-center" v-if="!previewProfilePhoto && !form.profile_img">
+        <div class="flex flex-col justify-center w-full h-full text-center"
+          v-if="!previewProfilePhoto && !form.profile_img">
           <p class="">There is no profile image.</p>
         </div>
         <Button icon="pi pi-pencil" class="!absolute bottom-0 left-0 bg-indigo-700 hover:bg-indigo-700"
