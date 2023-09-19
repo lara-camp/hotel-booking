@@ -1,5 +1,5 @@
 <template>
-  <DataTable :value="room_types.data" tableStyle="min-width: 50rem" striped-rows>
+  <DataTable :value="room_types.data" tableStyle="min-width: 50rem" striped-rows v-memo="[room_types]">
     <template #header>
       <div class="flex justify-between gap-2">
         <div class="">
@@ -15,7 +15,8 @@
         <Button icon="pi pi-pencil" aria-label="Submit" size="small" outlined class="mr-2"
           @click="() => editDialog(slotProps.data.name, slotProps.data.id)" />
         <Button aria-label="Delete" icon="pi pi-trash" severity="danger" size="small" outlined
-          @click.prevent=" confirmDelete(slotProps.data.id)" :key="`confirmDialog${slotProps.data.id}`" />
+          @click.prevent="() => confirmDelete(slotProps.data.id, route('roomtype.destroy', slotProps.data.id))"
+          :key="`confirmDialog${slotProps.data.id}`" />
       </template>
     </Column>
     <template #footer>
@@ -33,52 +34,60 @@
   <DynamicDialog />
 </template>
 <script setup>
-  import Toast from "primevue/toast";
   import CustomPaginator from "@/Components/CustomPaginator.vue";
-  import axios from 'axios';
+  import { router, useForm } from "@inertiajs/vue3";
   import Button from 'primevue/button';
   import Column from 'primevue/column';
   import ConfirmDialog from 'primevue/confirmdialog';
   import DataTable from 'primevue/datatable';
   import DynamicDialog from 'primevue/dynamicdialog';
+  import Toast from "primevue/toast";
   import { useConfirm } from "primevue/useconfirm";
   import { useDialog } from 'primevue/usedialog';
-  import CreateDialog from "../../Components/RoomType/CreateDialog.vue";
   import { useToast } from "primevue/usetoast";
-  import EditDialog from "../../Components/RoomType/EditDialog.vue";
+  import { defineAsyncComponent } from "vue";
 
   const toast = useToast();
 
   const props = defineProps({
-    room_types: Object
+    room_types: Object,
+    errors: Object
   })
 
   // Create Dialog
   const dialog = useDialog();
+  const CreateDialog = defineAsyncComponent(() => import("../../Components/RoomType/CreateDialog.vue"))
   function showCreate() {
     dialog.open(CreateDialog, {
-      data: {
+      props: {
+        modal: true
       }
     })
   }
 
   // Edit Dialog
+  const EditDialog = defineAsyncComponent(() => import("../../Components/RoomType/EditDialog.vue"));
   function editDialog(name, id) {
     dialog.open(EditDialog, {
       data: {
         name,
         id
+      },
+      props: {
+        modal: true
       }
     })
   }
 
   // Delete confirmation and actions
   const confirm = useConfirm();
-  function confirmDelete(id) {
+  const deleteRoomType = useForm({});
+  function confirmDelete(id, link) {
     confirm.require({
       message: `Are you sure you want to delete room type #${id}?`,
       header: `Delete room type #${id}`,
       accept: () => {
+<<<<<<< HEAD
         axios.delete(route('admin.room-types.destroy', id)).then(data => {
           toast.add({
             severity: "success",
@@ -86,6 +95,26 @@
             detail: `Room type #${id} is deleted successfully`,
             life: 3000,
           })
+=======
+        deleteRoomType.delete(link, {
+          onError() {
+            toast.add({
+              severity: "error",
+              summary: "Cannot Delete",
+              detail: `Room type #${id} is not deleted`,
+              life: 3000,
+            })
+          },
+          onSuccess() {
+            toast.add({
+              severity: "success",
+              summary: "Deleted successfully",
+              detail: `Room type #${id} is deleted successfully`,
+              life: 3000,
+            })
+            router.reload({ preserveState: true });
+          }
+>>>>>>> 62227741f91b968a22e8274f687adc60a43b72ec
         })
       }
     })

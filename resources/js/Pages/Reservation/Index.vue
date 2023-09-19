@@ -131,6 +131,9 @@
     dialog.open(Filter, {
       data: {
         filterForm
+      },
+      props: {
+        modal: true
       }
     })
   }

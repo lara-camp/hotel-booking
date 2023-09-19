@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Reservation;
 use App\Models\ReservationDetail;
 use App\Models\Room;
+use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class ReservationController extends Controller
@@ -39,7 +41,7 @@ class ReservationController extends Controller
             $query->where('from_date','<',$to_date)
             ->where('to_date','>',$from_date);
         })->get('id','room_number');
-        
+
         //return the response, modify according to the UI, for now returning JSON
         return response()->json(['available_rooms'=>$availableRoom]);
     }
@@ -71,7 +73,8 @@ class ReservationController extends Controller
     public function create()
     {
         return Inertia::render('Reservation/Create', [
-            'rooms' => Room::where('available', true)->get(['id', 'room_number'])
+            'rooms' => Room::where('available', true)
+                ->get(['id', 'room_number'])
         ]);
     }
 
@@ -102,11 +105,10 @@ class ReservationController extends Controller
                 if (
                     $from_date->between($reservation->from_date, $reservation->to_date) ||
                     $to_date->between($reservation->from_date, $reservation->to_date) ||
-                    $from_date->lte($reservation->from_date) && $to_date->gte($reservation->to_date)
-                ) 
+                    ($from_date->lte($reservation->from_date) && $to_date->gte($reservation->to_date))
+                )
                 {
-                    return redirect()->back()->with('error', 'Some rooms are unavailable for the selected dates.');
-                    echo "room unavailable";
+                    throw ValidationException::withMessages(['room_id' => "Some of the rooms are reserved on given date."]);
                 }
             }
         }
