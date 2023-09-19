@@ -87,15 +87,6 @@
       message: `Are you sure you want to delete room type #${id}?`,
       header: `Delete room type #${id}`,
       accept: () => {
-<<<<<<< HEAD
-        axios.delete(route('admin.room-types.destroy', id)).then(data => {
-          toast.add({
-            severity: "success",
-            summary: "Deleted successfully",
-            detail: `Room type #${id} is deleted successfully`,
-            life: 3000,
-          })
-=======
         deleteRoomType.delete(link, {
           onError() {
             toast.add({
@@ -114,7 +105,6 @@
             })
             router.reload({ preserveState: true });
           }
->>>>>>> 62227741f91b968a22e8274f687adc60a43b72ec
         })
       }
     })

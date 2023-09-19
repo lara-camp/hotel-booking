@@ -4,13 +4,6 @@
     <div class="gap-x-2 flex mb-2">
       <div class=" flex flex-col w-full">
         <label for="checkin">Room Type</label>
-<<<<<<< HEAD
-        <InputText type="text" v-model="roomTypeForm.name" autofocus />
-      </div>
-    </div>
-    <div class="flex justify-end">
-      <Button label="Update" outlined @click="() => roomTypeForm.put(route('admin.room-types.update', dialogRef.data.id))" />
-=======
         <InputText type="text" v-model="roomTypeForm.name" />
         <InlineMessage v-if="roomTypeForm.errors.name" severity="error" class="mt-2">
           {{ roomTypeForm.errors.name }}
@@ -19,7 +12,6 @@
     </div>
     <div class="flex justify-end">
       <Button label="Update" outlined @click="updateRoomType" />
->>>>>>> 62227741f91b968a22e8274f687adc60a43b72ec
     </div>
   </div>
   <Toast position="bottom-right" />
