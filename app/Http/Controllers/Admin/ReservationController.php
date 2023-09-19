@@ -91,6 +91,25 @@ class ReservationController extends Controller
             'checkout_time' => 'date',
         ]);
 
+        $from_date = Carbon::parse($request->from_date);
+        $to_date = Carbon::parse($request->to_date);
+        //check for each selected rooms
+        foreach($request->room_id as $room)
+        {
+            $room_in_res_detil = ReservationDetail::where('room_id',$room)->get();//get res detail data based on the room id
+            foreach($room_in_res_detil as $res_in_res_detail){  //loop through each data
+                $reservation = Reservation::find($res_in_res_detail->reservation_id);   //get reservation (which store from and to date)
+                if (
+                    $from_date->between($reservation->from_date, $reservation->to_date) ||
+                    $to_date->between($reservation->from_date, $reservation->to_date) ||
+                    $from_date->lte($reservation->from_date) && $to_date->gte($reservation->to_date)
+                ) 
+                {
+                    return redirect()->back()->with('error', 'Some rooms are unavailable for the selected dates.');
+                    echo "room unavailable";
+                }
+            }
+        }
 
         DB::beginTransaction();
 
