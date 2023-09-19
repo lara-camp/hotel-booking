@@ -13,7 +13,7 @@
     <Column header="Actions">
       <template #body="slotProps">
         <Button icon="pi pi-pencil" aria-label="Submit" size="small" outlined class="mr-2"
-          @click="() => editDialog(slotProps.data.name, slotProps.data.id)" />
+          @click="() => editDialog(slotProps.data.name, slotProps.data.id, room_types.current_page)" />
         <Button aria-label="Delete" icon="pi pi-trash" severity="danger" size="small" outlined
           @click.prevent=" confirmDelete(slotProps.data.id)" :key="`confirmDialog${slotProps.data.id}`" />
       </template>
@@ -63,11 +63,12 @@
   }
 
   // Edit Dialog
-  function editDialog(name, id) {
+  function editDialog(name, id, page) {
     dialog.open(EditDialog, {
       data: {
         name,
-        id
+        id,
+        page
       }
     })
   }

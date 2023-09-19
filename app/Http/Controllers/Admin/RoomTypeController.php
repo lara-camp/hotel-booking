@@ -39,7 +39,7 @@ class RoomTypeController extends Controller
         $room_type->name = $request->name;
         $room_type->update();
 
-        return to_route('admin.room-types.index')->with('status', 'The room type is updated successfully!');
+        return to_route('admin.room-types.index',['page' => $request->page])->with('status', 'The room type is updated successfully!');
     }
 
     public function destroy(RoomType $room_type)
