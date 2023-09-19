@@ -1,27 +1,19 @@
 <template>
   <div>
-    <h1 class="text-2xl my-2">Edit the Room</h1>
+    <h1 class="my-2 text-2xl">Edit the Room</h1>
     <div class="flex flex-col mb-3">
       <label for="roomnumber" class="my-2">room number</label>
-      <InputNumber
-        v-model="roomForm.room_number"
-        id="roomnumber"
-        inputId="integeronly"
-      />
-      <InlineMessage v-if="errors.room_number" severity="error" class="mt-2">{{
-        errors.room_number
+      <InputNumber v-model="roomForm.room_number" id="roomnumber" inputId="integeronly" />
+      <InlineMessage v-if="errors.number" severity="error" class="mt-2">{{
+        errors.number
       }}</InlineMessage>
     </div>
 
     <div class="flex flex-col">
       <label for="numOfBeds" class="my-2">number of beds</label>
-      <InputNumber
-        v-model="roomForm.number_of_bed"
-        id="numOfBeds"
-        inputId="integeronly"
-      />
-      <InlineMessage v-if="errors.number_of_bed" severity="error" class="mt-2">{{
-        errors.number_of_bed
+      <InputNumber v-model="roomForm.number_of_bed" id="numOfBeds" inputId="integeronly" />
+      <InlineMessage v-if="errors.num_of_bed" severity="error" class="mt-2">{{
+        errors.num_of_bed
       }}</InlineMessage>
     </div>
     <div class="flex flex-col">
@@ -42,13 +34,13 @@
       <label for="">status</label>
       <div class="flex gap-3">
         <div class="align-items-center flex">
-          <RadioButton v-model="roomForm.available" inputId="available" name="available" :value="true" />
-        <label for="availables" class="ml-2">available</label>
-      </div>
+          <RadioButton v-model="roomForm.status" inputId="available" name="available" :value="true" />
+          <label for="availables" class="ml-2">available</label>
+        </div>
         <div class="align-items-center flex">
-          <RadioButton v-model="roomForm.available" inputId="taken" name="taken" :value="false" />
-        <label for="taken" class="ml-2">taken</label>
-      </div>
+          <RadioButton v-model="roomForm.status" inputId="taken" name="taken" :value="false" />
+          <label for="taken" class="ml-2">taken</label>
+        </div>
       </div>
       <InlineMessage v-if="errors.available" severity="error" class="mt-2">{{
         errors.available
@@ -61,46 +53,47 @@
 </template>
 
 <script setup>
-import { useForm } from "@inertiajs/vue3";
-import Button from "primevue/button";
-import InputNumber from "primevue/inputnumber";
-import InputText from "primevue/inputtext";
-import RadioButton from "primevue/radiobutton";
-import InlineMessage from "primevue/inlinemessage";
-import { useToast } from "primevue/usetoast";
+  import { useForm } from "@inertiajs/vue3";
+  import Button from "primevue/button";
+  import InlineMessage from "primevue/inlinemessage";
+  import InputNumber from "primevue/inputnumber";
+  import InputText from "primevue/inputtext";
+  import RadioButton from "primevue/radiobutton";
+  import { useToast } from "primevue/usetoast";
 
-const props = defineProps({
-    id: Number,
-    room_number: String,
-    available: Boolean,
-    bed_type: String,
-    number_of_bed: Number,
-    price: Number,
+  const props = defineProps({
+    room: Object,
     errors: Object,
-});
+  });
 
   const roomForm = useForm(
-  {
-    room_number: props.room_number,
-    price: props.price,
-    available: props.available,
-    bed_type: props.bed_type,
-    number_of_bed: props.number_of_bed
-  },
+    {
+      room_number: props.room.room_number,
+      price: props.room.price,
+      status: props.room.status,
+      bed_type: props.room.bed_type,
+      number_of_bed: props.room.number_of_bed
+    },
   );
 
-const toast = useToast();
+  const toast = useToast();
 
-function submitForm() {
-  roomForm.put(route("admin.rooms.update", props.id), {
-    onSuccess: () => toast.add({ severity: "success",summary: "Success",detail: "Created a room successfully",life:3000}),
-  });
-}
+  function submitForm() {
+    roomForm.post("/room/create", {
+      onSuccess: () => toast.add({ severity: "success", summary: "Success", detail: "Created a room successfully", life: 3000 }),
+    });
+  }
+</script>
+<script>
+  import AdminLayout from "@/Layouts/AdminLayout.vue";
+  export default {
+    layout: AdminLayout
+  }
 </script>
 <style scoped>
-label {
-  text-transform: uppercase;
-  color: #474242;
-  font-size: 13px;
-}
+  label {
+    text-transform: uppercase;
+    color: #474242;
+    font-size: 13px;
+  }
 </style>

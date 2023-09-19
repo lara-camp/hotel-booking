@@ -72,6 +72,7 @@
 </template>
 
 <script setup>
+  import CustomPaginator from "@/Components/CustomPaginator.vue";
   import Filter from "@/Components/Filter.vue";
   import { router } from '@inertiajs/vue3';
   import axios from 'axios';
@@ -153,9 +154,8 @@
   }
 </script>
 <script>
-  import CustomPaginator from "@/Components/CustomPaginator.vue";
-  import IndexLayout from "../../Layouts/IndexLayout.vue";
+  import AdminLayout from "@/Layouts/AdminLayout.vue";
   export default {
-    layout: IndexLayout
+    layout: AdminLayout
   }
 </script>
