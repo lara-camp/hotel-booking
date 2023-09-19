@@ -10,19 +10,19 @@
       <!-- Options -->
       <div class="h-5/6 flex flex-col justify-between">
         <div class="">
-          <NavigationButton url="/reservation" icon="pi pi-calendar">Reservation</NavigationButton>
-          <NavigationButton url="/room" icon="pi pi-home">Room</NavigationButton>
+          <NavigationButton url="/admin/reservations" icon="pi pi-calendar">Reservation</NavigationButton>
+          <NavigationButton url="/admin/rooms" icon="pi pi-home">Room</NavigationButton>
           <NavigationExpand>
             <template #default>
               Rooms
             </template>
             <template #contents>
-              <NavigationButton icon="pi pi-home" url="/room">View</NavigationButton>
-              <NavigationButton icon=" pi pi-plus" url="/room/create">Create</NavigationButton>
+              <NavigationButton icon="pi pi-home" url="/admin/rooms">View</NavigationButton>
+              <NavigationButton icon=" pi pi-plus" url="/admin/rooms/create">Create</NavigationButton>
             </template>
           </NavigationExpand>
-          <NavigationButton url="/reservation" icon="pi pi-calendar">Reservation</NavigationButton>
-          <NavigationButton url="/room-type" icon="pi pi-bars">Room Type</NavigationButton>
+          <NavigationButton url="/admin/reservations" icon="pi pi-calendar">Reservation</NavigationButton>
+          <NavigationButton url="/admin/room-types" icon="pi pi-bars">Room Type</NavigationButton>
           <NavigationButton url="/profile" icon="pi pi-user">Profile</NavigationButton>
         </div>
         <div class="">

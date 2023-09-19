@@ -47,7 +47,7 @@ class RoomController extends Controller
     public function create()
     {
         return Inertia::render('Room/Create', [
-            'room_types' => RoomType::all(['id', 'title'])
+            'room_types' => RoomType::all(['id', 'name'])
         ]);
     }
 
