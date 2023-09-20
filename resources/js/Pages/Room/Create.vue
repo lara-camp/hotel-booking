@@ -60,9 +60,10 @@
 </template>
 
 <script setup>
-  import Dropdown from 'primevue/dropdown';
   import { useForm } from "@inertiajs/vue3";
   import Button from "primevue/button";
+  import Dropdown from 'primevue/dropdown';
+  import InlineMessage from "primevue/inlinemessage";
   import InputNumber from "primevue/inputnumber";
   import InputText from "primevue/inputtext";
   import RadioButton from "primevue/radiobutton";
