@@ -33,7 +33,7 @@
 
   const dialogRef = inject("dialogRef");
   function submitForm() {
-    nameForm.post(route('roomtype.store'), {
+    nameForm.post(route('room-type.store'), {
       onSuccess() {
         toast.add({
           severity: "success",

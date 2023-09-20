@@ -19,17 +19,16 @@
         </div>
       </div>
     </header>
-    <div class="max-w-2xl md:max-w-[75rem] p-3 mx-auto">
+    <div class="p-3">
       <slot />
     </div>
 
   </div>
 </template>
 <script setup>
-  import { Link, usePage } from '@inertiajs/vue3';
+  import { Link, router, usePage } from '@inertiajs/vue3';
   import Button from 'primevue/button';
   import { computed } from 'vue';
-  import { router } from '@inertiajs/vue3';
 
 
   const user = computed(() => usePage().props.auth.user)
