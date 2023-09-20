@@ -5,18 +5,27 @@
       <div class=" flex flex-col w-full">
         <label for="checkin">Room Type</label>
         <InputText type="text" v-model="roomTypeForm.name" />
+        <InlineMessage v-if="roomTypeForm.errors.name" severity="error" class="mt-2">
+          {{ roomTypeForm.errors.name }}
+        </InlineMessage>
       </div>
     </div>
     <div class="flex justify-end">
-      <Button label="Filter" outlined @click="() => roomTypeForm.putW(route('roomtype.update', dialogRef.data.id))" />
+      <Button label="Update" outlined @click="updateRoomType" />
     </div>
   </div>
+  <Toast position="bottom-right" />
 </template>
 <script setup>
-  import InputText from 'primevue/inputtext';
-  import Button from 'primevue/button';
   import { useForm } from '@inertiajs/vue3';
+  import Button from 'primevue/button';
+  import InlineMessage from 'primevue/inlinemessage';
+  import InputText from 'primevue/inputtext';
+  import Toast from 'primevue/toast';
+  import { useToast } from "primevue/usetoast";
   import { inject } from 'vue';
+
+  const toast = useToast();
 
   const dialogRef = inject('dialogRef');
 
@@ -24,4 +33,17 @@
     name: dialogRef.value.data.name
   });
 
+  function updateRoomType() {
+    roomTypeForm.put(route("roomtype.update", dialogRef.value.data.id), {
+      onSuccess() {
+        toast.add({
+          severity: "success",
+          summary: "Update Success",
+          detail: "Room type is updated successfully",
+          life: 3000,
+        })
+        dialogRef.value.close();
+      },
+    })
+  }
 </script>
