@@ -60,10 +60,9 @@
 </template>
 
 <script setup>
-  import AdminLayout from "@/Layouts/AdminLayout.vue";
+  import Dropdown from 'primevue/dropdown';
   import { useForm } from "@inertiajs/vue3";
   import Button from "primevue/button";
-  import InlineMessage from "primevue/inlinemessage";
   import InputNumber from "primevue/inputnumber";
   import InputText from "primevue/inputtext";
   import RadioButton from "primevue/radiobutton";
@@ -80,6 +79,7 @@
     status: null,
     bed_type: "",
     num_of_bed: 0,
+    room_type: ""
   });
 
   const toast = useToast();
@@ -89,7 +89,7 @@
       onSuccess: () => toast.add({ severity: "success", summary: "Success", detail: "Created a room successfully", life: 3000 }),
     });
   }
-</script>
+</script >
 <script>
   import AdminLayout from "@/Layouts/AdminLayout.vue";
   export default {
