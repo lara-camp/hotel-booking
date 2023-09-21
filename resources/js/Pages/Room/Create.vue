@@ -54,7 +54,7 @@
       }}</InlineMessage>
     </div>
     <div class="my-3">
-      <Button label="Create " outlined @click="submitForm" class="px-5" />
+      <Button label="Create " outlined @click="submitForm" class="px-5" :loading="roomForm.processing"/>
     </div>
   </div>
 </template>

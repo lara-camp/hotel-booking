@@ -65,7 +65,7 @@
                 </InlineMessage>
             </div>
             <div class="">
-                <Button label="Save" icon="pi pi-save" outlined="" :disabled="form.processing" type="submit" />
+                <Button label="Save" icon="pi pi-save" outlined="" :loading="form.processing" type="submit" />
             </div>
         </form>
         <Toast position="bottom-right" />

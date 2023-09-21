@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="flex justify-end">
-      <Button label="Create" outlined @click="submitForm" />
+      <Button label="Create" outlined @click="submitForm" :loading="nameForm.processing" />
     </div>
   </div>
   <Toast position="bottom-right" />

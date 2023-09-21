@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="flex justify-end">
-      <Button label="Update" outlined @click="updateRoomType" />
+      <Button label="Update" outlined @click="updateRoomType" :loading="roomTypeForm.processing" />
     </div>
   </div>
   <Toast position="bottom-right" />
