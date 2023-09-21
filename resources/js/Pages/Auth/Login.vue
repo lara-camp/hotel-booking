@@ -47,7 +47,7 @@
         </div>
         <div class="flex justify-between">
             <Button label="Login" outlined type="submit" :class="{ 'opacity-25': form.processing }"
-                :disabled="form.processing" />
+                :loading="form.processing" />
             <div class="">
                 <Link :href="route('register')">
                 <Button label="Register" text />
