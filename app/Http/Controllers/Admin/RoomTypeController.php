@@ -16,7 +16,7 @@ class RoomTypeController extends Controller
     public function index()
     {
         return Inertia::render('RoomType/Index', [
-            'room_types' => RoomType::latest()
+            'room_types' => RoomType::latest('id')
                 ->paginate(5)
                 ->through(fn ($room_type) => [
                     'id' => $room_type->id,

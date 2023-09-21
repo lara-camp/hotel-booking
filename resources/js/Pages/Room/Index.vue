@@ -10,7 +10,7 @@
     </template>
     <Column field="id" header="Id"></Column>
     <Column field="room_number" header="Room Number"></Column>
-    <Column field="roomtype.name" header="Room Type"></Column>
+    <Column field="room_type" header="Room Type"></Column>
     <Column field="bed_type" header="Bed type"></Column>
     <Column field="number_of_bed" header="Number of Beds"></Column>
     <Column field="price" header="Price">
@@ -22,7 +22,7 @@
     <Column header="Actions">
       <template #body="slotProps">
         <Button icon="pi pi-pencil" aria-label="Submit" size="small" outlined class="mr-2"
-          @click="() => router.visit(route('room.edit', slotProps.data.id))" />
+          @click="() => router.visit(route('admin.rooms.edit', slotProps.data.id))" />
         <Button aria-label="Delete" icon="pi pi-trash" severity="danger" size="small" outlined
           @click.prevent=" confirmDelete(slotProps.data.id)" :key="`confirmDialog${slotProps.data.id}`" />
       </template>

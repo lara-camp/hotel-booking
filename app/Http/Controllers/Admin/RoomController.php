@@ -29,7 +29,9 @@ class RoomController extends Controller
             'rooms' => Room::with('roomType', 'reservationDetails')->paginate(5)->through(fn($room) => [
                 'id' => $room->id,
                 'room_number' => $room->room_number,
-                'room_type' => $room->roomType->title,
+                'room_type' => $room->roomType->name,
+                'bed_type' => $room->bed_type,
+                'number_of_bed' => $room->number_of_bed,
                 'price' => $room->price,
                 'can' => [
                     'update_room' => Auth::user()->can('update', $room),
