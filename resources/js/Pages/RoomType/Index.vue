@@ -1,9 +1,16 @@
 <template>
-  <DataTable :value="room_types.data" tableStyle="min-width: 50rem" striped-rows v-memo="[room_types]">
+  <DataTable :value="room_types.data" tableStyle="min-width: 50rem" striped-rows v-memo="[room_types]"
+    class="bg-slate-100/80" :pt="{
+      header: (options) => ({
+        class: [
+          '!py-3 !px-0'
+        ],
+      })
+    }">
     <template #header>
-      <div class="flex justify-between gap-2">
+      <div class="flex justify-between gap-2 mb-3">
         <div class="">
-          <span class="text-900 text-2xl font-bold">Room Type</span>
+          <span class="text-900 text-5xl font-bold">Room Type</span>
         </div>
         <Button label="Create" icon="pi pi-plus" @click="showCreate" outlined />
       </div>

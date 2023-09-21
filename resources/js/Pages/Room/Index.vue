@@ -1,9 +1,15 @@
 <template>
-  <DataTable :value="rooms.data" tableStyle="min-width: 50rem" striped-rows>
+  <DataTable :value="rooms.data" class="bg-slate-100/80" tableStyle="min-width: 50rem" striped-rows :pt="{
+    header: (options) => ({
+      class: [
+        '!py-3 !px-0'
+      ]
+    })
+  }">
     <template #header>
-      <div class="flex justify-between gap-2">
+      <div class="flex justify-between gap-2 mb-3">
         <div class="">
-          <span class="text-900 text-2xl font-bold">Rooms</span>
+          <span class="text-900 text-5xl font-bold">Rooms</span>
         </div>
         <Button label="Create" icon="pi pi-plus" outlined @click="() => router.visit(route('room.create'))" />
       </div>
