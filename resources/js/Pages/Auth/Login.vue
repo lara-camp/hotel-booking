@@ -48,9 +48,14 @@
         <div class="flex justify-between">
             <Button label="Login" outlined type="submit" :class="{ 'opacity-25': form.processing }"
                 :disabled="form.processing" />
-            <Link :href="route('password.request')" v-if="canResetPassword">
-            <Button label="Forgot Password" text />
-            </Link>
+            <div class="">
+                <Link :href="route('register')">
+                <Button label="Register" text />
+                </Link>
+                <Link :href="route('password.request')" v-if="canResetPassword">
+                <Button label="Forgot Password?" text />
+                </Link>
+            </div>
         </div>
     </form>
 </template>
