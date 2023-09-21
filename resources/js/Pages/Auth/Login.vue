@@ -92,3 +92,9 @@ const submit = () => {
         </form>
     </GuestLayout>
 </template>
+<script>
+    import AuthLayout from '@/Layouts/AuthLayout.vue';
+    export default {
+        layout: AuthLayout
+    }
+</script>
