@@ -15,7 +15,7 @@
         <Button icon="pi pi-pencil" aria-label="Submit" size="small" outlined class="mr-2"
           @click="() => editDialog(slotProps.data.name, slotProps.data.id)" />
         <Button aria-label="Delete" icon="pi pi-trash" severity="danger" size="small" outlined
-          @click.prevent="() => confirmDelete(slotProps.data.id, route('roomtype.destroy', slotProps.data.id))"
+          @click.prevent="() => confirmDelete(slotProps.data.id, route('admin.room-types.destroy', slotProps.data.id))"
           :key="`confirmDialog${slotProps.data.id}`" />
       </template>
     </Column>
