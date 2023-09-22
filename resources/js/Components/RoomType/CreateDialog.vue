@@ -12,15 +12,38 @@
         <Button label="Create" outlined type="submit" />
       </div>
     </form>
+
   </div>
+  <Toast position="bottom-right" />
 </template>
 <script setup>
-  import InputText from 'primevue/inputtext';
+  import { useForm, router } from '@inertiajs/vue3';
   import Button from 'primevue/button';
-  import { useForm } from '@inertiajs/vue3';
+  import InlineMessage from 'primevue/inlinemessage';
+  import InputText from 'primevue/inputtext';
+  import Toast from "primevue/toast";
+  import { useToast } from "primevue/usetoast";
+  import { inject } from 'vue';
 
-  const roomTypeForm = useForm({
+  const toast = useToast();
+
+  const nameForm = useForm({
     name: ""
-  });
+  })
 
+  const dialogRef = inject("dialogRef");
+  function submitForm() {
+    nameForm.post(route('room-type.store'), {
+      onSuccess() {
+        toast.add({
+          severity: "success",
+          summary: "Create Success",
+          detail: "Room type is created successfully",
+          life: 3000,
+        })
+        router.reload({ preserveState: true });
+        dialogRef.value.close();
+      }
+    })
+  }
 </script>
