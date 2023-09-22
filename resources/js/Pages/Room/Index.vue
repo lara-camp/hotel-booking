@@ -11,7 +11,14 @@
         <div class="">
           <span class="text-900 text-5xl font-bold">Rooms</span>
         </div>
-        <Button label="Create" icon="pi pi-plus" outlined @click="() => router.visit(route('room.create'))" />
+        <div class="">
+          <Link :href="route('room.create')">
+          <Button label="Create" icon="pi pi-plus" outlined class="mr-3" />
+          </Link>
+          <Link :href="route('room.soft-deleted')">
+          <Button label="Deleted Rooms" severity="danger" text />
+          </Link>
+        </div>
       </div>
     </template>
     <Column field="id" header="Id"></Column>
