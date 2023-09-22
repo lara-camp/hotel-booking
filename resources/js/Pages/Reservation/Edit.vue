@@ -7,7 +7,7 @@
         <div class="gap-x-3 flex mb-2 [&>div]:w-60">
           <div class="flex flex-col">
             <label for="room">Room Number</label>
-            <MultiSelect v-model="reservationForm.room_id" :options="[...props.available_room, ...props.room_id]" filter
+            <MultiSelect v-model="reservationForm.room_id" :options="available_rooms" optionLabel="room_number" optionValue="id" filter
               placeholder="Select rooms" :maxSelectedLabels="5" class=" w-full"
               :class="{ 'p-invalid': errors.room_id }" />
             <InlineMessage v-if="errors.room_id" severity="error" class="mt-2">{{ errors.room_id }}</InlineMessage>
@@ -79,7 +79,7 @@
 
   const props = defineProps({
     id: Number,
-    available_room: Array,
+    available_rooms: Array,
     room_id: Array,
     total_person: Number,
     total_price: Number,
@@ -89,7 +89,7 @@
     checkout_time: String,
     errors: Object,
   })
-  const { available_room, errors, id, ...editProps } = props
+  const { available_rooms, errors, id, ...editProps } = props
 
   const reservationForm = useForm({
     ...editProps,
@@ -102,7 +102,7 @@
 
   const toast = useToast();
   function submitForm() {
-    reservationForm.put(route("reservation.update", props.id), {
+    reservationForm.put(route("admin.reservations.update", props.id), {
       preserveState: true,
       onSuccess: () => toast.add({ severity: 'success', summary: 'Success', detail: 'Added Reservation Successfully', life: 3000 }),
     })

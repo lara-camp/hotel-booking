@@ -25,7 +25,7 @@
     <Column header="Actions">
       <template #body="slotProps">
         <Button icon="pi pi-pencil" aria-label="Submit" size="small" outlined class="mr-2"
-          @click="() => editDialog(slotProps.data.name, slotProps.data.id)" />
+          @click="() => editDialog(slotProps.data.name, slotProps.data.id, room_types.current_page)" />
         <Button aria-label="Delete" icon="pi pi-trash" severity="danger" size="small" outlined
           @click.prevent="() => confirmDelete(slotProps.data.id, route('room-type.destroy', slotProps.data.id))"
           :key="`confirmDialog${slotProps.data.id}`" />
@@ -37,7 +37,7 @@
           <span>Showing {{ room_types.from }} to {{ room_types.to }} of {{ room_types.total }} results.</span>
         </div>
         <CustomPaginator :current-page="room_types.current_page" :total-pages="room_types.last_page"
-          route-name="room-type.index" />
+          route-name="admin.room-types.index" />
       </div>
     </template>
   </DataTable>
@@ -79,11 +79,12 @@
 
   // Edit Dialog
   const EditDialog = defineAsyncComponent(() => import("../../Components/RoomType/EditDialog.vue"));
-  function editDialog(name, id) {
+  function editDialog(name, id, page) {
     dialog.open(EditDialog, {
       data: {
         name,
-        id
+        id,
+        page
       },
       props: {
         modal: true

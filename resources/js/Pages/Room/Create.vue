@@ -6,10 +6,12 @@
       <InputNumber v-model="roomForm.number" id="roomnumber" inputId="integeronly" />
       <InlineMessage v-if="errors.number" severity="error" class="mt-2">{{
         errors.number
+
       }}</InlineMessage>
     </div>
     <div class="flex flex-col">
       <label for="numOfBeds" class="my-2">number of beds</label>
+
       <InputNumber v-model="roomForm.num_of_bed" id="numOfBeds" inputId="integeronly" />
       <InlineMessage v-if="errors.num_of_bed" severity="error" class="mt-2">{{
         errors.num_of_bed
@@ -54,7 +56,7 @@
       }}</InlineMessage>
     </div>
     <div class="my-3">
-      <Button label="Create " outlined @click="submitForm" class="px-5" :loading="roomForm.processing"/>
+      <Button label="Create " outlined @click="submitForm" class="px-5" :loading="roomForm.processing" />
     </div>
   </div>
 </template>
@@ -76,8 +78,10 @@
 
   const roomForm = useForm({
     number: 0,
+
     price: 0,
-    status: null,
+    available: true,
+    room_type_id: 0,
     bed_type: "",
     num_of_bed: 0,
     room_type: ""
@@ -104,3 +108,4 @@
     font-size: 13px;
   }
 </style>
+
