@@ -28,9 +28,9 @@
     <Column field="available" header="Availability"></Column>
     <Column header="Actions">
       <template #body="slotProps">
-        <Button icon="pi pi-pencil" aria-label="Submit" size="small" outlined class="mr-2"
+        <Button icon="pi pi-undo" aria-label="Submit" size="small" outlined class="mr-2"
           @click="() => router.visit(route('room.edit', slotProps.data.id))" />
-        <Button aria-label="Delete" icon="pi pi-trash" severity="danger" size="small" outlined
+        <Button aria-label="Delete" icon="pi pi-times" severity="danger" size="small" outlined
           @click.prevent=" confirmDelete(slotProps.data.id)" :key="`confirmDialog${slotProps.data.id}`" />
       </template>
     </Column>
