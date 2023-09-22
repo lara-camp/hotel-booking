@@ -44,7 +44,7 @@
 
 <script setup>
   import CustomPaginator from "@/Components/CustomPaginator.vue";
-  import { router, useForm, Link } from "@inertiajs/vue3";
+  import { router, useForm } from "@inertiajs/vue3";
   import Button from 'primevue/button';
   import Column from 'primevue/column';
   import ConfirmDialog from 'primevue/confirmdialog';
@@ -52,21 +52,18 @@
   import DynamicDialog from 'primevue/dynamicdialog';
   import Toast from "primevue/toast";
   import { useConfirm } from "primevue/useconfirm";
-  import { useDialog } from 'primevue/usedialog';
-  import { useToast } from "primevue/usetoast";
-  import { defineAsyncComponent } from "vue";
+
   defineProps({
     room_types: Object
   })
-  const dialog = useDialog();
 
   // Delete confirmation and actions
   const confirm = useConfirm();
   const deleteRoomType = useForm({});
   function confirmDelete(id, link) {
     confirm.require({
-      message: `Are you sure you want to delete room type #${id}?`,
-      header: `Delete room type #${id}`,
+      message: `Are you sure you want to delete room type #${id} permanently?`,
+      header: `Delete room type #${id} permanently`,
       icon: 'pi pi-info-circle',
       acceptClass: 'p-button-danger',
       accept: () => {
