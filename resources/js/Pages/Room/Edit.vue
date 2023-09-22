@@ -6,6 +6,7 @@
       <InputNumber v-model="roomForm.room_number" id="roomnumber" inputId="integeronly" />
       <InlineMessage v-if="errors.number" severity="error" class="mt-2">{{
         errors.number
+
       }}</InlineMessage>
     </div>
 
@@ -42,8 +43,8 @@
           <label for="taken" class="ml-2">taken</label>
         </div>
       </div>
-      <InlineMessage v-if="errors.status" severity="error" class="mt-2">{{
-        errors.status
+      <InlineMessage v-if="errors.available" severity="error" class="mt-2">{{
+        errors.available
       }}</InlineMessage>
     </div>
     <div class="my-3">
