@@ -119,6 +119,8 @@
     confirm.require({
       message: `Are you sure you want to delete reservation #${id}?`,
       header: `Delete Reservation #${id}`,
+      icon: 'pi pi-info-circle',
+      acceptClass: 'p-button-danger',
       accept: () => {
         axios.delete(route('reservation.destroy', id)).then(data => {
           toast.add({

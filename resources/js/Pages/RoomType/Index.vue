@@ -98,6 +98,8 @@
     confirm.require({
       message: `Are you sure you want to delete room type #${id}?`,
       header: `Delete room type #${id}`,
+      icon: 'pi pi-info-circle',
+      acceptClass: 'p-button-danger',
       accept: () => {
         deleteRoomType.delete(link, {
           onError() {
