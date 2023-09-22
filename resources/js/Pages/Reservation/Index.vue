@@ -1,9 +1,15 @@
 <template>
-  <DataTable :value="reservations.data" tableStyle="min-width: 50rem" striped-rows>
+  <DataTable :value="reservations.data" tableStyle="min-width: 50rem" striped-rows class="bg-slate-100/80" :pt="{
+    header: (options) => ({
+      class: [
+        '!py-3 !px-0'
+      ]
+    })
+  }">
     <template #header>
-      <div class="flex justify-between gap-2">
+      <div class=" flex justify-between gap-2 mb-3">
         <div class="">
-          <span class="text-900 text-2xl font-bold">Reservations</span>
+          <span class="text-900 text-5xl font-bold">Reservations</span>
         </div>
         <Button label="Filter" icon="pi pi-filter" @click="showFilter" outlined />
       </div>
@@ -11,7 +17,7 @@
     <Column field="id" header="id"></Column>
     <Column field="room_id" header="Room No">
       <template #body="slotProps">
-        <span v-for="(room, i) in slotProps.data.room_id" :key="`${slotProps.index}${i}`">
+        <span v-for="(    room, i    ) in     slotProps.data.room_id    " :key="`${slotProps.index}${i}`">
           <template v-if="i < slotProps.data.room_id.length - 1">
             {{ room }},
           </template>
@@ -113,6 +119,8 @@
     confirm.require({
       message: `Are you sure you want to delete reservation #${id}?`,
       header: `Delete Reservation #${id}`,
+      icon: 'pi pi-info-circle',
+      acceptClass: 'p-button-danger',
       accept: () => {
         axios.delete(route('reservation.destroy', id)).then(data => {
           toast.add({

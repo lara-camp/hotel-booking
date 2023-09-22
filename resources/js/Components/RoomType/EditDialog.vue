@@ -11,7 +11,7 @@
       </div>
       <input type="hidden" name="page" :value="dialogRef.data.page">
       <div class="flex justify-end">
-        <Button label="Update" outlined type="submit" />
+        <Button label="Update" outlined type="submit" :loading="roomTypeForm.processing" />
       </div>
     </form>
   </div>

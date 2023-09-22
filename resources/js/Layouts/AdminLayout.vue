@@ -45,7 +45,7 @@
         </div>
       </div>
     </div>
-    <div class="xl:w-5/6 w-11/12 p-3 overflow-auto">
+    <div class="xl:w-5/6 w-11/12 p-3 m-3 overflow-auto">
       <slot />
     </div>
   </div>

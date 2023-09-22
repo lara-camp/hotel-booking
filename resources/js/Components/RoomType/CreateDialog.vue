@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="flex justify-end">
-        <Button label="Create" outlined type="submit" />
+        <Button label="Create" outlined type="submit" :loading="nameForm.processing" />
       </div>
     </form>
 

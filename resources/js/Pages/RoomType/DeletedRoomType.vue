@@ -10,13 +10,9 @@
     <template #header>
       <div class="flex justify-between gap-2 mb-3">
         <div class="">
-          <span class="text-900 text-5xl font-bold">Room Type</span>
+          <span class="text-900 text-5xl font-bold text-red-500">Deleted Room Types</span>
         </div>
         <div class="">
-          <Button label="Create" icon="pi pi-plus" class="mr-3" @click="showCreate" outlined />
-          <Link :href="route('room-type.soft-deleted')">
-          <Button label="Deleted Room Types" icon="" severity="danger" text />
-          </Link>
         </div>
       </div>
     </template>
@@ -24,9 +20,9 @@
     <Column field="name" header="Type"></Column>
     <Column header="Actions">
       <template #body="slotProps">
-        <Button icon="pi pi-pencil" aria-label="Submit" size="small" outlined class="mr-2"
-          @click="() => editDialog(slotProps.data.name, slotProps.data.id, room_types.current_page)" />
-        <Button aria-label="Delete" icon="pi pi-trash" severity="danger" size="small" outlined
+        <Button icon="pi pi-undo" aria-label="Submit" size="small" outlined class="mr-2"
+          @click="() => editDialog(slotProps.data.name, slotProps.data.id)" />
+        <Button aria-label="Delete" icon="pi pi-times" severity="danger" size="small" outlined
           @click.prevent="() => confirmDelete(slotProps.data.id, route('room-type.destroy', slotProps.data.id))"
           :key="`confirmDialog${slotProps.data.id}`" />
       </template>
@@ -37,7 +33,7 @@
           <span>Showing {{ room_types.from }} to {{ room_types.to }} of {{ room_types.total }} results.</span>
         </div>
         <CustomPaginator :current-page="room_types.current_page" :total-pages="room_types.last_page"
-          route-name="admin.room-types.index" />
+          route-name="room-type.soft-deleted" />
       </div>
     </template>
   </DataTable>
@@ -45,9 +41,10 @@
   <ConfirmDialog></ConfirmDialog>
   <DynamicDialog />
 </template>
+
 <script setup>
   import CustomPaginator from "@/Components/CustomPaginator.vue";
-  import { router, useForm, Link } from "@inertiajs/vue3";
+  import { router, useForm } from "@inertiajs/vue3";
   import Button from 'primevue/button';
   import Column from 'primevue/column';
   import ConfirmDialog from 'primevue/confirmdialog';
@@ -55,50 +52,18 @@
   import DynamicDialog from 'primevue/dynamicdialog';
   import Toast from "primevue/toast";
   import { useConfirm } from "primevue/useconfirm";
-  import { useDialog } from 'primevue/usedialog';
-  import { useToast } from "primevue/usetoast";
-  import { defineAsyncComponent } from "vue";
 
-  const toast = useToast();
-
-  const props = defineProps({
-    room_types: Object,
-    errors: Object
+  defineProps({
+    room_types: Object
   })
-
-  // Create Dialog
-  const dialog = useDialog();
-  const CreateDialog = defineAsyncComponent(() => import("../../Components/RoomType/CreateDialog.vue"))
-  function showCreate() {
-    dialog.open(CreateDialog, {
-      props: {
-        modal: true
-      }
-    })
-  }
-
-  // Edit Dialog
-  const EditDialog = defineAsyncComponent(() => import("../../Components/RoomType/EditDialog.vue"));
-  function editDialog(name, id, page) {
-    dialog.open(EditDialog, {
-      data: {
-        name,
-        id,
-        page
-      },
-      props: {
-        modal: true
-      }
-    })
-  }
 
   // Delete confirmation and actions
   const confirm = useConfirm();
   const deleteRoomType = useForm({});
   function confirmDelete(id, link) {
     confirm.require({
-      message: `Are you sure you want to delete room type #${id}?`,
-      header: `Delete room type #${id}`,
+      message: `Are you sure you want to delete room type #${id} permanently?`,
+      header: `Delete room type #${id} permanently`,
       icon: 'pi pi-info-circle',
       acceptClass: 'p-button-danger',
       accept: () => {
@@ -126,7 +91,7 @@
   }
 </script>
 <script>
-  import AdminLayout from "@/Layouts/AdminLayout.vue";
+  import AdminLayout from '@/Layouts/AdminLayout.vue';
   export default {
     layout: AdminLayout
   }
