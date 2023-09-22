@@ -10,7 +10,7 @@
     <template #header>
       <div class="flex justify-between gap-2 mb-3">
         <div class="">
-          <span class="text-900 text-5xl font-bold">Deleted Room Types</span>
+          <span class="text-900 text-5xl font-bold text-red-500">Deleted Room Types</span>
         </div>
         <div class="">
         </div>
@@ -20,9 +20,9 @@
     <Column field="name" header="Type"></Column>
     <Column header="Actions">
       <template #body="slotProps">
-        <Button icon="pi pi-pencil" aria-label="Submit" size="small" outlined class="mr-2"
+        <Button icon="pi pi-undo" aria-label="Submit" size="small" outlined class="mr-2"
           @click="() => editDialog(slotProps.data.name, slotProps.data.id)" />
-        <Button aria-label="Delete" icon="pi pi-trash" severity="danger" size="small" outlined
+        <Button aria-label="Delete" icon="pi pi-times" severity="danger" size="small" outlined
           @click.prevent="() => confirmDelete(slotProps.data.id, route('room-type.destroy', slotProps.data.id))"
           :key="`confirmDialog${slotProps.data.id}`" />
       </template>
