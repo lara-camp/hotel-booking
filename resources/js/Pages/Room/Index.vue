@@ -70,6 +70,27 @@
   function formatCurrency(currency) {
     return currency.toLocaleString('en-US', { style: 'currency', currency: 'MMK' });
   }
+
+  const toast = useToast();
+  const confirm = useConfirm();
+  function confirmDelete(id) {
+    confirm.require({
+      message: `Are you sure you want to delete room #${id}`,
+      header: `Delete room #${id}.`,
+      icon: 'pi pi-info-circle',
+      acceptClass: 'p-button-danger',
+      accept() {
+        axios.delete(route('room.destroy', id)).then(data => {
+          toast.add({
+            severity: "success",
+            summary: "Deleted successfully",
+            detail: `Room #${id} is deleted successfully`,
+            life: 3000,
+          })
+        })
+      }
+    })
+  }
 </script>
 <script>
   import AdminLayout from "@/Layouts/AdminLayout.vue";

@@ -58,7 +58,40 @@
   defineProps({
     room_types: Object
   })
+  const dialog = useDialog();
 
+  // Delete confirmation and actions
+  const confirm = useConfirm();
+  const deleteRoomType = useForm({});
+  function confirmDelete(id, link) {
+    confirm.require({
+      message: `Are you sure you want to delete room type #${id}?`,
+      header: `Delete room type #${id}`,
+      icon: 'pi pi-info-circle',
+      acceptClass: 'p-button-danger',
+      accept: () => {
+        deleteRoomType.delete(link, {
+          onError() {
+            toast.add({
+              severity: "error",
+              summary: "Cannot Delete",
+              detail: `Room type #${id} is not deleted`,
+              life: 3000,
+            })
+          },
+          onSuccess() {
+            toast.add({
+              severity: "success",
+              summary: "Deleted successfully",
+              detail: `Room type #${id} is deleted successfully`,
+              life: 3000,
+            })
+            router.reload({ preserveState: true });
+          }
+        })
+      }
+    })
+  }
 </script>
 <script>
   import AdminLayout from '@/Layouts/AdminLayout.vue';
