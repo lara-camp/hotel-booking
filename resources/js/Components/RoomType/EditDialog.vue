@@ -1,12 +1,14 @@
 <template>
   <div class="w-[30rem]">
-
-    <form @submit.prevent="() => roomTypeForm.put(route('admin.room-types.update', dialogRef.data.id))">
+    <form @submit.prevent="updateRoomType">
       <h1 class="mb-2 text-3xl font-bold">Edit Room Type #{{ dialogRef.data.id }}</h1>
       <div class="gap-x-2 flex mb-2">
         <div class=" flex flex-col w-full">
           <label for="checkin">Room Type</label>
           <InputText type="text" v-model="roomTypeForm.name" autofocus />
+          <InlineMessage v-if="roomTypeForm.errors.name" severity="error" class="mt-2">
+            {{ roomTypeForm.errors.name }}
+          </InlineMessage>
         </div>
       </div>
       <input type="hidden" name="page" :value="dialogRef.data.page">
