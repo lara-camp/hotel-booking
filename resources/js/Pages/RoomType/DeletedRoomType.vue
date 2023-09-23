@@ -23,7 +23,7 @@
         <Button icon="pi pi-undo" aria-label="Submit" size="small" outlined class="mr-2"
           @click="() => editDialog(slotProps.data.name, slotProps.data.id)" />
         <Button aria-label="Delete" icon="pi pi-times" severity="danger" size="small" outlined
-          @click.prevent="() => confirmDelete(slotProps.data.id, route('room-type.destroy', slotProps.data.id))"
+          @click.prevent="() => confirmDelete(slotProps.data.id, route('admin.room-types.destroy', slotProps.data.id))"
           :key="`confirmDialog${slotProps.data.id}`" />
       </template>
     </Column>
@@ -33,7 +33,7 @@
           <span>Showing {{ room_types.from }} to {{ room_types.to }} of {{ room_types.total }} results.</span>
         </div>
         <CustomPaginator :current-page="room_types.current_page" :total-pages="room_types.last_page"
-          route-name="room-type.soft-deleted" />
+          route-name="room-type.soft-delete" />
       </div>
     </template>
   </DataTable>

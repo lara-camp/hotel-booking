@@ -14,7 +14,7 @@
         </div>
         <div class="">
           <Button label="Create" icon="pi pi-plus" class="mr-3" @click="showCreate" outlined />
-          <Link :href="route('room-type.soft-deleted')">
+          <Link :href="route('admin.room_types.soft-delete')">
           <Button label="Deleted Room Types" icon="" severity="danger" text />
           </Link>
         </div>
@@ -27,7 +27,7 @@
         <Button icon="pi pi-pencil" aria-label="Submit" size="small" outlined class="mr-2"
           @click="() => editDialog(slotProps.data.name, slotProps.data.id, room_types.current_page)" />
         <Button aria-label="Delete" icon="pi pi-trash" severity="danger" size="small" outlined
-          @click.prevent="() => confirmDelete(slotProps.data.id, route('room-type.destroy', slotProps.data.id))"
+          @click.prevent="() => confirmDelete(slotProps.data.id, route('admin.room-types.destroy', slotProps.data.id))"
           :key="`confirmDialog${slotProps.data.id}`" />
       </template>
     </Column>
