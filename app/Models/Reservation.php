@@ -21,8 +21,8 @@ class Reservation extends Model
         });
     }
 
-    public function reservationDetails() {
-        return $this->hasMany(ReservationDetail::class);
+    public function rooms() {
+        return $this->belongsToMany(Room::class);
     }
 
     public function user() {

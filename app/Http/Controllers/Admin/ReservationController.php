@@ -88,12 +88,7 @@ class ReservationController extends Controller
 
             $reservation->save();
 
-            foreach($request->room_id as $room) {
-                ReservationDetail::create([
-                    'room_id' => $room,
-                    'reservation_id' => $reservation->id,
-                ]);
-            }
+            $reservation->rooms()->attach($request->room_id);
 
             DB::commit();
 
