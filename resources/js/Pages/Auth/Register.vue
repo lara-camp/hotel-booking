@@ -1,10 +1,9 @@
 <script setup>
-    import InputError from '@/Components/InputError.vue';
-    import InputLabel from '@/Components/InputLabel.vue';
-    import TextInput from '@/Components/TextInput.vue';
-    import GuestLayout from '@/Layouts/GuestLayout.vue';
     import { Head, Link, useForm } from '@inertiajs/vue3';
     import Button from 'primevue/button';
+    import InlineMessage from 'primevue/inlinemessage';
+    import InputText from 'primevue/inputtext';
+    import Password from 'primevue/password';
     import { ref } from "vue";
 
     const form = useForm({
@@ -12,7 +11,7 @@
         email: '',
         password: '',
         password_confirmation: '',
-        profile_image: ''
+        profile_img: ''
     });
 
     // Profile Picture
@@ -23,7 +22,7 @@
         const file = target.files;
 
         previewProfilePhoto.value = URL.createObjectURL(file[0]);
-        form.profile_image = file[0];
+        form.profile_img = file[0];
     }
 
     const submit = () => {
@@ -34,68 +33,61 @@
 </script>
 
 <template>
-    <GuestLayout>
+    <Head title="Register" />
 
-        <Head title="Register" />
-
-        <form @submit.prevent="submit" enctype="multipart/form-data">
-            <div class="relative mt-4">
-                <InputLabel for="profilePicture" value="Profile Picture" />
-                <div class="h-80 w-full" v-if="previewProfilePhoto">
-                    <img :src="previewProfilePhoto" class="object-cover w-full h-full rounded">
-                </div>
-                <Button class="absolute bottom-0 left-0 px-3 md:px-4 md:py-2.5 mt-1 !w-full "
-                    @click="() => profilePictureInputRef.click()" :icon="`pi ${form.profile_image ? 'pi-pencil' : 'pi-plus'}`"
-                    outlined>
-                </Button>
-                <input type="file" accept="image/jpeg,image/png" class="hidden" id="profilePicture"
-                    ref="profilePictureInputRef" @input="handleProfileInput">
+    <form @submit.prevent="submit" class="">
+        <div class="relative my-4">
+            <div class="h-80 w-full" v-if="previewProfilePhoto">
+                <img :src="previewProfilePhoto" class="object-cover w-full h-full rounded">
             </div>
-            <div>
-                <InputLabel for="name" value="Name" />
-
-                <TextInput id="name" type="text" class="block w-full mt-1" v-model="form.name" required autofocus
-                    autocomplete="name" />
-
-                <InputError class="mt-2" :message="form.errors.name" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="email" value="Email" />
-
-                <TextInput id="email" type="email" class="block w-full mt-1" v-model="form.email" required
-                    autocomplete="username" />
-
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput id="password" type="password" class="block w-full mt-1" v-model="form.password" required
-                    autocomplete="new-password" />
-
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="mt-4">
-                <InputLabel for="password_confirmation" value="Confirm Password" />
-
-                <TextInput id="password_confirmation" type="password" class="block w-full mt-1"
-                    v-model="form.password_confirmation" required autocomplete="new-password" />
-
-                <InputError class="mt-2" :message="form.errors.password_confirmation" />
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                <Link :href="route('login')"
-                    class="hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-sm text-gray-600 underline rounded-md">
-                Already registered?
-                </Link>
-
-                <Button label="Register" class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"
-                    outlined type="submit" />
-            </div>
-        </form>
-    </GuestLayout>
+            <Button class="absolute bottom-0 left-0 px-3 md:px-4 md:py-2.5 mt-1 !w-full "
+                @click="() => profilePictureInputRef.click()" :icon="`pi ${form.profile_img ? 'pi-pencil' : 'pi-plus'}`"
+                outlined label="Profile Picture">
+            </Button>
+            <input type="file" accept="image/jpeg,image/png" class="hidden" id="profilePicture" ref="profilePictureInputRef"
+                @input="handleProfileInput">
+        </div>
+        <div class="flex flex-col mb-4">
+            <InputText id="name" v-model="form.name" size="small" placeholder="Name" required autofocus />
+            <InlineMessage v-if="form.errors.name" severity="error" class="mt-2">{{ form.errors.name }}</InlineMessage>
+        </div>
+        <div class="flex flex-col mb-4">
+            <InputText id="email" v-model="form.email" size="small" placeholder="Email" required autofocus />
+            <InlineMessage v-if="form.errors.email" severity="error" class="mt-2">{{ form.errors.email }}</InlineMessage>
+        </div>
+        <div class="flex flex-col mb-4">
+            <Password v-model="form.password" toggle-mask :feedback="true" id="current_password" size="small" class="w-full"
+                placeholder="Password" required />
+            <InlineMessage v-if="form.errors.password" severity="error" class="mt-2">
+                {{ form.errors.password }}
+            </InlineMessage>
+        </div>
+        <div class="flex flex-col mb-4">
+            <Password v-model="form.password_confirmation" toggle-mask :feedback="false" id="confirm_password" size="small"
+                class="w-full" placeholder="Confirm Password" required />
+            <InlineMessage v-if="form.errors.password_confirmation" severity="error" class="mt-2">
+                {{ form.errors.password_confirmation }}
+            </InlineMessage>
+        </div>
+        <div class="flex justify-between">
+            <Button label="Register" outlined type="submit" :class="{ 'opacity-25': form.processing }"
+                :disabled="form.processing" :loading="form.processing" />
+            <Link :href="route('login')">
+            <Button label="Already Registered?" text />
+            </Link>
+        </div>
+    </form>
 </template>
+<script>
+    import AuthLayout from '@/Layouts/AuthLayout.vue';
+    export default {
+        layout: AuthLayout
+    }
+</script>
+<style scoped>
+    :deep(.p-password-input) {
+        width: 100%;
+        padding: 14px;
+        border-radius: 4px;
+    }
+</style>

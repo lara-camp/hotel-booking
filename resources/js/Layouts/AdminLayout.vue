@@ -1,7 +1,7 @@
 <template>
-  <div class=" md:p-3 flex h-screen">
+  <div class=" flex">
     <!-- Left side bar -->
-    <div class=" xl:block xl:w-1/6 hidden p-3 bg-indigo-600 rounded">
+    <div class=" xl:block xl:w-1/6 sticky top-3 left-3 hidden h-[97vh] m-3 p-3 bg-indigo-600 rounded">
       <!-- Logo -->
       <div class=" h-1/6">
         <Link class=" text-5xl font-extrabold text-center text-white transition-colors duration-300" href="/">Laracamp
@@ -17,13 +17,12 @@
               Rooms
             </template>
             <template #contents>
-              <NavigationButton icon="pi pi-home" url="/admin/rooms">View</NavigationButton>
-              <NavigationButton icon=" pi pi-plus" url="/admin/rooms/create">Create</NavigationButton>
+              <NavigationButton icon="pi pi-home" url="/room">View</NavigationButton>
+              <NavigationButton icon=" pi pi-plus" url="/room/create">Create</NavigationButton>
             </template>
           </NavigationExpand>
-          <NavigationButton url="/admin/reservations" icon="pi pi-calendar">Reservation</NavigationButton>
           <NavigationButton url="/admin/room-types" icon="pi pi-bars">Room Type</NavigationButton>
-          <NavigationButton url="/profile" icon="pi pi-user">Profile</NavigationButton>
+          <NavigationButton url="/admin/profile" icon="pi pi-user">Profile</NavigationButton>
         </div>
         <div class="">
           <UserSection />
@@ -31,7 +30,7 @@
       </div>
     </div>
     <!-- Left side bar for small -->
-    <div class="xl:hidden block w-1/12 p-3 bg-indigo-600 rounded">
+    <div class="xl:hidden block w-1/12 p-3 bg-indigo-600 rounded h-[97vh] m-3 sticky top-3 left-3">
       <div class="h-1/6">
         <Link class="block w-full text-5xl font-extrabold text-center text-white transition-colors duration-300" href="/">
         LB
@@ -46,7 +45,7 @@
         </div>
       </div>
     </div>
-    <div class="xl:w-5/6 w-11/12 p-3 overflow-auto">
+    <div class="xl:w-5/6 w-11/12 p-3 m-3 overflow-auto">
       <slot />
     </div>
   </div>

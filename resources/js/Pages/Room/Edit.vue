@@ -6,6 +6,7 @@
       <InputNumber v-model="roomForm.room_number" id="roomnumber" inputId="integeronly" />
       <InlineMessage v-if="errors.number" severity="error" class="mt-2">{{
         errors.number
+
       }}</InlineMessage>
     </div>
 
@@ -47,7 +48,7 @@
       }}</InlineMessage>
     </div>
     <div class="my-3">
-      <Button label="Update" outlined @click="submitForm" class="px-5" />
+      <Button label="Update" outlined @click="submitForm" class="px-5" :loading="roomForm.processing" />
     </div>
   </div>
 </template>

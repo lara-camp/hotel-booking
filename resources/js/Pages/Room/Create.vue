@@ -6,10 +6,12 @@
       <InputNumber v-model="roomForm.number" id="roomnumber" inputId="integeronly" />
       <InlineMessage v-if="errors.number" severity="error" class="mt-2">{{
         errors.number
+
       }}</InlineMessage>
     </div>
     <div class="flex flex-col">
       <label for="numOfBeds" class="my-2">number of beds</label>
+
       <InputNumber v-model="roomForm.num_of_bed" id="numOfBeds" inputId="integeronly" />
       <InlineMessage v-if="errors.num_of_bed" severity="error" class="mt-2">{{
         errors.num_of_bed
@@ -29,12 +31,20 @@
         errors.bed_type
       }}</InlineMessage>
     </div>
+    <div class="flex flex-col">
+      <label for="roomType" class="my-2">Room type</label>
+      <Dropdown v-model="roomForm.room_type" :options="props.room_type" optionLabel="name"
+        placeholder="Select a room type" class="md:w-14rem w-full" option-value="id" />
+      <InlineMessage v-if="errors.bed_type" severity="error" class="mt-2">{{
+        errors.bed_type
+      }}</InlineMessage>
+    </div>
     <div class="flex flex-col flex-wrap gap-3 my-2">
       <label for="">status</label>
       <div class="flex gap-3">
         <div class="align-items-center flex">
           <RadioButton v-model="roomForm.status" inputId="available" name="available" :value="true" />
-          <label for="availables" class="ml-2">available</label>
+          <label for="available" class="ml-2">available</label>
         </div>
         <div class="align-items-center flex">
           <RadioButton v-model="roomForm.status" inputId="taken" name="taken" :value="false" />
@@ -46,15 +56,15 @@
       }}</InlineMessage>
     </div>
     <div class="my-3">
-      <Button label="Create " outlined @click="submitForm" class="px-5" />
+      <Button label="Create " outlined @click="submitForm" class="px-5" :loading="roomForm.processing" />
     </div>
   </div>
 </template>
 
 <script setup>
-  import AdminLayout from "@/Layouts/AdminLayout.vue";
   import { useForm } from "@inertiajs/vue3";
   import Button from "primevue/button";
+  import Dropdown from 'primevue/dropdown';
   import InlineMessage from "primevue/inlinemessage";
   import InputNumber from "primevue/inputnumber";
   import InputText from "primevue/inputtext";
@@ -63,26 +73,28 @@
 
   const props = defineProps({
     errors: Object,
+    room_type: Array
   });
 
-  const roomForm = useForm(
-    {
-      number: 0,
-      price: 0,
-      status: null,
-      bed_type: "",
-      num_of_bed: 0,
-    },
-  );
+  const roomForm = useForm({
+    number: 0,
+
+    price: 0,
+    available: true,
+    room_type_id: 0,
+    bed_type: "",
+    num_of_bed: 0,
+    room_type: ""
+  });
 
   const toast = useToast();
 
   function submitForm() {
-    roomForm.post("/room/create", {
+    roomForm.post("/room", {
       onSuccess: () => toast.add({ severity: "success", summary: "Success", detail: "Created a room successfully", life: 3000 }),
     });
   }
-</script>
+</script >
 <script>
   import AdminLayout from "@/Layouts/AdminLayout.vue";
   export default {
@@ -96,3 +108,4 @@
     font-size: 13px;
   }
 </style>
+
