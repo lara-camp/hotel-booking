@@ -53,7 +53,7 @@ class ReservationController extends Controller
     {
 
         return Inertia::render('Reservation/Index', [
-            'reservations' => Reservation::with('user', 'reservationDetails')
+            'reservations' => Reservation::with('user', 'rooms')
                 ->search(request(['from_date', 'to_date']))
                 ->paginate(5)
                 ->withQueryString()
@@ -97,21 +97,21 @@ class ReservationController extends Controller
         $from_date = Carbon::parse($request->from_date);
         $to_date = Carbon::parse($request->to_date);
         //check for each selected rooms
-        foreach($request->room_id as $room)
-        {
-            $room_in_res_detil = ReservationDetail::where('room_id',$room)->get();//get res detail data based on the room id
-            foreach($room_in_res_detil as $res_in_res_detail){  //loop through each data
-                $reservation = Reservation::find($res_in_res_detail->reservation_id);   //get reservation (which store from and to date)
-                if (
-                    $from_date->between($reservation->from_date, $reservation->to_date) ||
-                    $to_date->between($reservation->from_date, $reservation->to_date) ||
-                    ($from_date->lte($reservation->from_date) && $to_date->gte($reservation->to_date))
-                )
-                {
-                    throw ValidationException::withMessages(['room_id' => "Some of the rooms are reserved on given date."]);
-                }
-            }
-        }
+//        foreach($request->room_id as $room)
+//        {
+//            $room_in_res_detil = ReservationDetail::where('room_id',$room)->get();//get res detail data based on the room id
+//            foreach($room_in_res_detil as $res_in_res_detail){  //loop through each data
+//                $reservation = Reservation::find($res_in_res_detail->reservation_id);   //get reservation (which store from and to date)
+//                if (
+//                    $from_date->between($reservation->from_date, $reservation->to_date) ||
+//                    $to_date->between($reservation->from_date, $reservation->to_date) ||
+//                    ($from_date->lte($reservation->from_date) && $to_date->gte($reservation->to_date))
+//                )
+//                {
+//                    throw ValidationException::withMessages(['room_id' => "Some of the rooms are reserved on given date."]);
+//                }
+//            }
+//        }
 
         DB::beginTransaction();
 
@@ -124,19 +124,14 @@ class ReservationController extends Controller
             $reservation->from_date = date('Y-m-d', strtotime($request->from_date));
             $reservation->to_date = date('Y-m-d', strtotime($request->to_date));
 
-//            if ($request->checkin_time && $request->checkout_time) {
-//                $reservation->checkin_time = $request->checkin_time;
-//                $reservation->checkout_time = $request->checkout_time;
-//            }
+            if ($request->checkin_time && $request->checkout_time) {
+                $reservation->checkin_time = date('Y-m-d H:i:s', strtotime($request->checkin_time));
+                $reservation->checkout_time = date('Y-m-d H:i:s', strtotime($request->checkout_time));;
+            }
 
             $reservation->save();
 
-            foreach($request->room_id as $room) {
-                ReservationDetail::create([
-                    'room_id' => $room,
-                    'reservation_id' => $reservation->id,
-                ]);
-            }
+            $reservation->rooms()->attach($request->room_id);
 
             DB::commit();
 

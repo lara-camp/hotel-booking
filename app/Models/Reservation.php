@@ -21,8 +21,8 @@ class Reservation extends Model
         });
     }
 
-    public function reservationDetails() {
-        return $this->hasMany(ReservationDetail::class);
+    public function rooms() {
+        return $this->belongsToMany(Room::class, 'reservation_details', 'reservation_id', 'room_id')->withTimestamps();
     }
 
     public function user() {
