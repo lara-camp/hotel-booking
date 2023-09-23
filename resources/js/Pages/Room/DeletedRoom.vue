@@ -29,7 +29,7 @@
     <Column header="Actions">
       <template #body="slotProps">
         <Button icon="pi pi-undo" aria-label="Submit" size="small" outlined class="mr-2"
-          @click="() => router.visit(route('room.edit', slotProps.data.id))" />
+          @click="() => router.visit(route('admin.rooms.edit', slotProps.data.id))" />
         <Button aria-label="Delete" icon="pi pi-times" severity="danger" size="small" outlined
           @click.prevent=" confirmDelete(slotProps.data.id)" :key="`confirmDialog${slotProps.data.id}`" />
       </template>
@@ -77,7 +77,7 @@
       icon: 'pi pi-info-circle',
       acceptClass: 'p-button-danger',
       accept() {
-        axios.delete(route('room.destroy', id)).then(data => {
+        axios.delete(route('admin.rooms.destroy', id)).then(data => {
           toast.add({
             severity: "success",
             summary: "Deleted successfully",

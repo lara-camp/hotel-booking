@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="flex justify-end">
-        <Button label="Create" outlined type="submit" :loading="nameForm.processing" />
+        <Button label="Create" outlined type="submit" :loading="roomTypeForm.processing" />
       </div>
     </form>
 
@@ -27,13 +27,13 @@
 
   const toast = useToast();
 
-  const nameForm = useForm({
+  const roomTypeForm = useForm({
     name: ""
   })
 
   const dialogRef = inject("dialogRef");
   function submitForm() {
-    nameForm.post(route('room-type.store'), {
+    roomTypeForm.post(route('admin.room-types.store'), {
       onSuccess() {
         toast.add({
           severity: "success",

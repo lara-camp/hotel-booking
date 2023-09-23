@@ -36,7 +36,7 @@
   });
 
   function updateRoomType() {
-    roomTypeForm.put(route("room-type.update", dialogRef.value.data.id), {
+    roomTypeForm.put(route("admin.room-types.update", dialogRef.value.data.id), {
       onSuccess() {
         toast.add({
           severity: "success",

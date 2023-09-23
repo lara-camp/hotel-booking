@@ -57,7 +57,7 @@
     <Column header="Actions">
       <template #body="slotProps">
         <Button icon="pi pi-pencil" aria-label="Submit" size="small" outlined class="mr-2"
-          @click="() => router.visit(route('reservation.edit', slotProps.data.id))" />
+          @click="() => router.visit(route('admin.reservations.edit', slotProps.data.id))" />
         <Button aria-label="Delete" icon="pi pi-trash" severity="danger" size="small" outlined
           @click.prevent=" confirmDelete(slotProps.data.id)" :key="`confirmDialog${slotProps.data.id}`" />
       </template>
@@ -122,7 +122,7 @@
       icon: 'pi pi-info-circle',
       acceptClass: 'p-button-danger',
       accept: () => {
-        axios.delete(route('reservation.destroy', id)).then(data => {
+        axios.delete(route('admin.reservations.destroy', id)).then(data => {
           toast.add({
             severity: "success",
             summary: "Deleted successfully",
@@ -154,7 +154,7 @@
   })
 
   function paginateRouter(prop) {
-    router.visit(route('reservation.index', {
+    router.visit(route('admin.reservations.index', {
       _query: {
         page: prop + 1
       }
