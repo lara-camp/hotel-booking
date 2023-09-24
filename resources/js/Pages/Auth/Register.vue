@@ -11,7 +11,7 @@
         email: '',
         password: '',
         password_confirmation: '',
-        profile_img: ''
+        profile_image: ''
     });
 
     // Profile Picture
@@ -22,7 +22,7 @@
         const file = target.files;
 
         previewProfilePhoto.value = URL.createObjectURL(file[0]);
-        form.profile_img = file[0];
+        form.profile_image = file[0];
     }
 
     const submit = () => {
@@ -41,7 +41,7 @@
                 <img :src="previewProfilePhoto" class="object-cover w-full h-full rounded">
             </div>
             <Button class="absolute bottom-0 left-0 px-3 md:px-4 md:py-2.5 mt-1 !w-full "
-                @click="() => profilePictureInputRef.click()" :icon="`pi ${form.profile_img ? 'pi-pencil' : 'pi-plus'}`"
+                @click="() => profilePictureInputRef.click()" :icon="`pi ${form.profile_image ? 'pi-pencil' : 'pi-plus'}`"
                 outlined label="Profile Picture">
             </Button>
             <input type="file" accept="image/jpeg,image/png" class="hidden" id="profilePicture" ref="profilePictureInputRef"

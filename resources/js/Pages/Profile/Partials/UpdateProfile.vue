@@ -4,7 +4,6 @@
       <div class="w-1/2">
         <header class="mb-3">
           <h2 class="text-lg font-medium text-gray-900">Profile Information</h2>
-
           <p class="mt-1 text-sm text-gray-600">
             Update your account's profile information and email address.
           </p>
@@ -27,15 +26,15 @@
       <div class="relative w-1/2 h-auto max-h-[18rem] bg-slate-200/50 rounded">
         <input type="file" accept="image/jpeg,image/png" class="hidden" id="profilePicture" ref="profilePictureInputRef"
           @input="handleProfileInput">
-        <img class="object-cover w-full h-full rounded" :src="form.profile_img" alt=""
-          v-if="form.profile_img && !previewProfilePhoto">
+        <img class="object-cover w-full h-full rounded" :src="form.profile_image" alt=""
+          v-if="form.profile_image && !previewProfilePhoto">
         <img class="object-cover w-full h-full rounded" :src="previewProfilePhoto" alt="" v-if="previewProfilePhoto">
         <div class="flex flex-col justify-center w-full h-full text-center"
-          v-if="!previewProfilePhoto && !form.profile_img">
+          v-if="!previewProfilePhoto && !form.profile_image">
           <p class="">There is no profile image.</p>
         </div>
         <Button icon="pi pi-pencil" class="!absolute bottom-0 left-0 bg-indigo-700 hover:bg-indigo-700"
-          @click="() => profilePictureInputRef.click()" />
+          @click="() => profilePictureInputRef.click()" :loading="form.processing" />
       </div>
     </form>
   </section>
@@ -67,7 +66,7 @@
   const form = useForm({
     name: user.name,
     email: user.email,
-    profile_img: user.profile_img
+    profile_image: user.profile_image
   });
 
   function submitForm() {
@@ -91,7 +90,7 @@
     const file = target.files;
 
     previewProfilePhoto.value = URL.createObjectURL(file[0]);
-    form.profile_img = file[0];
+    form.profile_image= file[0];
   }
 </script>
 
