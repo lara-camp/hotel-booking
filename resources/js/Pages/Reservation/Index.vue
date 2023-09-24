@@ -113,8 +113,11 @@
     return newDate.toLocaleDateString();
   }
   function getDateTime(date) {
-    let newDate = new Date(date);
-    return newDate.toLocaleString();
+    if (date) {
+      let newDate = new Date(date);
+      return newDate.toLocaleString();
+    }
+    return null;
   }
 
   // Delete Confirmation And Actions
