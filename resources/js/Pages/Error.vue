@@ -17,7 +17,7 @@
     status: Number
   })
   const title = computed(() => {
-    return { 503: 'Service Error', 404: "The Thing You Are Looking For Is Not Found.", 403: "Error" }[props.status] || "Something Went Wrong"
+    return { 503: 'Service Unavailable', 404: "The Thing You Are Looking For Is Not Found.", 403: "The page you requested is forbidden",500: "Server Error" }[props.status] || "Something Went Wrong"
   })
 </script>
 <script>

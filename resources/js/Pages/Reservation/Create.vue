@@ -59,7 +59,7 @@
         </div>
       </div>
       <div class="mb-3">
-        <Button label="Add Reservation" outlined @click="submitForm" />
+        <Button label="Add Reservation" :loading="reservationForm.processing" outlined @click="submitForm" />
       </div>
     </div>
   </div>
@@ -99,7 +99,7 @@
 
   const toast = useToast();
   function submitForm() {
-    reservationForm.post(route("reservation.store"), {
+    reservationForm.post(route("admin.reservations.store"), {
       onSuccess: () => toast.add({ severity: 'success', summary: 'Success', detail: 'Added Reservation Successfully', life: 3000 }),
     })
   }

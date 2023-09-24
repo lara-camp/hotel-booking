@@ -10,8 +10,8 @@
       <!-- Options -->
       <div class="h-5/6 flex flex-col justify-between">
         <div class="">
-          <NavigationButton url="/reservation" icon="pi pi-calendar">Reservation</NavigationButton>
-          <NavigationButton url="/room" icon="pi pi-home">Room</NavigationButton>
+          <NavigationButton url="/admin/reservations" icon="pi pi-calendar">Reservation</NavigationButton>
+          <NavigationButton url="/admin/rooms" icon="pi pi-home">Room</NavigationButton>
           <NavigationExpand>
             <template #default>
               Rooms
@@ -21,8 +21,8 @@
               <NavigationButton icon=" pi pi-plus" url="/room/create">Create</NavigationButton>
             </template>
           </NavigationExpand>
-          <NavigationButton url="/room-type" icon="pi pi-bars">Room Type</NavigationButton>
-          <NavigationButton url="/profile" icon="pi pi-user">Profile</NavigationButton>
+          <NavigationButton url="/admin/room-types" icon="pi pi-bars">Room Type</NavigationButton>
+          <NavigationButton url="/admin/profile" icon="pi pi-user">Profile</NavigationButton>
         </div>
         <div class="">
           <UserSection />
@@ -45,7 +45,7 @@
         </div>
       </div>
     </div>
-    <div class="xl:w-5/6 w-11/12 p-3 overflow-auto">
+    <div class="xl:w-5/6 w-11/12 p-3 m-3 overflow-auto">
       <slot />
     </div>
   </div>

@@ -9,15 +9,9 @@
     <template #header>
       <div class="flex justify-between gap-2 mb-3">
         <div class="">
-          <span class="text-900 text-5xl font-bold">Rooms</span>
+          <span class="text-900 text-5xl font-bold text-red-500">Deleted Rooms</span>
         </div>
         <div class="">
-          <Link :href="route('admin.rooms.create')">
-          <Button label="Create" icon="pi pi-plus" outlined class="mr-3" />
-          </Link>
-          <Link :href="route('admin.rooms.soft-delete')">
-          <Button label="Deleted Rooms" severity="danger" text />
-          </Link>
         </div>
       </div>
     </template>
@@ -34,9 +28,9 @@
     <Column field="available" header="Availability"></Column>
     <Column header="Actions">
       <template #body="slotProps">
-        <Button icon="pi pi-pencil" aria-label="Submit" size="small" outlined class="mr-2"
+        <Button icon="pi pi-undo" aria-label="Submit" size="small" outlined class="mr-2"
           @click="() => router.visit(route('admin.rooms.edit', slotProps.data.id))" />
-        <Button aria-label="Delete" icon="pi pi-trash" severity="danger" size="small" outlined
+        <Button aria-label="Delete" icon="pi pi-times" severity="danger" size="small" outlined
           @click.prevent=" confirmDelete(slotProps.data.id)" :key="`confirmDialog${slotProps.data.id}`" />
       </template>
     </Column>
@@ -55,22 +49,18 @@
 </template>
 
 <script setup>
-  import Filter from "@/Components/Filter.vue";
-  import { Link, router } from '@inertiajs/vue3';
+  import CustomPaginator from "@/Components/CustomPaginator.vue";
+  import { router } from '@inertiajs/vue3';
   import axios from 'axios';
   import Button from 'primevue/button';
   import Column from 'primevue/column';
   import ConfirmDialog from 'primevue/confirmdialog';
   import DataTable from 'primevue/datatable';
-  import CustomPaginator from "@/Components/CustomPaginator.vue";
   import DynamicDialog from 'primevue/dynamicdialog';
   import Toast from 'primevue/toast';
   import { useConfirm } from "primevue/useconfirm";
-  import { useDialog } from 'primevue/usedialog';
   import { useToast } from 'primevue/usetoast';
-  import { reactive } from "vue";
-
-  const props = defineProps({
+  defineProps({
     rooms: Object
   })
 
@@ -82,8 +72,8 @@
   const confirm = useConfirm();
   function confirmDelete(id) {
     confirm.require({
-      message: `Are you sure you want to delete room #${id}`,
-      header: `Delete room #${id}.`,
+      message: `Are you sure you want to delete room #${id} permanently?`,
+      header: `Delete room #${id} permanently.`,
       icon: 'pi pi-info-circle',
       acceptClass: 'p-button-danger',
       accept() {
@@ -105,3 +95,4 @@
     layout: AdminLayout
   }
 </script>
+<style lang="scss" scoped></style>
