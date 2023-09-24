@@ -76,17 +76,14 @@ class ReservationController extends Controller
         DB::beginTransaction();
 
         try {
-            $carbon_checkin_time = new Carbon($request->checkin_time);
-            $carbon_checkout_time = new Carbon($request->checkout_time);
-
             $reservation = new Reservation();
             $reservation->user_id = Auth::user()->id;
             $reservation->total_person = $request->total_person;
             $reservation->total_price = $request->total_price;
             $reservation->from_date = date('Y-m-d', strtotime($request->from_date));
             $reservation->to_date = date('Y-m-d', strtotime($request->to_date));
-            $reservation->checkin_time = $carbon_checkin_time->toDateTimeString();
-            $reservation->checkout_time = $carbon_checkout_time->toDateTimeString();
+            $reservation->checkin_time = (new Carbon($request->checkin_time))->toDateTimeString();
+            $reservation->checkout_time = (new Carbon($request->checkout_time))->toDateTimeString();
 
             $reservation->save();
 
