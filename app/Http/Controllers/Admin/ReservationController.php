@@ -41,7 +41,6 @@ class ReservationController extends Controller
                     'to_date' => $reservation->to_date,
                     'checkin_time' => $reservation->checkin_time,
                     'checkout_time' => $reservation->checkout_time,
-                    'created' => $reservation->created_at
                 ])
         ]);
     }
