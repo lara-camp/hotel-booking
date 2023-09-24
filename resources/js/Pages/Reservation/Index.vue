@@ -11,7 +11,12 @@
         <div class="">
           <span class="text-900 text-5xl font-bold">Reservations</span>
         </div>
-        <Button label="Filter" icon="pi pi-filter" @click="showFilter" outlined />
+        <div class="">
+          <Button label="Filter" icon="pi pi-filter" class="mr-3" @click="showFilter" outlined />
+          <Link :href="route('admin.reservations.create')">
+          <Button label="Create" icon="pi pi-plus" outlined class="mr-3" />
+          </Link>
+        </div>
       </div>
     </template>
     <Column field="id" header="id"></Column>
@@ -68,7 +73,7 @@
           <span>Showing {{ reservations.from }} to {{ reservations.to }} of {{ reservations.total }} results.</span>
         </div>
         <CustomPaginator :current-page="reservations.current_page" :total-pages="reservations.last_page"
-          route-name="reservation.index" />
+          route-name="admin.reservations.index" />
       </div>
     </template>
   </DataTable>
@@ -80,7 +85,7 @@
 <script setup>
   import CustomPaginator from "@/Components/CustomPaginator.vue";
   import Filter from "@/Components/Filter.vue";
-  import { router } from '@inertiajs/vue3';
+  import { Link, router } from '@inertiajs/vue3';
   import axios from 'axios';
   import Button from 'primevue/button';
   import Column from 'primevue/column';
