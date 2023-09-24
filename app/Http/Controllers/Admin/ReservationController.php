@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Reservation;
 use App\Models\ReservationDetail;
 use App\Models\Room;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -39,6 +39,9 @@ class ReservationController extends Controller
                     'total_price' => $reservation->total_price,
                     'from_date' => $reservation->from_date,
                     'to_date' => $reservation->to_date,
+                    'checkin_time' => $reservation->checkin_time,
+                    'checkout_time' => $reservation->checkout_time,
+                    'created' => $reservation->created_at
                 ])
         ]);
     }
@@ -65,14 +68,16 @@ class ReservationController extends Controller
             'total_price' => 'required|integer',
             'from_date' => 'required|date',
             'to_date' => 'required|date',
-            'checkin_time' => 'date',
-            'checkout_time' => 'date',
+            'checkin_time' => "date|nullable",
+            'checkout_time' => 'date|nullable',
         ]);
 
 
         DB::beginTransaction();
 
         try {
+            $carbon_checkin_time = new Carbon($request->checkin_time);
+            $carbon_checkout_time = new Carbon($request->checkout_time);
 
             $reservation = new Reservation();
             $reservation->user_id = Auth::user()->id;
@@ -80,11 +85,8 @@ class ReservationController extends Controller
             $reservation->total_price = $request->total_price;
             $reservation->from_date = date('Y-m-d', strtotime($request->from_date));
             $reservation->to_date = date('Y-m-d', strtotime($request->to_date));
-
-//            if ($request->checkin_time && $request->checkout_time) {
-//                $reservation->checkin_time = $request->checkin_time;
-//                $reservation->checkout_time = $request->checkout_time;
-//            }
+            $reservation->checkin_time = $carbon_checkin_time->toDateTimeString();
+            $reservation->checkout_time = $carbon_checkout_time->toDateTimeString();
 
             $reservation->save();
 
