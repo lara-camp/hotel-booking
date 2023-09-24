@@ -147,27 +147,10 @@
   const dialog = useDialog();
   function showFilter() {
     dialog.open(Filter, {
-      data: {
-        filterForm
-      },
       props: {
         modal: true
       }
     })
-  }
-
-  const searchParams = new URLSearchParams(document.location.search);
-  const filterForm = reactive({
-    from_date: searchParams.get("from_date") ? new Date(searchParams.get("from_date")) : "",
-    to_date: searchParams.get("to_date") ? new Date(searchParams.get("to_date")) : ""
-  })
-
-  function paginateRouter(prop) {
-    router.visit(route('admin.reservations.index', {
-      _query: {
-        page: prop + 1
-      }
-    }))
   }
 </script>
 <script>
