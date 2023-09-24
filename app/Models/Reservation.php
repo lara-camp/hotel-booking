@@ -10,6 +10,10 @@ class Reservation extends Model
     use HasFactory;
 
     protected $guarded = [];
+    protected $casts = [
+        'checkin_time'=>"datetime",
+        'checkout_time'=> "datetime"
+    ];
 
     public function scopeSearch($query, array $filters) {
         $query->when($filters['from_date'] ?? false, function($query, $from_date) {
