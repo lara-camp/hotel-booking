@@ -81,9 +81,8 @@ class ReservationController extends Controller
             $reservation->total_price = $request->total_price;
             $reservation->from_date = date('Y-m-d', strtotime($request->from_date));
             $reservation->to_date = date('Y-m-d', strtotime($request->to_date));
-            $reservation->checkin_time = (new Carbon($request->checkin_time))->toDateTimeString();
-            $reservation->checkout_time = (new Carbon($request->checkout_time))->toDateTimeString();
-
+            $reservation->checkin_time = $request->checkin_time ? (new Carbon($request->checkin_time))->toDateTimeString() : null;
+            $reservation->checkout_time =$request->checkout_time? (new Carbon($request->checkout_time))->toDateTimeString(): null;
             $reservation->save();
 
             foreach($request->room_id as $room) {
