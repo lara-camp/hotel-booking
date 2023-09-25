@@ -1,5 +1,8 @@
 <script setup>
-    import { Head, Link } from '@inertiajs/vue3';
+    import { Head, router } from '@inertiajs/vue3';
+    import { reactive, ref } from 'vue';
+    import Calendar from 'primevue/calendar';
+    import Button from 'primevue/button';
 
     defineProps({
         canLogin: {
@@ -9,13 +12,50 @@
             type: Boolean,
         },
     });
+
+    const filterDate = reactive({
+        from_date: "",
+        to_date: ""
+    })
+
+    const minDate = ref(new Date());
+
+    function filterRooms() {
+        router.visit(route('index', {
+            _query: {
+                from_date: filterDate.from_date,
+                to_date: filterDate.to_date
+            }
+        }))
+    }
+
 </script>
 
 <template>
     <Head title="Welcome" />
-<div class="h-[1000rem] bg-slate-400 rounded">
-
-</div>
+    <div class="h-[1000rem]  bg-slate-100 rounded p-3">
+        <div class="md:max-w-[75rem] max-w-2xl flex-col items-center justify-center mx-auto p-3">
+            <div class="my-16">
+                <h1 class=" mb-3 text-6xl font-bold">Welcome to Laracamp Hotel</h1>
+                <h2 class="text-4xl font-normal">Reserve your room</h2>
+            </div>
+            <div class="flex">
+                <div class=" flex items-baseline mr-3">
+                    <label for="checkin" class="mr-3">From</label>
+                    <Calendar v-model="filterDate.from_date" :manualInput="true" class="h-full" id="checkin" :minDate="minDate" />
+                </div>
+                <div class=" flex items-baseline mr-3">
+                    <label for="checkin" class="mr-3">To</label>
+                    <Calendar v-model="filterDate.to_date" :manualInput="true" class="h-full" id="checkin"
+                        :minDate="filterDate.from_date || null" />
+                </div>
+                <div class="">
+                    <Button label="Search" outlined @click="filterRooms"/>
+                </div>
+            </div>
+            <div class="h-96 w-full"></div>
+        </div>
+    </div>
 </template>
 <script>
     import IndexLayout from '@/Layouts/IndexLayout.vue';
@@ -25,14 +65,4 @@
     }
 </script>
 
-<style>
-    .bg-dots-darker {
-        background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(0,0,0,0.07)'/%3E%3C/svg%3E");
-    }
-
-    @media (prefers-color-scheme: dark) {
-        .dark\:bg-dots-lighter {
-            background-image: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.22676 0C1.91374 0 2.45351 0.539773 2.45351 1.22676C2.45351 1.91374 1.91374 2.45351 1.22676 2.45351C0.539773 2.45351 0 1.91374 0 1.22676C0 0.539773 0.539773 0 1.22676 0Z' fill='rgba(255,255,255,0.07)'/%3E%3C/svg%3E");
-        }
-    }
-</style>
+<style scoped></style>
