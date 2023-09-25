@@ -1,42 +1,28 @@
 <template>
-  <section>
-    <form @submit.prevent="submitForm" class="flex space-x-3">
-      <div class="w-1/2">
-        <header class="mb-3">
-          <h2 class="text-lg font-medium text-gray-900">Profile Information</h2>
-          <p class="mt-1 text-sm text-gray-600">
-            Update your account's profile information and email address.
-          </p>
-        </header>
-        <div class="flex flex-col mb-2">
-          <label for="name">Name</label>
-          <InputText id="name" v-model="form.name" size="small" />
-          <InlineMessage v-if="form.errors.name" severity="error" class="mt-2">{{ form.errors.name }}</InlineMessage>
-        </div>
-        <div class="flex flex-col mb-2">
-          <label for="email">Email</label>
-          <InputText id="email" v-model="form.email" size="small" />
-          <InlineMessage v-if="form.errors.email" severity="error" class="mt-2">{{ form.errors.email }}</InlineMessage>
-        </div>
-        <div class="">
-          <Button label="Save" icon="pi pi-save" outlined :loading="form.processing" type="submit" />
-          <InlineMessage v-if="form.errors.email" severity="error" class="mt-2">{{ form.errors.email }}</InlineMessage>
-        </div>
+  <section class="flex space-x-3">
+    <form @submit.prevent="submitForm" class="md:w-1/2" enctype="multipart/form-data">
+      <header class="mb-3">
+        <h2 class="text-lg font-medium text-gray-900">Profile Information</h2>
+        <p class="mt-1 text-sm text-gray-600">
+          Update your account's profile information and email address.
+        </p>
+      </header>
+      <div class="flex flex-col mb-2">
+        <label for="name">Name</label>
+        <InputText id="name" v-model="form.name" size="small" />
+        <InlineMessage v-if="form.errors.name" severity="error" class="mt-2">{{ form.errors.name }}</InlineMessage>
       </div>
-      <div class="relative w-1/2 h-auto max-h-[18rem] bg-slate-200/50 rounded">
-        <input type="file" accept="image/jpeg,image/png" class="hidden" id="profilePicture" ref="profilePictureInputRef"
-          @input="handleProfileInput">
-        <img class="object-cover w-full h-full rounded" :src="form.profile_image" alt=""
-          v-if="form.profile_image && !previewProfilePhoto">
-        <img class="object-cover w-full h-full rounded" :src="previewProfilePhoto" alt="" v-if="previewProfilePhoto">
-        <div class="flex flex-col justify-center w-full h-full text-center"
-          v-if="!previewProfilePhoto && !form.profile_image">
-          <p class="">There is no profile image.</p>
-        </div>
-        <Button icon="pi pi-pencil" class="!absolute bottom-0 left-0 bg-indigo-700 hover:bg-indigo-700"
-          @click="() => profilePictureInputRef.click()" :loading="form.processing" />
+      <div class="flex flex-col mb-2">
+        <label for="email">Email</label>
+        <InputText id="email" v-model="form.email" size="small" />
+        <InlineMessage v-if="form.errors.email" severity="error" class="mt-2">{{ form.errors.email }}</InlineMessage>
+      </div>
+      <div class="">
+        <Button label="Save" icon="pi pi-save" outlined :loading="form.processing" type="submit" />
+        <InlineMessage v-if="form.errors.email" severity="error" class="mt-2">{{ form.errors.email }}</InlineMessage>
       </div>
     </form>
+    <UpdateProfileImage />
   </section>
   <Toast position="bottom-right" />
 </template>
@@ -48,7 +34,7 @@
   import InputText from 'primevue/inputtext';
   import Toast from 'primevue/toast';
   import { useToast } from 'primevue/usetoast';
-  import { ref } from "vue";
+  import UpdateProfileImage from './UpdateProfileImage.vue';
 
   const toast = useToast();
 
@@ -66,7 +52,6 @@
   const form = useForm({
     name: user.name,
     email: user.email,
-    profile_image: user.profile_image
   });
 
   function submitForm() {
@@ -82,16 +67,7 @@
     })
   }
 
-  // Profile Picture
-  const previewProfilePhoto = ref(null);
-  const profilePictureInputRef = ref();
-  function handleProfileInput(event) {
-    const target = event.target;
-    const file = target.files;
 
-    previewProfilePhoto.value = URL.createObjectURL(file[0]);
-    form.profile_image= file[0];
-  }
 </script>
 
 <style lang="scss" scoped></style>
