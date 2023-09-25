@@ -44,10 +44,14 @@ class RegisteredUserController extends Controller
         $user->password = Hash::make($request->password);
 
         if($request->profile_image) {
-            $user->profile_image = $request->profile_image;
+            $profile_image = $request->file('profile_image');
+            $profile_image_path = 'profile_images/' . time() . '.' . $profile_image->getClientOriginalExtension();
 
-            $profile_image = time() . '.' . $request->profile_image->getClientOriginalExtension();
-            $request->profile_image->move(public_path('profile_images'), $profile_image);
+            // copy the file under public folder >> profile_images
+            $profile_image->move(public_path('profile_images'), $profile_image_path);
+
+            // save the file path to db
+            $user->profile_image = $profile_image_path;
         }
 
         $user->save();
