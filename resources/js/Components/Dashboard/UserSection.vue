@@ -1,9 +1,10 @@
 <template>
-  <div class="flex justify-start p-3">
-    <div class="w-1/6 ml-6 mr-4">
-      <img :src="user.profile_img" :alt="`Profile image of ${user.name}`" v-if="user.profile_img">
+  <div class="flex items-center justify-start p-3">
+    <div class="w-12 h-12 ml-6 mr-4">
+      <img :src="user.profile_image_path" class="object-cover w-full h-full rounded-full" :alt="`Profile image of ${user.name}`" v-if="user.profile_image_path">
+      <span class="pi pi-user text-white" v-else></span>
     </div>
-    <div class="">
+    <div class="h-10 leading-10 text-center">
       <p class="text-xl font-semibold text-white">{{ user.name }}</p>
     </div>
   </div>
