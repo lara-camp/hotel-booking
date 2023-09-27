@@ -26,7 +26,7 @@ class RoomController extends Controller
     public function index()
     {
         return Inertia::render('Room/Index', [
-            'rooms' => Room::with('roomType', 'reservationDetails')->paginate(5)->through(fn($room) => [
+            'rooms' => Room::with('roomType')->paginate(5)->through(fn($room) => [
                 'id' => $room->id,
                 'room_number' => $room->room_number,
                 'room_type' => $room->roomType->name,

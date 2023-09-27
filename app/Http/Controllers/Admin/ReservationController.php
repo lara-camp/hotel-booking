@@ -59,6 +59,7 @@ class ReservationController extends Controller
                 ->withQueryString()
                 ->through(fn($reservation) => [
                     'id' => $reservation->id,
+                    'room_id'=>$reservation->rooms->pluck('room_number'),
                     'total_person' => $reservation->total_person,
                     'total_price' => $reservation->total_price,
                     'from_date' => $reservation->from_date,
@@ -147,17 +148,17 @@ class ReservationController extends Controller
      */
     public function show(Reservation $reservation)
     {
-    $reservation->load('reservationDetails');//also retrieve data from detail
+    $reservation->load('rooms');//also retrieve data from detail
         return Inertia::render('Reservation/Show', [
             'id' => $reservation->id,
             'total_person' => $reservation->total_person,
             'total_price' => $reservation->total_price,
             'from_date' => $reservation->from_date,
             'to_date' => $reservation->to_date,
-            'room_id' => $reservation->reservationDetails()->pluck('room_id')->toArray(),
+            'room_ids' => $reservation->rooms->pluck('id')->toArray(),
             'checkin_time' => $reservation->checkin_time ?? Carbon::now(),
             'checkout_time' => $reservation->checkout_time ?? Carbon::now(),
-            'reservation_details' => $reservation->reservationDetails,
+            // 'reservation_details' => $reservation->reservationDetails,
         ]);
     }
 
@@ -173,7 +174,7 @@ class ReservationController extends Controller
             'total_price' => $reservation->total_price,
             'from_date' => $reservation->from_date,
             'to_date' => $reservation->to_date,
-            'room_id' => $reservation->reservationDetails()->pluck('room_id')->toArray(),
+            'room_id' => $reservation->rooms()->pluck('room_id')->toArray(),
             'checkin_time' => $reservation->checkin_time ?? Carbon::now(),
             'checkout_time' => $reservation->checkout_time ?? Carbon::now(),
             'available_rooms' => Room::where('available', true)->get(['id', 'room_number']),
@@ -211,19 +212,21 @@ class ReservationController extends Controller
             $reservation->checkout_time = Carbon::parse($request->checkout_time);
         }
 
-        //save the changes
-        $reservation->save();
-
         //remove the current reservation detail and will add new later on
-        ReservationDetail::where('reservation_id',$reservation->id)->delete();
+        DB::table('reservation_room')->where('reservation_id',$reservation->id)->delete();
 
         //add new detail
         foreach($request->room_id as $room){
-            ReservationDetail::create([
+            DB::table('reservation_room')->insert([
                 'room_id'=>$room,
                 'reservation_id'=>$reservation->id,
+                'updated_at'=>now()
             ]);
         }
+
+        //save the changes
+        $reservation->save();
+
         //redirect, may need to update later
         return redirect()->route('admin.reservations.index');
     }
@@ -233,7 +236,7 @@ class ReservationController extends Controller
      */
     public function destroy(Reservation $reservation)
     {
-        ReservationDetail::where('reservation_id',$reservation->id)->delete();
+        DB::table('reservation_room')->where('reservation_id',$reservation->id)->delete();
         $reservation->delete();
 
         //redirect, may need to update later
