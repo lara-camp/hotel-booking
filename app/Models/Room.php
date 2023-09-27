@@ -12,10 +12,10 @@ class Room extends Model
     protected $guarded = [];
 
     public function reservations() {
-        return $this->belongsToMany(Reservation::class, 'reservation_details', 'room_id', 'reservation_id')->withTimestamps();
+        return $this->belongsToMany(Reservation::class);
     }
 
     public function roomType() {
-        return $this->belongsTo(RoomType::class)->withTrashed();
+        return $this->belongsTo(RoomType::class);
     }
 }
