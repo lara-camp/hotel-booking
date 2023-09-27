@@ -33,6 +33,7 @@ class RoomController extends Controller
                 'bed_type' => $room->bed_type,
                 'number_of_bed' => $room->number_of_bed,
                 'price' => $room->price,
+                'available' => (boolean)$room->available,
                 'can' => [
                     'update_room' => Auth::user()->can('update', $room),
                 ]
@@ -70,7 +71,7 @@ class RoomController extends Controller
 
         Room::create($validated);
 
-        return redirect()->route('admin.rooms.index')->with('message', 'New Room Created!');
+        return redirect()->route('admin.rooms.index');
     }
 
     /**

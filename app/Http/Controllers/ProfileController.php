@@ -39,7 +39,23 @@ class ProfileController extends Controller
 
         return Redirect::route('profile.edit');
     }
-
+    public function updateProfileImage(Request $request){
+            
+            $request->validate([
+                'profile_image'=>'image|required'
+            ]);
+            if($request->profile_image){
+                $user = auth()->user();
+                if($user->profile_image && file_exists(public_path($user->profile_image))){
+                    unlink(public_path($user->profile_image));
+                }
+                $profile_image = $request->profile_image;
+                $image_path = 'profile_images/'.time(). '.' .$profile_image->getClientOriginalExtension();
+                $profile_image->move(public_path('profile_images'),$image_path);
+                $user->profile_image=$image_path;
+                $request->user()->save();
+            }
+    }
     /**
      * Delete the user's account.
      */

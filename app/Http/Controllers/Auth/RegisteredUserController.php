@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Support\Facades\Validator;
 
 class RegisteredUserController extends Controller
 {
@@ -32,27 +31,27 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'profile_image' => 'image',
         ]);
-        if ($validator->fails()) {
-            return redirect()->back()->with('error', 'Cannot Register');
-        }
 
         $user = new User();
-        $user->name = $request->input('name');
-        $user->email = $request->input('email');
-        $user->password = Hash::make($request->input('password'));
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
 
-        if ($request->hasFile('profile_image')) {
-            $image = $request->file('profile_image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('profile_images'), $imageName);
-            //save the path to db
-            $user->profile_image='profile_images/'.$imageName;
+        if($request->profile_image) {
+            $profile_image = $request->file('profile_image');
+            $profile_image_path = 'profile_images/' . time() . '.' . $profile_image->getClientOriginalExtension();
+
+            // copy the file under public folder >> profile_images
+            $profile_image->move(public_path('profile_images'), $profile_image_path);
+
+            // save the file path to db
+            $user->profile_image = $profile_image_path;
         }
 
         $user->save();

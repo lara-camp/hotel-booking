@@ -1,17 +1,28 @@
 <template>
-  <DataTable :value="reservations.data" tableStyle="min-width: 50rem" striped-rows>
+  <DataTable :value="reservations.data" tableStyle="min-width: 50rem" striped-rows class="bg-slate-100/80" :pt="{
+    header: (options) => ({
+      class: [
+        '!py-3 !px-0'
+      ]
+    })
+  }">
     <template #header>
-      <div class="flex justify-between gap-2">
+      <div class=" flex justify-between gap-2 mb-3">
         <div class="">
-          <span class="text-900 text-2xl font-bold">Reservations</span>
+          <span class="text-900 text-5xl font-bold">Reservations</span>
         </div>
-        <Button label="Filter" icon="pi pi-filter" @click="showFilter" outlined />
+        <div class="">
+          <Button label="Filter" icon="pi pi-filter" class="mr-3" @click="showFilter" outlined />
+          <Link :href="route('admin.reservations.create')">
+          <Button label="Create" icon="pi pi-plus" outlined class="mr-3" />
+          </Link>
+        </div>
       </div>
     </template>
     <Column field="id" header="id"></Column>
     <Column field="room_id" header="Room No">
       <template #body="slotProps">
-        <span v-for="(room, i) in slotProps.data.room_id" :key="`${slotProps.index}${i}`">
+        <span v-for="(    room, i    ) in     slotProps.data.room_id    " :key="`${slotProps.index}${i}`">
           <template v-if="i < slotProps.data.room_id.length - 1">
             {{ room }},
           </template>
@@ -51,7 +62,7 @@
     <Column header="Actions">
       <template #body="slotProps">
         <Button icon="pi pi-pencil" aria-label="Submit" size="small" outlined class="mr-2"
-          @click="() => router.visit(route('reservation.edit', slotProps.data.id))" />
+          @click="() => router.visit(route('admin.reservations.edit', slotProps.data.id))" />
         <Button aria-label="Delete" icon="pi pi-trash" severity="danger" size="small" outlined
           @click.prevent=" confirmDelete(slotProps.data.id)" :key="`confirmDialog${slotProps.data.id}`" />
       </template>
@@ -62,7 +73,7 @@
           <span>Showing {{ reservations.from }} to {{ reservations.to }} of {{ reservations.total }} results.</span>
         </div>
         <CustomPaginator :current-page="reservations.current_page" :total-pages="reservations.last_page"
-          route-name="reservation.index" />
+          route-name="admin.reservations.index" />
       </div>
     </template>
   </DataTable>
@@ -74,7 +85,7 @@
 <script setup>
   import CustomPaginator from "@/Components/CustomPaginator.vue";
   import Filter from "@/Components/Filter.vue";
-  import { router } from '@inertiajs/vue3';
+  import { Link, router } from '@inertiajs/vue3';
   import axios from 'axios';
   import Button from 'primevue/button';
   import Column from 'primevue/column';
@@ -102,8 +113,11 @@
     return newDate.toLocaleDateString();
   }
   function getDateTime(date) {
-    let newDate = new Date(date);
-    return newDate.toLocaleString();
+    if (date) {
+      let newDate = new Date(date);
+      return newDate.toLocaleString();
+    }
+    return null;
   }
 
   // Delete Confirmation And Actions
@@ -113,14 +127,18 @@
     confirm.require({
       message: `Are you sure you want to delete reservation #${id}?`,
       header: `Delete Reservation #${id}`,
+      icon: 'pi pi-info-circle',
+      acceptClass: 'p-button-danger',
       accept: () => {
-        axios.delete(route('reservation.destroy', id)).then(data => {
+        axios.delete(route('admin.reservations.destroy', id)).then(data => {
+            console.log(data)
           toast.add({
             severity: "success",
             summary: "Deleted successfully",
             detail: `Reservation #${id} is deleted successfully`,
             life: 3000,
-          })
+          });
+          router.reload({ preserveState: false });
         })
       }
     })
@@ -130,27 +148,10 @@
   const dialog = useDialog();
   function showFilter() {
     dialog.open(Filter, {
-      data: {
-        filterForm
-      },
       props: {
         modal: true
       }
     })
-  }
-
-  const searchParams = new URLSearchParams(document.location.search);
-  const filterForm = reactive({
-    from_date: searchParams.get("from_date") ? new Date(searchParams.get("from_date")) : "",
-    to_date: searchParams.get("to_date") ? new Date(searchParams.get("to_date")) : ""
-  })
-
-  function paginateRouter(prop) {
-    router.visit(route('reservation.index', {
-      _query: {
-        page: prop + 1
-      }
-    }))
   }
 </script>
 <script>

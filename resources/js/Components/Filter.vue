@@ -4,11 +4,11 @@
     <div class="gap-x-2 flex mb-2">
       <div class=" flex flex-col w-full">
         <label for="checkin">Reserved From</label>
-        <Calendar v-model="dialogRef.data.filterForm.from_date" :manualInput="true" id="checkin" />
+        <Calendar v-model="filterForm.from_date" :manualInput="true" id="checkin" />
       </div>
       <div class="flex flex-col w-full">
         <label for="checkin">Reserved To</label>
-        <Calendar v-model="dialogRef.data.filterForm.to_date" :manualInput="true" id="checkout" />
+        <Calendar v-model="filterForm.to_date" :manualInput="true" id="checkout" />
       </div>
     </div>
     <div class="flex justify-end">
@@ -18,21 +18,39 @@
 </template>
 
 <script setup>
-  import Calendar from 'primevue/calendar';
-  import Button from 'primevue/button';
-  import { reactive, ref } from 'vue';
   import { router } from '@inertiajs/vue3';
-  import { inject } from 'vue';
+  import Button from 'primevue/button';
+  import Calendar from 'primevue/calendar';
+  import { reactive, watchEffect } from 'vue';
 
-  const minDate = ref(new Date());
-  const dialogRef = inject('dialogRef');
+  // Get Date from the query
+  const searchParams = new URLSearchParams(document.location.search);
 
+  const filterForm = reactive({
+    from_date: searchParams.get("from_date") ? (new Date(searchParams.get("from_date"))) : "",
+    to_date: searchParams.get("to_date") ? new Date(searchParams.get("to_date")) : ""
+  })
+
+  // Filtering Query
+  let query = reactive({
+    from_date: "",
+    to_date: ""
+  })
   function filterPage() {
     router.visit(route('admin.reservations.index', {
-      _query: {
-        from_date: dialogRef.value.data.filterForm.from_date,
-        to_date: dialogRef.value.data.filterForm.to_date
-      }
+      _query: query
     }))
   }
+
+  // To Mutate checkin and checkout time to YYYY-MM-DD format
+  watchEffect(() => {
+    let newDate = new Date(filterForm.from_date);
+    let newDateString = `${newDate.getFullYear()}-${newDate.getMonth() + 1 < 10 ? "0" + (newDate.getMonth() + 1) : newDate.getMonth() + 1}-${newDate.getDate() < 10 ? "0" : ""}${newDate.getDate()}`
+    query.from_date = filterForm.from_date ? newDateString : null;
+  })
+  watchEffect(() => {
+    let newDate = new Date(filterForm.to_date);
+    let newDateString = `${newDate.getFullYear()}-${newDate.getMonth() + 1 < 10 ? "0" + (newDate.getMonth() + 1) : newDate.getMonth() + 1}-${newDate.getDate() < 10 ? "0" : ""}${newDate.getDate()}`
+    query.to_date = filterForm.to_date ? newDateString : null;
+  })
 </script>

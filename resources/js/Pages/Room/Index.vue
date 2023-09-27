@@ -32,7 +32,7 @@
         <div class="">
           <span>Showing {{ rooms.from }} to {{ rooms.to }} of {{ rooms.total }} results.</span>
         </div>
-        <CustomPaginator :current-page="rooms.current_page" :total-pages="rooms.last_page" route-name="room.index" />
+        <CustomPaginator :current-page="rooms.current_page" :total-pages="rooms.last_page" route-name="admin.rooms.index" />
       </div>
     </template>
   </DataTable>

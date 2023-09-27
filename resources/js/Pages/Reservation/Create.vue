@@ -7,8 +7,9 @@
         <div class="gap-x-3 flex mb-2 [&>div]:w-60">
           <div class="flex flex-col">
             <label for="room">Room Number</label>
-            <MultiSelect v-model="reservationForm.room_id" id="room" :options="rooms" optionLabel="room_number" optionValue="id" filter placeholder="Select rooms"
-              :maxSelectedLabels="5" class=" w-full" :class="{ 'p-invalid': errors.room_id }" />
+            <MultiSelect v-model="reservationForm.room_id" id="room" :options="rooms" optionLabel="room_number"
+              optionValue="id" filter placeholder="Select rooms" :maxSelectedLabels="5" class=" w-full"
+              :class="{ 'p-invalid': errors.room_id }" />
             <InlineMessage v-if="errors.room_id" severity="error" class="mt-2">{{ errors.room_id }}</InlineMessage>
           </div>
           <div class=" flex flex-col">
@@ -45,15 +46,15 @@
       <div class="gap-x-3 flex mt-2 [&>div]:w-60">
         <div class="flex flex-col">
           <label for="checkin">Checkin</label>
-          <Calendar v-model="reservationForm.checkin_time" :minDate="minDate" :manualInput="false" id="checkin"
-            :showTime="true" hourFormat="24" :class="{ 'p-invalid': errors.checkin_time }" />
+          <Calendar v-model="checkinTime" :minDate="minDate" :manualInput="false" id="checkin" :showTime="true"
+            hourFormat="24" :class="{ 'p-invalid': errors.checkin_time }" />
           <InlineMessage v-if="errors.checkin_time" severity="error" class="mt-2">{{ errors.checkin_time }}
           </InlineMessage>
         </div>
         <div class=" flex flex-col">
           <label for="checkout">Checkout</label>
-          <Calendar v-model="reservationForm.checkout_time" :minDate="minDate" :manualInput="true" id="checkout"
-            :showTime="true" hourFormat="24" :class="{ 'p-invalid': errors.checkout_time }" />
+          <Calendar v-model="checkoutTime" :minDate="minDate" :manualInput="true" id="checkout" :showTime="true"
+            hourFormat="24" :class="{ 'p-invalid': errors.checkout_time }" />
           <InlineMessage v-if="errors.checkout_time" severity="error" class="mt-2">{{ errors.checkout_time }}
           </InlineMessage>
         </div>
@@ -69,23 +70,16 @@
   import { useForm } from '@inertiajs/vue3';
   import Button from 'primevue/button';
   import Calendar from 'primevue/calendar';
+  import InlineMessage from 'primevue/inlinemessage';
   import InputNumber from 'primevue/inputnumber';
   import MultiSelect from 'primevue/multiselect';
-  import InlineMessage from 'primevue/inlinemessage';
   import { useToast } from "primevue/usetoast";
-
-  import { ref } from 'vue';
+  import { ref, watchEffect } from 'vue';
 
   const props = defineProps({
-    // availableRooms: Array,
     errors: Object,
     rooms: Object
   })
-
-  // Dummy data for props
-  const availableRooms = ref([
-    "234", "2323", "342", "924", "239", "294", "629"
-  ])
 
   const reservationForm = useForm({
     room_id: [],
@@ -95,6 +89,16 @@
     to_date: "",
     checkin_time: "",
     checkout_time: "",
+  })
+
+  const checkinTime = ref("");
+  const checkoutTime = ref("");
+  // Change checkin and checkout time to UTC and save to reservationForm
+  watchEffect(() => {
+    reservationForm.checkin_time = checkinTime.value ? new Date(checkinTime.value).toISOString() : "";
+  })
+  watchEffect(() => {
+    reservationForm.checkout_time = checkoutTime.value ? new Date(checkoutTime.value).toISOString() : "";
   })
 
   const toast = useToast();
