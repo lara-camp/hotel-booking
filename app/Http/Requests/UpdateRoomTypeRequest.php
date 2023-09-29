@@ -24,8 +24,7 @@ class UpdateRoomTypeRequest extends FormRequest
     public function rules(RoomType $room_type): array
     {
         return [
-            'name' => 'required|string|max:255|unique:room_types,name,'.$room_type->id,
-            'page' => 'numeric'
+            'name' => 'required|string|max:255|unique:room_types,name,'.$room_type->id
         ];
     }
 }

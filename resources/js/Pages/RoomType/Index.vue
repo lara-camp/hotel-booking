@@ -1,23 +1,11 @@
 <template>
-  <DataTable :value="room_types.data" tableStyle="min-width: 50rem" striped-rows v-memo="[room_types]"
-    class="bg-slate-100/80" :pt="{
-      header: (options) => ({
-        class: [
-          '!py-3 !px-0'
-        ],
-      })
-    }">
+  <DataTable :value="room_types.data" tableStyle="min-width: 50rem" striped-rows v-memo="[room_types]">
     <template #header>
-      <div class="flex justify-between gap-2 mb-3">
+      <div class="flex justify-between gap-2">
         <div class="">
-          <span class="text-900 text-5xl font-bold">Room Type</span>
+          <span class="text-900 text-2xl font-bold">Room Type</span>
         </div>
-        <div class="">
-          <Button label="Create" icon="pi pi-plus" class="mr-3" @click="showCreate" outlined />
-          <Link :href="route('admin.room_types.soft-delete')">
-          <Button label="Deleted Room Types" icon="" severity="danger" text />
-          </Link>
-        </div>
+        <Button label="Create" icon="pi pi-plus" @click="showCreate" outlined />
       </div>
     </template>
     <Column field="id" header="id"></Column>
@@ -25,7 +13,7 @@
     <Column header="Actions">
       <template #body="slotProps">
         <Button icon="pi pi-pencil" aria-label="Submit" size="small" outlined class="mr-2"
-          @click="() => editDialog(slotProps.data.name, slotProps.data.id, room_types.current_page)" />
+          @click="() => editDialog(slotProps.data.name, slotProps.data.id)" />
         <Button aria-label="Delete" icon="pi pi-trash" severity="danger" size="small" outlined
           @click.prevent="() => confirmDelete(slotProps.data.id, route('admin.room-types.destroy', slotProps.data.id))"
           :key="`confirmDialog${slotProps.data.id}`" />
@@ -47,7 +35,7 @@
 </template>
 <script setup>
   import CustomPaginator from "@/Components/CustomPaginator.vue";
-  import { router, useForm, Link } from "@inertiajs/vue3";
+  import { router, useForm } from "@inertiajs/vue3";
   import Button from 'primevue/button';
   import Column from 'primevue/column';
   import ConfirmDialog from 'primevue/confirmdialog';
@@ -79,12 +67,11 @@
 
   // Edit Dialog
   const EditDialog = defineAsyncComponent(() => import("../../Components/RoomType/EditDialog.vue"));
-  function editDialog(name, id, page) {
+  function editDialog(name, id) {
     dialog.open(EditDialog, {
       data: {
         name,
-        id,
-        page
+        id
       },
       props: {
         modal: true
@@ -99,8 +86,6 @@
     confirm.require({
       message: `Are you sure you want to delete room type #${id}?`,
       header: `Delete room type #${id}`,
-      icon: 'pi pi-info-circle',
-      acceptClass: 'p-button-danger',
       accept: () => {
         deleteRoomType.delete(link, {
           onError() {
