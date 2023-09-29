@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\ReservationController;
 use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\RoomTypeController;
+use App\Http\Controllers\Admin\PopularRoomTypeController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -44,6 +45,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('rooms', RoomController::class);
         Route::resource('room-types', RoomTypeController::class)->except(['create', 'edit']);
         Route::get('/avaible-rooms', AvailableRoomController::class);
+        Route::get('popular-room-types', PopularRoomTypeController::class);
     });
 });
 

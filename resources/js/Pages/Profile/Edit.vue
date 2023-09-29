@@ -1,6 +1,6 @@
 <script setup>
     import { Head } from '@inertiajs/vue3';
-    import DeleteUserForm from './Partials/DeleteUserForm.vue';
+    import Logout from './Partials/Logout.vue';
     import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
     import UpdateProfile from './Partials/UpdateProfile.vue';
 
@@ -26,6 +26,9 @@
 
             <div class="bg-slate-100/80 p-3 rounded shadow">
                 <UpdatePasswordForm class="max-w-xl" />
+            </div>
+            <div class="bg-slate-100/80 p-3 rounded shadow">
+                <Logout />
             </div>
         </div>
     </div>
