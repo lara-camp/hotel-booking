@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AvailableRoomController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\ReservationController;
 use App\Http\Controllers\Admin\RoomController;
@@ -41,8 +42,8 @@ Route::middleware('auth')->group(function () {
     Route::prefix('admin')->as('admin.')->group(function() {
         Route::resource('reservations', ReservationController::class);
         Route::resource('rooms', RoomController::class);
-                                                Route::resource('room-types', RoomTypeController::class)->except(['create', 'edit']);
-
+        Route::resource('room-types', RoomTypeController::class)->except(['create', 'edit']);
+        Route::get('/avaible-rooms', AvailableRoomController::class);
     });
 });
 
