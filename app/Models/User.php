@@ -52,6 +52,6 @@ class User extends Authenticatable {
     }
 
     protected function profileImagePath(): Attribute {
-        return new Attribute(get: fn() => asset("/$this->profile_image"));
+        return new Attribute(get: fn() => $this->profile_image ? asset("/$this->profile_image"):null );
     }
 }

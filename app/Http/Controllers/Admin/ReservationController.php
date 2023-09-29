@@ -97,11 +97,10 @@ class ReservationController extends Controller
             $reservation->user_id = Auth::user()->id;
             $reservation->total_person = $request->total_person;
             $reservation->total_price = $request->total_price;
-            $reservation->from_date = Carbon::parse($request->from_date);
-            $reservation->to_date = Carbon::parse($request->to_date);
+            $reservation->from_date = date('Y-m-d', strtotime($request->from_date));
+            $reservation->to_date = date('Y-m-d', strtotime($request->to_date));
             $reservation->checkin_time = $request->checkin_time ? (new Carbon($request->checkin_time))->toDateTimeString() : null;
             $reservation->checkout_time =$request->checkout_time? (new Carbon($request->checkout_time))->toDateTimeString(): null;
-
             $reservation->save();
 
             $reservation->rooms()->attach($request->room_id);
