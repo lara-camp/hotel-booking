@@ -75,7 +75,7 @@
   import InputNumber from 'primevue/inputnumber';
   import MultiSelect from 'primevue/multiselect';
   import { useToast } from "primevue/usetoast";
-  import { ref, watchEffect } from 'vue';
+  import { computed, ref, watchEffect } from 'vue';
 
 
   const props = defineProps({
@@ -113,11 +113,19 @@
   //For calculating min date
   const minDate = ref(new Date());
 
-  // Calculate price
-  watchEffect(() => {
-    reservationForm.total_price = props.rooms.filter((item) => reservationForm.room_id.indexOf(item.id) >= 0).reduce((initialPrice, item) => initialPrice + item.price, 0)
+  // Calculate price per day
+  let pricePerDay = computed(() => {
+    return props.rooms.filter((item) => reservationForm.room_id.indexOf(item.id) >= 0).reduce((initialPrice, item) => initialPrice + item.price, 0)
   })
 
+  // Calculate total price
+  watchEffect(() => {
+    let fromDate = new Date(reservationForm.from_date);
+    let toDate = new Date(reservationForm.to_date)
+    let diff = Math.abs(toDate.getTime() - fromDate.getTime())
+    let days = diff / (1000 * 60 * 60 * 24);
+    reservationForm.total_price = days * pricePerDay.value || 0
+  })
 </script>
 <script>
   import AdminLayout from "@/Layouts/AdminLayout.vue";
