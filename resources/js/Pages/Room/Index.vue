@@ -42,7 +42,8 @@
         <div class="">
           <span>Showing {{ rooms.from }} to {{ rooms.to }} of {{ rooms.total }} results.</span>
         </div>
-        <CustomPaginator :current-page="rooms.current_page" :total-pages="rooms.last_page" route-name="room.index" />
+        <CustomPaginator :current-page="rooms.current_page" :total-pages="rooms.last_page"
+          route-name="admin.rooms.index" />
       </div>
     </template>
   </DataTable>
@@ -52,20 +53,17 @@
 </template>
 
 <script setup>
-  import Filter from "@/Components/Filter.vue";
+  import CustomPaginator from "@/Components/CustomPaginator.vue";
   import { Link, router } from '@inertiajs/vue3';
   import axios from 'axios';
   import Button from 'primevue/button';
   import Column from 'primevue/column';
   import ConfirmDialog from 'primevue/confirmdialog';
   import DataTable from 'primevue/datatable';
-  import CustomPaginator from "@/Components/CustomPaginator.vue";
   import DynamicDialog from 'primevue/dynamicdialog';
   import Toast from 'primevue/toast';
   import { useConfirm } from "primevue/useconfirm";
-  import { useDialog } from 'primevue/usedialog';
   import { useToast } from 'primevue/usetoast';
-  import { reactive } from "vue";
 
   const props = defineProps({
     rooms: Object
