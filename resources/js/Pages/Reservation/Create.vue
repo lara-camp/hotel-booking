@@ -77,9 +77,10 @@
   import { useToast } from "primevue/usetoast";
   import { ref, watchEffect } from 'vue';
 
+
   const props = defineProps({
     errors: Object,
-    rooms: Object
+    rooms: Array
   })
 
   const reservationForm = useForm({
@@ -111,6 +112,11 @@
 
   //For calculating min date
   const minDate = ref(new Date());
+
+  // Calculate price
+  watchEffect(() => {
+    reservationForm.total_price = props.rooms.filter((item) => reservationForm.room_id.indexOf(item.id) >= 0).reduce((initialPrice, item) => initialPrice + item.price, 0)
+  })
 
 </script>
 <script>
