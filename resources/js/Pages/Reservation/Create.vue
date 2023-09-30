@@ -37,7 +37,7 @@
           </div>
           <div class="flex flex-col">
             <label for="reservedTo">To</label>
-            <Calendar v-model="reservationForm.to_date" :minDate="reservationForm.from_date" :manualInput="false"
+            <Calendar v-model="reservationForm.to_date" :minDate="reservationForm.from_date || null" :manualInput="false"
               id="reservedTo" :class="{ 'p-invalid': errors.to_date }" />
             <InlineMessage v-if="errors.to_date" severity="error" class="mt-2">{{ errors.to_date }}</InlineMessage>
           </div>
@@ -46,16 +46,16 @@
       <div class="gap-x-3 flex mt-2 [&>div]:w-60">
         <div class="flex flex-col">
           <label for="checkin">Checkin</label>
-          <Calendar v-model="checkinTime" :minDate="reservationForm.from_date || minDate" :maxDate="reservationForm.to_date"
-            :manualInput="false" id="checkin" :showTime="true" hourFormat="24"
+          <Calendar v-model="checkinTime" :minDate="reservationForm.from_date || minDate"
+            :maxDate="reservationForm.to_date || null" :manualInput="false" id="checkin" :showTime="true" hourFormat="24"
             :class="{ 'p-invalid': errors.checkin_time }" :disabled="!reservationForm.from_date" />
           <InlineMessage v-if="errors.checkin_time" severity="error" class="mt-2">{{ errors.checkin_time }}
           </InlineMessage>
         </div>
         <div class=" flex flex-col">
           <label for="checkout">Checkout</label>
-          <Calendar v-model="checkoutTime" :minDate="checkinTime" :manualInput="true" id="checkout" :showTime="true"
-            hourFormat="24" :class="{ 'p-invalid': errors.checkout_time }" :disabled="!checkinTime" />
+          <Calendar v-model="checkoutTime" :minDate="checkinTime || null" :manualInput="true" id="checkout"
+            :showTime="true" hourFormat="24" :class="{ 'p-invalid': errors.checkout_time }" :disabled="!checkinTime" />
           <InlineMessage v-if="errors.checkout_time" severity="error" class="mt-2">{{ errors.checkout_time }}
           </InlineMessage>
         </div>
