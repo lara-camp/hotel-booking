@@ -4,7 +4,7 @@
     <div class="[&>div]:mt-2">
       <div class="mb-3">
         <h2 class="mb-2 text-3xl font-normal">Room</h2>
-        <div class="gap-x-3 flex mb-2">
+        <div class="gap-x-3 flex mb-3">
           <div class="flex flex-col w-1/3">
             <label for="room">Room Number</label>
             <MultiSelect v-model="reservationForm.room_id" id="room" :options="rooms" optionLabel="room_number"
@@ -20,7 +20,7 @@
             </InlineMessage>
           </div>
           <div class="flex flex-col w-1/3">
-            <label for="pricePerDay">Price Per Night</label>
+            <label for="pricePerDay">Price Per Day</label>
             <InputNumber id="pricePerDay" disabled mode="currency" currency="MMK" v-model="pricePerDay" :pt="{
               input: {
                 class: '!opacity-100'
@@ -86,7 +86,7 @@
         <InlineMessage v-if="errors.total_price" severity="error" class="mt-2">{{ errors.total_price }}
         </InlineMessage>
       </div>
-      <div class="mb-3">
+      <div class="mt-6 mb-3">
         <Button label="Add Reservation" :loading="reservationForm.processing" outlined @click="submitForm" />
       </div>
     </div>
