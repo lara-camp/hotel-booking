@@ -15,9 +15,6 @@
           <Link :href="route('admin.rooms.create')">
           <Button label="Create" icon="pi pi-plus" outlined class="mr-3" />
           </Link>
-          <Link :href="route('admin.rooms.soft-delete')">
-          <Button label="Deleted Rooms" severity="danger" text />
-          </Link>
         </div>
       </div>
     </template>

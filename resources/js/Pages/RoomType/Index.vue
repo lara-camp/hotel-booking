@@ -14,7 +14,7 @@
         </div>
         <div class="">
           <Button label="Create" icon="pi pi-plus" class="mr-3" @click="showCreate" outlined />
-          <Link :href="route('admin.room_types.soft-delete')">
+          <Link :href="route('admin.room_types.archives')">
           <Button label="Deleted Room Types" icon="" severity="danger" text />
           </Link>
         </div>

@@ -33,7 +33,7 @@
           <span>Showing {{ room_types.from }} to {{ room_types.to }} of {{ room_types.total }} results.</span>
         </div>
         <CustomPaginator :current-page="room_types.current_page" :total-pages="room_types.last_page"
-          route-name="room-type.soft-delete" />
+          route-name="room-type.archives" />
       </div>
     </template>
   </DataTable>
