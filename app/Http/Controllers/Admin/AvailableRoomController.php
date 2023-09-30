@@ -23,6 +23,7 @@ class AvailableRoomController extends Controller
                     ->orWhere('to_date', '>', $today);
             })
             ->get();
+        $takenRooms   = [];
         //get taken rooms of today reservations
         foreach ($reservations as $reservation) {
             foreach ($reservation->rooms as $room) {

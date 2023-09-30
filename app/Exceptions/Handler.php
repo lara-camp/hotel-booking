@@ -29,7 +29,7 @@ class Handler extends ExceptionHandler {
 
     public function render($request, Throwable $e) {
         $response = parent::render($request, $e);
-        if (in_array($response->status(), [500, 503, 404, 403])) {
+        if (in_array($response->status(), [500, 503, 404, 403, 401])) {
             return Inertia::render('Error', [
                 'status' => $response->status()
             ]);
