@@ -26,14 +26,11 @@ class RoomController extends Controller
     public function index()
     {
         return Inertia::render('Room/Index', [
-            'rooms' => Room::with('roomType')->paginate(5)->through(fn($room) => [
+            'rooms' => Room::with('roomType', 'reservationDetails')->paginate(5)->through(fn($room) => [
                 'id' => $room->id,
                 'room_number' => $room->room_number,
-                'room_type' => $room->roomType->name,
-                'bed_type' => $room->bed_type,
-                'number_of_bed' => $room->number_of_bed,
+                'room_type' => $room->roomType->title,
                 'price' => $room->price,
-                'available' => (boolean)$room->available,
                 'can' => [
                     'update_room' => Auth::user()->can('update', $room),
                 ]
@@ -50,7 +47,7 @@ class RoomController extends Controller
     public function create()
     {
         return Inertia::render('Room/Create', [
-            'room_type' => RoomType::all(['id', 'name'])
+            'room_types' => RoomType::all(['id', 'title'])
         ]);
     }
 
@@ -70,8 +67,6 @@ class RoomController extends Controller
         ]);
 
         Room::create($validated);
-
-        return redirect()->route('admin.rooms.index');
     }
 
     /**
@@ -80,7 +75,7 @@ class RoomController extends Controller
     public function show(Room $room)
     {
         return Inertia::render('Room/Show', [
-            'room' => $room
+            'room' => $room->get()
         ]);
     }
 
@@ -95,9 +90,7 @@ class RoomController extends Controller
             'number_of_bed' => $room->number_of_bed,
             'price' => $room->price,
             'bed_type' => $room->bed_type,
-            'room_type_id' => $room->room_type_id,
-            'available' => (boolean)$room->available,
-            'room_type' => RoomType::all(['id', 'name'])
+            'available' => $room->available,
         ]);
     }
 
@@ -106,10 +99,9 @@ class RoomController extends Controller
      */
     public function update(Request $request, Room $room)
     {
-
         $validated = $request->validate([
             'room_number' => 'required|unique:rooms,room_number,'.$room->id,
-            'room_type_id' => 'required|exists:room_types,id',
+//            'room_type_id' => 'required|exists:room_types,id',
             'bed_type' => 'required|string',
             'number_of_bed' => 'required|integer',
             'price' => 'required|integer',

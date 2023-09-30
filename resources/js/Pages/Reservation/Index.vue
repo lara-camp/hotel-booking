@@ -131,7 +131,6 @@
       acceptClass: 'p-button-danger',
       accept: () => {
         axios.delete(route('admin.reservations.destroy', id)).then(data => {
-            console.log(data)
           toast.add({
             severity: "success",
             summary: "Deleted successfully",
