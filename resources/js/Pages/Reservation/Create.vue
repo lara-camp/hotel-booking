@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h1 class="text-3xl font-light">Create New Reservation</h1>
+    <h1 class="mb-3 text-5xl font-bold">Create New Reservation</h1>
     <div class="[&>div]:mt-2">
       <div class="mb-3">
-        <h2 class="mb-2 text-2xl">Room</h2>
+        <h2 class="mb-2 text-3xl font-normal">Room</h2>
         <div class="gap-x-3 flex mb-2 [&>div]:w-60">
           <div class="flex flex-col">
             <label for="room">Room Number</label>
@@ -37,8 +37,8 @@
           </div>
           <div class="flex flex-col">
             <label for="reservedTo">To</label>
-            <Calendar v-model="reservationForm.to_date" :minDate="minDate" :manualInput="false" id="reservedTo"
-              :class="{ 'p-invalid': errors.to_date }" />
+            <Calendar v-model="reservationForm.to_date" :minDate="reservationForm.from_date" :manualInput="false"
+              id="reservedTo" :class="{ 'p-invalid': errors.to_date }" />
             <InlineMessage v-if="errors.to_date" severity="error" class="mt-2">{{ errors.to_date }}</InlineMessage>
           </div>
         </div>
@@ -46,15 +46,16 @@
       <div class="gap-x-3 flex mt-2 [&>div]:w-60">
         <div class="flex flex-col">
           <label for="checkin">Checkin</label>
-          <Calendar v-model="checkinTime" :minDate="minDate" :manualInput="false" id="checkin" :showTime="true"
-            hourFormat="24" :class="{ 'p-invalid': errors.checkin_time }" />
+          <Calendar v-model="checkinTime" :minDate="reservationForm.from_date || minDate" :maxDate="reservationForm.to_date"
+            :manualInput="false" id="checkin" :showTime="true" hourFormat="24"
+            :class="{ 'p-invalid': errors.checkin_time }" :disabled="!reservationForm.from_date" />
           <InlineMessage v-if="errors.checkin_time" severity="error" class="mt-2">{{ errors.checkin_time }}
           </InlineMessage>
         </div>
         <div class=" flex flex-col">
           <label for="checkout">Checkout</label>
-          <Calendar v-model="checkoutTime" :minDate="minDate" :manualInput="true" id="checkout" :showTime="true"
-            hourFormat="24" :class="{ 'p-invalid': errors.checkout_time }" />
+          <Calendar v-model="checkoutTime" :minDate="checkinTime" :manualInput="true" id="checkout" :showTime="true"
+            hourFormat="24" :class="{ 'p-invalid': errors.checkout_time }" :disabled="!checkinTime" />
           <InlineMessage v-if="errors.checkout_time" severity="error" class="mt-2">{{ errors.checkout_time }}
           </InlineMessage>
         </div>
