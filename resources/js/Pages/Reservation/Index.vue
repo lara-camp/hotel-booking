@@ -12,6 +12,7 @@
           <span class="text-900 text-5xl font-bold">Reservations</span>
         </div>
         <div class="">
+          <Button label="Clear Filter" class="mr-3" outlined icon="pi pi-filter-slash" @click="clearFilter" />
           <Button label="Filter" icon="pi pi-filter" class="mr-3" @click="showFilter" outlined />
           <Link :href="route('admin.reservations.create')">
           <Button label="Create" icon="pi pi-plus" outlined class="mr-3" />
@@ -61,7 +62,7 @@
     </Column>
     <Column header="Actions">
       <template #body="slotProps">
-        <Button icon="pi pi-pencil" aria-label="Submit" size="small" outlined class="mr-2"
+        <Button icon="pi pi-pencil" aria-label="Submit" size="small" outlined class="mb-2 mr-2"
           @click="() => router.visit(route('admin.reservations.edit', slotProps.data.id))" />
         <Button aria-label="Delete" icon="pi pi-trash" severity="danger" size="small" outlined
           @click.prevent=" confirmDelete(slotProps.data.id)" :key="`confirmDialog${slotProps.data.id}`" />
@@ -96,7 +97,6 @@
   import { useConfirm } from "primevue/useconfirm";
   import { useDialog } from 'primevue/usedialog';
   import { useToast } from 'primevue/usetoast';
-  import { reactive } from "vue";
 
   const props = defineProps({
     reservations: {
@@ -151,6 +151,10 @@
         modal: true
       }
     })
+  }
+
+  function clearFilter() {
+    router.visit(route("admin.reservations.index"))
   }
 </script>
 <script>
