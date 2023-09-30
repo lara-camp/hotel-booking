@@ -1,5 +1,5 @@
 <template>
-  <form class="relative md:w-1/2 h-auto max-h-[18rem] bg-slate-200/50 rounded">
+  <form class="relative w-full md:w-1/2 h-auto max-h-[18rem] bg-slate-200/50 rounded">
     <input type="file" accept="image/jpeg,image/png" class="hidden" id="profilePicture" ref="profilePictureInputRef"
       @input="handleProfileInput">
     <img :src="previewProfilePhoto" :alt="`Profile image of ${user.name}`" class="object-cover w-full h-full rounded"
@@ -28,7 +28,7 @@
   })
 
   function submit() {
-    form.post(route('profile.updateProfileImage'), {
+    form.post(route('admin.profile.updateProfileImage'), {
       onSuccess() {
         toast.add({
           severity: "success",

@@ -1,6 +1,6 @@
 <template>
   <div class="hover:bg-white group flex items-center justify-start p-3 transition-colors duration-300 rounded cursor-pointer"
-    @click="() => router.visit(route('profile.edit'))">
+    @click="() => router.visit(route('admin.profile.edit'))">
     <div class="w-12 h-12 ml-6 mr-4">
       <img :src="user.profile_image_path" class="object-cover w-full h-full rounded-full"
         :alt="`Profile image of ${user.name}`" v-if="user.profile_image_path">
