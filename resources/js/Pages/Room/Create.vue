@@ -1,31 +1,30 @@
 <template>
   <div>
-    <h1 class="my-2 text-2xl">Create A New Room</h1>
+    <h1 class="my-2 text-5xl font-bold">Create A New Room</h1>
     <div class="flex flex-col mb-3">
-      <label for="roomnumber" class="my-2">room number</label>
-      <InputNumber v-model="roomForm.number" id="roomnumber" inputId="integeronly" />
-      <InlineMessage v-if="errors.number" severity="error" class="mt-2">{{
-        errors.number
-
+      <label for="roomnumber" class="my-2">Room Number</label>
+      <InputNumber v-model="roomForm.room_number" id="roomnumber" inputId="integeronly" />
+      <InlineMessage v-if="errors.room_number" severity="error" class="mt-2">{{
+        errors.room_number
       }}</InlineMessage>
     </div>
     <div class="flex flex-col">
-      <label for="numOfBeds" class="my-2">number of beds</label>
+      <label for="numOfBeds" class="my-2">Number Of Beds</label>
 
-      <InputNumber v-model="roomForm.num_of_bed" id="numOfBeds" inputId="integeronly" />
-      <InlineMessage v-if="errors.num_of_bed" severity="error" class="mt-2">{{
-        errors.num_of_bed
+      <InputNumber v-model="roomForm.number_of_bed" id="numOfBeds" inputId="integeronly" />
+      <InlineMessage v-if="errors.number_of_bed" severity="error" class="mt-2">{{
+        errors.number_of_bed
       }}</InlineMessage>
     </div>
     <div class="flex flex-col">
-      <label for="integeronly" class="my-2">price</label>
+      <label for="integeronly" class="my-2">Price</label>
       <InputNumber v-model="roomForm.price" inputId="integeronly" mode="currency" currency="MMK" />
       <InlineMessage v-if="errors.price" severity="error" class="mt-2">{{
         errors.price
       }}</InlineMessage>
     </div>
     <div class="flex flex-col">
-      <label for="bedType" class="my-2">bed type</label>
+      <label for="bedType" class="my-2">Bed Type</label>
       <InputText id="bedType" v-model="roomForm.bed_type" />
       <InlineMessage v-if="errors.bed_type" severity="error" class="mt-2">{{
         errors.bed_type
@@ -33,10 +32,10 @@
     </div>
     <div class="flex flex-col">
       <label for="roomType" class="my-2">Room type</label>
-      <Dropdown v-model="roomForm.room_type" :options="props.room_type" optionLabel="name"
+      <Dropdown v-model="roomForm.room_type_id" :options="props.room_type" optionLabel="name"
         placeholder="Select a room type" class="md:w-14rem w-full" option-value="id" />
-      <InlineMessage v-if="errors.bed_type" severity="error" class="mt-2">{{
-        errors.bed_type
+      <InlineMessage v-if="errors.room_type_id" severity="error" class="mt-2">{{
+        errors.room_type_id
       }}</InlineMessage>
     </div>
     <div class="flex flex-col flex-wrap gap-3 my-2">
@@ -77,20 +76,18 @@
   });
 
   const roomForm = useForm({
-    number: 0,
-
+    room_number: 0,
     price: 0,
     available: true,
     room_type_id: 0,
     bed_type: "",
-    num_of_bed: 0,
-    room_type: ""
+    number_of_bed: 0,
   });
 
   const toast = useToast();
 
   function submitForm() {
-    roomForm.post("/room", {
+    roomForm.post(route('admin.rooms.store'), {
       onSuccess: () => toast.add({ severity: "success", summary: "Success", detail: "Created a room successfully", life: 3000 }),
     });
   }
