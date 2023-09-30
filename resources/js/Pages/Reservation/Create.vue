@@ -4,61 +4,87 @@
     <div class="[&>div]:mt-2">
       <div class="mb-3">
         <h2 class="mb-2 text-3xl font-normal">Room</h2>
-        <div class="gap-x-3 flex mb-2 [&>div]:w-60">
-          <div class="flex flex-col">
+        <div class="gap-x-3 flex mb-2">
+          <div class="flex flex-col w-1/3">
             <label for="room">Room Number</label>
             <MultiSelect v-model="reservationForm.room_id" id="room" :options="rooms" optionLabel="room_number"
               optionValue="id" filter placeholder="Select rooms" :maxSelectedLabels="5" class=" w-full"
               :class="{ 'p-invalid': errors.room_id }" />
             <InlineMessage v-if="errors.room_id" severity="error" class="mt-2">{{ errors.room_id }}</InlineMessage>
           </div>
-          <div class=" flex flex-col">
+          <div class=" flex flex-col w-1/3">
             <label for="totalPerson">Total Number Of Person</label>
             <InputNumber id="totalPerson" v-model="reservationForm.total_person"
               :class="{ 'p-invalid': errors.total_person }" class="" />
             <InlineMessage v-if="errors.total_person" severity="error" class="mt-2">{{ errors.total_person }}
             </InlineMessage>
           </div>
-          <div class="flex flex-col">
-            <label for="totalPrice">Total Price</label>
-            <InputNumber id="totalPrice" v-model="reservationForm.total_price" mode="currency" currency="MMK"
-              :class="{ 'p-invalid': errors.total_price }" />
+          <div class="flex flex-col w-1/3">
+            <label for="pricePerDay">Price Per Night</label>
+            <InputNumber id="pricePerDay" disabled mode="currency" currency="MMK" v-model="pricePerDay" :pt="{
+              input: {
+                class: '!opacity-100'
+              }
+            }" />
             <InlineMessage v-if="errors.total_price" severity="error" class="mt-2">{{ errors.total_price }}
             </InlineMessage>
           </div>
         </div>
-        <h3 class=" text-xl">Room Reservation Date</h3>
-        <div class="gap-x-3 flex mt-2 [&>div]:w-60">
-          <div class="flex flex-col">
+        <h3 class=" mb-2 text-3xl font-normal">Room Reservation Date</h3>
+        <div class="gap-x-3 flex mt-2">
+          <div class="flex flex-col w-1/2">
             <label for="reservedFrom">From</label>
             <Calendar v-model="reservationForm.from_date" :minDate="minDate" :manualInput="false" id="reservedFrom"
-              :class="{ 'p-invalid': errors.from_date }" class="w-full" />
+              :class="{ 'p-invalid': errors.from_date }" class="w-full" :pt="{
+                input: {
+                  class: 'p-4 rounded'
+                }
+              }" />
             <InlineMessage v-if="errors.from_date" severity="error" class="mt-2">{{ errors.from_date }}</InlineMessage>
           </div>
-          <div class="flex flex-col">
+          <div class="flex flex-col w-1/2">
             <label for="reservedTo">To</label>
             <Calendar v-model="reservationForm.to_date" :minDate="reservationForm.from_date || null" :manualInput="false"
-              id="reservedTo" :class="{ 'p-invalid': errors.to_date }" />
+              id="reservedTo" :class="{ 'p-invalid': errors.to_date }" :pt="{
+                input: {
+                  class: 'p-4 rounded'
+                }
+              }" />
             <InlineMessage v-if="errors.to_date" severity="error" class="mt-2">{{ errors.to_date }}</InlineMessage>
           </div>
         </div>
       </div>
-      <div class="gap-x-3 flex mt-2 [&>div]:w-60">
-        <div class="flex flex-col">
+      <div class="gap-x-3 flex mt-2">
+        <div class="flex flex-col w-1/2">
           <label for="checkin">Checkin</label>
           <Calendar v-model="checkinTime" :minDate="reservationForm.from_date || minDate"
             :maxDate="reservationForm.to_date || null" :manualInput="false" id="checkin" :showTime="true" hourFormat="24"
-            :class="{ 'p-invalid': errors.checkin_time }" :disabled="!reservationForm.from_date" />
+            :class="{ 'p-invalid': errors.checkin_time }" :disabled="!reservationForm.from_date" :pt="{
+              input: {
+                class: 'p-4 rounded'
+              }
+            }" />
           <InlineMessage v-if="errors.checkin_time" severity="error" class="mt-2">{{ errors.checkin_time }}
           </InlineMessage>
         </div>
-        <div class=" flex flex-col">
+        <div class=" flex flex-col w-1/2">
           <label for="checkout">Checkout</label>
           <Calendar v-model="checkoutTime" :minDate="checkinTime || null" :manualInput="true" id="checkout"
-            :showTime="true" hourFormat="24" :class="{ 'p-invalid': errors.checkout_time }" :disabled="!checkinTime" />
+            :showTime="true" hourFormat="24" :class="{ 'p-invalid': errors.checkout_time }" :disabled="!checkinTime" :pt="{
+              input: {
+                class: 'p-4 rounded'
+              }
+            }" />
           <InlineMessage v-if="errors.checkout_time" severity="error" class="mt-2">{{ errors.checkout_time }}
           </InlineMessage>
         </div>
+      </div>
+      <div class="flex flex-col">
+        <label for="totalPrice">Total Price</label>
+        <InputNumber id="totalPrice" v-model="reservationForm.total_price" mode="currency" currency="MMK"
+          :class="{ 'p-invalid': errors.total_price }" />
+        <InlineMessage v-if="errors.total_price" severity="error" class="mt-2">{{ errors.total_price }}
+        </InlineMessage>
       </div>
       <div class="mb-3">
         <Button label="Add Reservation" :loading="reservationForm.processing" outlined @click="submitForm" />
