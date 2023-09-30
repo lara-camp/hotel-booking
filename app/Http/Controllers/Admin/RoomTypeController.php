@@ -23,7 +23,7 @@ class RoomTypeController extends Controller
     }
 
     public function archives() {
-        return Inertia::render('RoomType/Index', [
+        return Inertia::render('RoomType/DeletedRoomType', [
             'room_types' => RoomType::onlyTrashed()
                                     ->paginate(5)
                                     ->through(fn($room_type) => [
