@@ -52,7 +52,7 @@ class ReservationController extends Controller
     {
         return Inertia::render('Reservation/Create', [
             'rooms' => Room::where('available', true)
-                ->get(['id', 'room_number'])
+                ->get(['id', 'room_number', "price"])
         ]);
     }
 
