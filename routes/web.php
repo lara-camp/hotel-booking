@@ -35,17 +35,29 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'admin'])->group(function () {
+    // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post("/profile/image", [ProfileController::class, 'updateProfileImage'])->name("profile.updateProfileImage");
 
     Route::prefix('admin')->as('admin.')->group(function() {
+        // Reservations
         Route::resource('reservations', ReservationController::class);
+
+        // Rooms
+        Route::get('rooms/archives', [RoomController::class, 'archives'])->name('rooms.archives');
+        Route::get('rooms/{id}/restore', [RoomController::class, 'restore'])->name('rooms.restore');
+        Route::delete('rooms/{id}/force-delete', [RoomTypeController::class, 'forceDelete'])->name('rooms.force-delete');
         Route::resource('rooms', RoomController::class);
+
+        // Room Types
         Route::get('room-types/archives', [RoomTypeController::class, 'archives'])->name('room-types.archives');
+        Route::delete('room-types/{id}/restore', [RoomTypeController::class, 'restore'])->name('room-types.restore');
+        Route::delete('room-types/{id}/force-delete', [RoomTypeController::class, 'forceDelete'])->name('room-types.force-delete');
         Route::resource('room-types', RoomTypeController::class)->except(['create', 'edit']);
-        Route::get('/avaible-rooms', AvailableRoomController::class);
+
+        Route::get('/available-rooms', AvailableRoomController::class);
         Route::get('popular-room-types', PopularRoomTypeController::class);
     });
 });

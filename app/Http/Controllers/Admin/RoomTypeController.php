@@ -26,7 +26,7 @@ class RoomTypeController extends Controller
     }
 
     public function archives() {
-        return Inertia::render('RoomType/Index', [
+        return Inertia::render('RoomType/DeletedRoomType', [
             'room_types' => RoomType::onlyTrashed()
                                     ->paginate(5)
                                     ->through(fn($room_type) => [
@@ -70,6 +70,7 @@ class RoomTypeController extends Controller
         $room_type = RoomType::onlyTrashed()->findOrFail($id);
         $room_type->forceDelete();
 
-        return redirect()->route('admin.room-types.index')->with('status', 'The room is permanently deleted');
+        // Toast not shown yet
+        return redirect()->route('admin.room-types.index');
     }
 }

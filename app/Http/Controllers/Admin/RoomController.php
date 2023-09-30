@@ -130,4 +130,30 @@ class RoomController extends Controller
 
         return redirect()->route('admin.rooms.index');
     }
+
+    public function archives() {
+        return Inertia::render('Room/DeletedRoom', [
+            'rooms' => Room::onlyTrashed()
+                            ->paginate(5)
+                            ->through(fn($room) => [
+                                'id' => $room->id,
+                                'room_number' => $room->room_number
+                            ]),
+        ]);
+    }
+
+    public function restore($id) {
+        $room = Room::onlyTrashed()->findOrFail($id);
+        $room->restore();
+
+        return redirect()->route('admin.rooms.index')->with('status', 'The room is restored');
+    }
+
+    public function forceDelete($id) {
+        $room = Room::onlyTrashed()->findOrFail($id);
+        $room->forceDelete();
+
+        // Toast not shown yet
+        return redirect()->route('admin.rooms.index');
+    }
 }

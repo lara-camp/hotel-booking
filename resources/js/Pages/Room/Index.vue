@@ -5,7 +5,7 @@
         <div class="">
           <span class="text-900 text-2xl font-bold">Rooms</span>
         </div>
-        <Button label="Create" icon="pi pi-plus" outlined @click="() => router.visit(route('room.create'))" />
+        <Button label="Create" icon="pi pi-plus" outlined @click="() => router.visit(route('admin.rooms.create'))" />
       </div>
     </template>
     <Column field="id" header="Id"></Column>
