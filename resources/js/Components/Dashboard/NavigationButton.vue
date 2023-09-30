@@ -14,7 +14,7 @@
   </div>
   <!-- Button for small Device -->
   <div
-    class="xl:hidden hover:bg-white hover:text-indigo-600 flex items-baseline justify-center px-3 py-4 mb-2 transition-all duration-300 cursor-pointer"
+    class="xl:hidden hover:bg-white hover:text-indigo-600 md:px-3 md:py-5 flex items-baseline justify-center px-2 py-4 mb-2 transition-all duration-300 cursor-pointer"
     :class="{ 'text-indigo-600 bg-white -mr-3 rounded-l justify-start': isCurrentRoute, 'text-white rounded': !isCurrentRoute }"
     :title="title">
     <span :class="[icon]"></span>
