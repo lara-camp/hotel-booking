@@ -1,29 +1,16 @@
 <template>
-  <DataTable :value="rooms.data" class="bg-slate-100/80" tableStyle="min-width: 50rem" striped-rows :pt="{
-    header: (options) => ({
-      class: [
-        '!py-3 !px-0'
-      ]
-    })
-  }">
+  <DataTable :value="rooms.data" tableStyle="min-width: 50rem" striped-rows>
     <template #header>
-      <div class="flex justify-between gap-2 mb-3">
+      <div class="flex justify-between gap-2">
         <div class="">
-          <span class="text-900 text-5xl font-bold">Rooms</span>
+          <span class="text-900 text-2xl font-bold">Rooms</span>
         </div>
-        <div class="">
-          <Link :href="route('admin.rooms.create')">
-          <Button label="Create" icon="pi pi-plus" outlined class="mr-3" />
-          </Link>
-          <Link :href="route('admin.rooms.soft-delete')">
-          <Button label="Deleted Rooms" severity="danger" text />
-          </Link>
-        </div>
+        <Button label="Create" icon="pi pi-plus" outlined @click="() => router.visit(route('admin.rooms.create'))" />
       </div>
     </template>
     <Column field="id" header="Id"></Column>
     <Column field="room_number" header="Room Number"></Column>
-    <Column field="roomtype.name" header="Room Type"></Column>
+    <Column field="room_type" header="Room Type"></Column>
     <Column field="bed_type" header="Bed type"></Column>
     <Column field="number_of_bed" header="Number of Beds"></Column>
     <Column field="price" header="Price">
@@ -45,7 +32,7 @@
         <div class="">
           <span>Showing {{ rooms.from }} to {{ rooms.to }} of {{ rooms.total }} results.</span>
         </div>
-        <CustomPaginator :current-page="rooms.current_page" :total-pages="rooms.last_page" route-name="room.index" />
+        <CustomPaginator :current-page="rooms.current_page" :total-pages="rooms.last_page" route-name="admin.rooms.index" />
       </div>
     </template>
   </DataTable>
@@ -76,27 +63,6 @@
 
   function formatCurrency(currency) {
     return currency.toLocaleString('en-US', { style: 'currency', currency: 'MMK' });
-  }
-
-  const toast = useToast();
-  const confirm = useConfirm();
-  function confirmDelete(id) {
-    confirm.require({
-      message: `Are you sure you want to delete room #${id}`,
-      header: `Delete room #${id}.`,
-      icon: 'pi pi-info-circle',
-      acceptClass: 'p-button-danger',
-      accept() {
-        axios.delete(route('admin.rooms.destroy', id)).then(data => {
-          toast.add({
-            severity: "success",
-            summary: "Deleted successfully",
-            detail: `Room #${id} is deleted successfully`,
-            life: 3000,
-          })
-        })
-      }
-    })
   }
 </script>
 <script>

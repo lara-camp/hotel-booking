@@ -54,4 +54,12 @@ class User extends Authenticatable {
     protected function profileImagePath(): Attribute {
         return new Attribute(get: fn() => $this->profile_image ? asset("/$this->profile_image"):null );
     }
+
+    public function getRedirectRoute()
+    {
+        return match((int)$this->role_id) {
+            1 => 'admin/reservations',
+            2 => 'user/dashboard',
+        };
+    }
 }

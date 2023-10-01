@@ -38,10 +38,10 @@
       </div>
       <div class="h-5/6 flex flex-col justify-between">
         <div class="">
-          <NavigationButton url="/reservation" icon="pi pi-calendar" title="Reservation">Reservation
+          <NavigationButton url="/admin/reservations" icon="pi pi-calendar" title="Reservation">Reservation
           </NavigationButton>
-          <NavigationButton url="/room" icon="pi pi-home" title="Room">Room</NavigationButton>
-          <NavigationButton url="/profile" icon="pi pi-user" title="Profile">Profile</NavigationButton>
+          <NavigationButton url="/admin/rooms" icon="pi pi-home" title="Room">Room</NavigationButton>
+          <NavigationButton url="/admin/profile" icon="pi pi-user" title="Profile">Profile</NavigationButton>
         </div>
       </div>
     </div>

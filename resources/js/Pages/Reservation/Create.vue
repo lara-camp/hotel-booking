@@ -60,7 +60,7 @@
         </div>
       </div>
       <div class="mb-3">
-        <Button label="Add Reservation" :loading="reservationForm.processing" outlined @click="submitForm" />
+        <Button label="Add Reservation" outlined @click="submitForm" />
       </div>
     </div>
   </div>

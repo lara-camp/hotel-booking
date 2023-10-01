@@ -21,6 +21,7 @@ return new class extends Migration
             $table->boolean('available')->default(true);
             $table->timestamps();
             $table->foreign('room_type_id')->references('id')->on('room_types');
+            $table->softDeletes();
         });
     }
 
