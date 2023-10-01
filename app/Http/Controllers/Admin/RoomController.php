@@ -7,6 +7,7 @@ use App\Http\Requests\StoreRoomRequest;
 use App\Http\Requests\UpdateRoomRequest;
 use App\Models\Room;
 use App\Models\RoomType;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -24,10 +25,15 @@ class RoomController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         return Inertia::render('Room/Index', [
-            'rooms' => Room::with('roomType')->paginate(5)->through(fn($room) => [
+            'rooms' => Room::with('roomType')
+                ->when($request->filter_room_types ?? false, function($query, $filter_room_types) {
+                    $query->whereIn('room_type_id', $filter_room_types);
+                })
+                ->paginate(5)
+                ->through(fn($room) => [
                 'id' => $room->id,
                 'room_number' => $room->room_number,
                 'room_type' => $room->roomType->name,
@@ -39,6 +45,7 @@ class RoomController extends Controller
                     'update_room' => Auth::user()->can('update', $room),
                 ]
             ]),
+            'room_types' => RoomType::with('rooms')->get(['id', 'name']),
             'can' =>[
                 'create_room' => Auth::user()->can('create', Room::class),
             ]
@@ -51,7 +58,7 @@ class RoomController extends Controller
     public function create()
     {
         return Inertia::render('Room/Create', [
-            'room_type' => RoomType::all(['id', 'name'])
+            'room_type' => RoomType::with('rooms')->get(['id', 'name'])
         ]);
     }
 
