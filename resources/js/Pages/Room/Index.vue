@@ -16,6 +16,7 @@
           <Button label="Create" icon="pi pi-plus" outlined class="mr-3" />
           </Link>
         </div>
+        <Button label="Create" icon="pi pi-plus" outlined @click="() => router.visit(route('admin.rooms.create'))" />
       </div>
     </template>
     <Column field="id" header="Id"></Column>
@@ -54,16 +55,16 @@
 
 <script setup>
   import CustomPaginator from "@/Components/CustomPaginator.vue";
-  import { Link, router } from '@inertiajs/vue3';
-  import axios from 'axios';
-  import Button from 'primevue/button';
-  import Column from 'primevue/column';
-  import ConfirmDialog from 'primevue/confirmdialog';
-  import DataTable from 'primevue/datatable';
-  import DynamicDialog from 'primevue/dynamicdialog';
-  import Toast from 'primevue/toast';
-  import { useConfirm } from "primevue/useconfirm";
-  import { useToast } from 'primevue/usetoast';
+import { Link, router } from '@inertiajs/vue3';
+import axios from 'axios';
+import Button from 'primevue/button';
+import Column from 'primevue/column';
+import ConfirmDialog from 'primevue/confirmdialog';
+import DataTable from 'primevue/datatable';
+import DynamicDialog from 'primevue/dynamicdialog';
+import Toast from 'primevue/toast';
+import { useConfirm } from "primevue/useconfirm";
+import { useToast } from 'primevue/usetoast';
 
   const props = defineProps({
     rooms: Object

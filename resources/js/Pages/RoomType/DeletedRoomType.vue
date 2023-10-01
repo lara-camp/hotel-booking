@@ -38,7 +38,7 @@
     </template>
   </DataTable>
   <Toast position="bottom-right" />
-  <ConfirmDialog></ConfirmDialog>
+  <ConfirmDialog />
   <DynamicDialog />
 </template>
 

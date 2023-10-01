@@ -67,6 +67,7 @@ class RoomTypeController extends Controller
         $room_type = RoomType::onlyTrashed()->findOrFail($id);
         $room_type->forceDelete();
 
-        return redirect()->route('admin.room-types.index')->with('status', 'The room is permanently deleted');
+        // Toast not shown yet
+        return redirect()->route('admin.room-types.index');
     }
 }
