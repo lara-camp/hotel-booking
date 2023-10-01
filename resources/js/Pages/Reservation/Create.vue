@@ -150,7 +150,7 @@
     let toDate = new Date(reservationForm.to_date)
     let diff = Math.abs(toDate.getTime() - fromDate.getTime())
     let days = diff / (1000 * 60 * 60 * 24);
-    reservationForm.total_price = days * pricePerDay.value || 0
+    reservationForm.total_price = (days + 1) * pricePerDay.value || 0
   })
 </script>
 <script>
