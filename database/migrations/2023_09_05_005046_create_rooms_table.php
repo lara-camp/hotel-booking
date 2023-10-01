@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('bed_type');
             $table->integer('number_of_bed');
             $table->integer('price');
-            $table->boolean('available')->default(true);
             $table->timestamps();
             $table->foreign('room_type_id')->references('id')->on('room_types');
             $table->softDeletes();
