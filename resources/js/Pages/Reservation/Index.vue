@@ -1,5 +1,5 @@
 <template>
-  <DataTable :value="reservations.data" tableStyle="min-width: 50rem" striped-rows class="bg-slate-100/80" :pt="{
+  <DataTable scrollable :value="reservations.data" tableStyle="min-width: 75rem" striped-rows class="bg-slate-100/80" :pt="{
     header: (options) => ({
       class: [
         '!py-3 !px-0'
@@ -60,9 +60,9 @@
         {{ getDateTime(slotProps.data.checkout_time) }}
       </template>
     </Column>
-    <Column header="Actions">
+    <Column header="Actions" class="w-52">
       <template #body="slotProps">
-        <Button icon="pi pi-pencil" aria-label="Submit" size="small" outlined class="mb-2 mr-2"
+        <Button icon="pi pi-pencil" aria-label="Submit" size="small" outlined class="mr-2"
           @click="() => router.visit(route('admin.reservations.edit', slotProps.data.id))" />
         <Button aria-label="Delete" icon="pi pi-trash" severity="danger" size="small" outlined
           @click.prevent=" confirmDelete(slotProps.data.id)" :key="`confirmDialog${slotProps.data.id}`" />
