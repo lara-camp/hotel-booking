@@ -1,6 +1,6 @@
 <template>
-  <section class="flex space-x-3">
-    <form @submit.prevent="submitForm" class="md:w-1/2" enctype="multipart/form-data">
+  <section class="flex flex-row space-x-3">
+    <form @submit.prevent="submitForm" class="md:w-1/2 block w-full" enctype="multipart/form-data">
       <header class="mb-3">
         <h2 class="text-lg font-medium text-gray-900">Profile Information</h2>
         <p class="mt-1 text-sm text-gray-600">
@@ -22,7 +22,7 @@
         <InlineMessage v-if="form.errors.email" severity="error" class="mt-2">{{ form.errors.email }}</InlineMessage>
       </div>
     </form>
-    <UpdateProfileImage />
+    <UpdateProfileImage class="lg:w-1/2 w-full" />
   </section>
   <Toast position="bottom-right" />
 </template>
@@ -55,7 +55,7 @@
   });
 
   function submitForm() {
-    form.patch(route('profile.update'), {
+    form.patch(route('admin.profile.update'), {
       onSuccess() {
         toast.add({
           severity: "success",

@@ -1,5 +1,5 @@
 <template>
-  <DataTable :value="reservations.data" tableStyle="min-width: 50rem" striped-rows class="bg-slate-100/80" :pt="{
+  <DataTable scrollable :value="reservations.data" tableStyle="min-width: 75rem" striped-rows class="bg-slate-100/80" :pt="{
     header: (options) => ({
       class: [
         '!py-3 !px-0'
@@ -12,6 +12,7 @@
           <span class="text-900 text-5xl font-bold">Reservations</span>
         </div>
         <div class="">
+          <Button label="Clear Filter" class="mr-3" outlined icon="pi pi-filter-slash" @click="clearFilter" />
           <Button label="Filter" icon="pi pi-filter" class="mr-3" @click="showFilter" outlined />
           <Link :href="route('admin.reservations.create')">
           <Button label="Create" icon="pi pi-plus" outlined class="mr-3" />
@@ -59,7 +60,7 @@
         {{ getDateTime(slotProps.data.checkout_time) }}
       </template>
     </Column>
-    <Column header="Actions">
+    <Column header="Actions" class="w-52">
       <template #body="slotProps">
         <Button icon="pi pi-pencil" aria-label="Submit" size="small" outlined class="mr-2"
           @click="() => router.visit(route('admin.reservations.edit', slotProps.data.id))" />
@@ -96,7 +97,6 @@
   import { useConfirm } from "primevue/useconfirm";
   import { useDialog } from 'primevue/usedialog';
   import { useToast } from 'primevue/usetoast';
-  import { reactive } from "vue";
 
   const props = defineProps({
     reservations: {
@@ -131,7 +131,6 @@
       acceptClass: 'p-button-danger',
       accept: () => {
         axios.delete(route('admin.reservations.destroy', id)).then(data => {
-            console.log(data)
           toast.add({
             severity: "success",
             summary: "Deleted successfully",
@@ -152,6 +151,10 @@
         modal: true
       }
     })
+  }
+
+  function clearFilter() {
+    router.visit(route("admin.reservations.index"))
   }
 </script>
 <script>
