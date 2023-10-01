@@ -3,16 +3,15 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
-class UpdateRoomTypeRequest extends FormRequest
+class ReservationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return Auth::user()->role_id === 1;
+        return true;
     }
 
     /**
@@ -23,7 +22,13 @@ class UpdateRoomTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:room_types,name,'.$this->room_type->id,
+            'room_id.*' => 'required|exists:rooms,id',
+            'total_person' => 'required|integer|min:1',
+            'total_price' => 'required|integer',
+            'from_date' => 'required|date',
+            'to_date' => 'required|date',
+            'checkin_time' => "date|nullable",
+            'checkout_time' => 'date|nullable',
         ];
     }
 }

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreRoomRequest;
+use App\Http\Requests\UpdateRoomRequest;
 use App\Models\Room;
 use App\Models\RoomType;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class RoomController extends Controller
@@ -56,19 +58,17 @@ class RoomController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRoomRequest $request)
     {
-
-        $validated = $request->validate([
-            'room_number' => 'required|integer|unique:rooms,room_number',
-            'room_type_id' => 'required|exists:room_types,id',
-            'bed_type' => 'required|string',
-            'number_of_bed' => 'required|integer',
-            'price' => 'required|integer',
-            'available' => 'required|boolean',
-        ]);
-
-        Room::create($validated);
+        DB::beginTransaction();
+        $room = new Room();
+        $room->room_number = $request->room_number;
+        $room->number_of_bed = $request->number_of_bed;
+        $room->price = $request->price;
+        $room->bed_type = $request->bed_type;
+        $room->available = $request->available;
+        $room->save();
+        DB::commit();
 
         return redirect()->route('admin.rooms.index');
     }
@@ -103,19 +103,17 @@ class RoomController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Room $room)
+    public function update(UpdateRoomRequest $request, Room $room)
     {
 
-        $validated = $request->validate([
-            'room_number' => 'required|unique:rooms,room_number,'.$room->id,
-            'room_type_id' => 'required|exists:room_types,id',
-            'bed_type' => 'required|string',
-            'number_of_bed' => 'required|integer',
-            'price' => 'required|integer',
-            'available' => 'required|boolean',
-        ]);
-
-        $room->update($validated);
+        DB::beginTransaction();
+        $room->room_number = $request->room_number;
+        $room->number_of_bed = $request->number_of_bed;
+        $room->price = $request->price;
+        $room->bed_type = $request->bed_type;
+        $room->available = $request->available;
+        $room->save();
+        DB::commit();
 
         return redirect()->route('admin.rooms.index');
     }
