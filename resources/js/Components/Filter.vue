@@ -8,7 +8,7 @@
       </div>
       <div class="flex flex-col w-full">
         <label for="checkin">Reserved To</label>
-        <Calendar v-model="filterForm.to_date" :manualInput="true" id="checkout" />
+        <Calendar v-model="filterForm.to_date" :manualInput="true" id="checkout" :minDate="filterForm.from_date"/>
       </div>
     </div>
     <div class="flex justify-end">

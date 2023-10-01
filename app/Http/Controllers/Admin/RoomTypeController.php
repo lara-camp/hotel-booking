@@ -6,9 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRoomTypeRequest;
 use App\Http\Requests\UpdateRoomTypeRequest;
 use App\Models\RoomType;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class RoomTypeController extends Controller

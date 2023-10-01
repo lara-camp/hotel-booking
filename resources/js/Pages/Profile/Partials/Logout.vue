@@ -10,9 +10,8 @@
 
 <script setup>
   import { router } from '@inertiajs/vue3';
-import Button from 'primevue/button';
+  import Button from 'primevue/button';
   import ConfirmDialog from 'primevue/confirmdialog';
-  import ConfirmPopup from 'primevue/confirmpopup';
   import { useConfirm } from "primevue/useconfirm";
 
   const confirm = useConfirm();
@@ -20,7 +19,7 @@ import Button from 'primevue/button';
     confirm.require({
       icon: 'pi pi-info-circle',
       acceptClass: 'p-button-danger',
-      message: 'Are you sure you want to proceed?',
+      message: 'Are you sure you want to logout?',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         router.post(route('logout'));

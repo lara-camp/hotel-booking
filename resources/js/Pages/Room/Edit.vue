@@ -31,14 +31,14 @@
         errors.bed_type
       }}</InlineMessage>
     </div>
-      <div class="flex flex-col">
-          <label for="roomType" class="my-2">Room type</label>
-          <Dropdown v-model="roomForm.room_type_id" :options="props.room_type" optionLabel="name"
-                    placeholder="Select a room type" class="md:w-14rem w-full" option-value="id" />
-          <InlineMessage v-if="errors.room_type_id" severity="error" class="mt-2">{{
-                  errors.room_type_id
-              }}</InlineMessage>
-      </div>
+    <div class="flex flex-col">
+      <label for="roomType" class="my-2">Room type</label>
+      <Dropdown v-model="roomForm.room_type_id" :options="props.room_type" optionLabel="name"
+        placeholder="Select a room type" class="md:w-14rem w-full" option-value="id" />
+      <InlineMessage v-if="errors.room_type_id" severity="error" class="mt-2">{{
+        errors.room_type_id
+      }}</InlineMessage>
+    </div>
     <div class="flex flex-col flex-wrap gap-3 my-2">
       <label for="">status</label>
       <div class="flex gap-3">

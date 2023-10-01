@@ -1,9 +1,20 @@
 <template>
-  <DataTable :value="rooms.data" tableStyle="min-width: 50rem" striped-rows>
+  <DataTable :value="rooms.data" class="bg-slate-100/80" tableStyle="min-width: 50rem" striped-rows :pt="{
+    header: (options) => ({
+      class: [
+        '!py-3 !px-0'
+      ]
+    })
+  }">
     <template #header>
-      <div class="flex justify-between gap-2">
+      <div class="flex justify-between gap-2 mb-3">
         <div class="">
-          <span class="text-900 text-2xl font-bold">Rooms</span>
+          <span class="text-900 text-5xl font-bold">Rooms</span>
+        </div>
+        <div class="">
+          <Link :href="route('admin.rooms.create')">
+          <Button label="Create" icon="pi pi-plus" outlined class="mr-3" />
+          </Link>
         </div>
         <Button label="Create" icon="pi pi-plus" outlined @click="() => router.visit(route('admin.rooms.create'))" />
       </div>
@@ -32,7 +43,8 @@
         <div class="">
           <span>Showing {{ rooms.from }} to {{ rooms.to }} of {{ rooms.total }} results.</span>
         </div>
-        <CustomPaginator :current-page="rooms.current_page" :total-pages="rooms.last_page" route-name="admin.rooms.index" />
+        <CustomPaginator :current-page="rooms.current_page" :total-pages="rooms.last_page"
+          route-name="admin.rooms.index" />
       </div>
     </template>
   </DataTable>
@@ -42,20 +54,17 @@
 </template>
 
 <script setup>
-  import Filter from "@/Components/Filter.vue";
-  import { Link, router } from '@inertiajs/vue3';
-  import axios from 'axios';
-  import Button from 'primevue/button';
-  import Column from 'primevue/column';
-  import ConfirmDialog from 'primevue/confirmdialog';
-  import DataTable from 'primevue/datatable';
   import CustomPaginator from "@/Components/CustomPaginator.vue";
-  import DynamicDialog from 'primevue/dynamicdialog';
-  import Toast from 'primevue/toast';
-  import { useConfirm } from "primevue/useconfirm";
-  import { useDialog } from 'primevue/usedialog';
-  import { useToast } from 'primevue/usetoast';
-  import { reactive } from "vue";
+import { Link, router } from '@inertiajs/vue3';
+import axios from 'axios';
+import Button from 'primevue/button';
+import Column from 'primevue/column';
+import ConfirmDialog from 'primevue/confirmdialog';
+import DataTable from 'primevue/datatable';
+import DynamicDialog from 'primevue/dynamicdialog';
+import Toast from 'primevue/toast';
+import { useConfirm } from "primevue/useconfirm";
+import { useToast } from 'primevue/usetoast';
 
   const props = defineProps({
     rooms: Object
@@ -63,6 +72,27 @@
 
   function formatCurrency(currency) {
     return currency.toLocaleString('en-US', { style: 'currency', currency: 'MMK' });
+  }
+
+  const toast = useToast();
+  const confirm = useConfirm();
+  function confirmDelete(id) {
+    confirm.require({
+      message: `Are you sure you want to delete room #${id}`,
+      header: `Delete room #${id}.`,
+      icon: 'pi pi-info-circle',
+      acceptClass: 'p-button-danger',
+      accept() {
+        axios.delete(route('admin.rooms.destroy', id)).then(data => {
+          toast.add({
+            severity: "success",
+            summary: "Deleted successfully",
+            detail: `Room #${id} is deleted successfully`,
+            life: 3000,
+          })
+        })
+      }
+    })
   }
 </script>
 <script>
