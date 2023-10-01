@@ -2,11 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Models\RoomType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class UpdateRoomTypeRequest extends FormRequest
+class UpdateRoomRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +23,12 @@ class UpdateRoomTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:room_types,name,'.$this->room_type->id,
+            'room_number' => 'required|integer|unique:rooms,room_number,' . $this->room->id,
+            'room_type_id' => 'required|exists:room_types,id',
+            'bed_type' => 'required|string',
+            'number_of_bed' => 'required|integer',
+            'price' => 'required|integer',
+            'available' => 'required|boolean',
         ];
     }
 }

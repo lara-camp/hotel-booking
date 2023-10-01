@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ReservationRequest;
 use App\Models\Reservation;
 use App\Models\Room;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -59,19 +59,8 @@ class ReservationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ReservationRequest $request)
     {
-
-        $validated = $request->validate([
-            'room_id.*' => 'required|exists:rooms,id',
-            'total_person' => 'required|integer|min:1',
-            'total_price' => 'required|integer',
-            'from_date' => 'required|date',
-            'to_date' => 'required|date',
-            'checkin_time' => "date|nullable",
-            'checkout_time' => 'date|nullable',
-        ]);
-
         $from_date = Carbon::parse($request->from_date);
         $to_date = Carbon::parse($request->to_date);
 
@@ -158,7 +147,7 @@ class ReservationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Reservation $reservation)
+    public function update(ReservationRequest $request, Reservation $reservation)
     {
         $request->validate([
             'room_id.*' => 'required|exists:rooms,id',
