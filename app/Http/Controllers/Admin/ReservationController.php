@@ -51,8 +51,7 @@ class ReservationController extends Controller
     public function create()
     {
         return Inertia::render('Reservation/Create', [
-            'rooms' => Room::where('available', true)
-                ->get(['id', 'room_number', "price"])
+            'rooms' => Room::all(['id', 'room_number', "price"])
         ]);
     }
 
@@ -138,7 +137,7 @@ class ReservationController extends Controller
             'room_id' => $reservation->rooms()->pluck('room_id')->toArray(),
             'checkin_time' => $reservation->checkin_time ?? Carbon::now(),
             'checkout_time' => $reservation->checkout_time ?? Carbon::now(),
-            'available_rooms' => Room::where('available', true)->get(['id', 'room_number']),
+            'available_rooms' => Room::all(['id', 'room_number']),
             'reservation_details' => $reservation->reservationDetails,
 
         ]);

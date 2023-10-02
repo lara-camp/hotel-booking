@@ -38,22 +38,6 @@
         errors.room_type_id
       }}</InlineMessage>
     </div>
-    <div class="flex flex-col flex-wrap gap-3 my-2">
-      <label for="">status</label>
-      <div class="flex gap-3">
-        <div class="align-items-center flex">
-          <RadioButton v-model="roomForm.status" inputId="available" name="available" :value="true" />
-          <label for="available" class="ml-2">available</label>
-        </div>
-        <div class="align-items-center flex">
-          <RadioButton v-model="roomForm.status" inputId="taken" name="taken" :value="false" />
-          <label for="taken" class="ml-2">taken</label>
-        </div>
-      </div>
-      <InlineMessage v-if="errors.status" severity="error" class="mt-2">{{
-        errors.status
-      }}</InlineMessage>
-    </div>
     <div class="my-3">
       <Button label="Create " outlined @click="submitForm" class="px-5" :loading="roomForm.processing" />
     </div>
@@ -78,7 +62,6 @@
   const roomForm = useForm({
     room_number: 0,
     price: 0,
-    available: true,
     room_type_id: 0,
     bed_type: "",
     number_of_bed: 0,
