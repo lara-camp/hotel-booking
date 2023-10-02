@@ -13,6 +13,13 @@
             <InlineMessage v-if="errors.room_id" severity="error" class="mt-2">{{ errors.room_id }}</InlineMessage>
           </div>
           <div class=" flex flex-col">
+            <label for="guest_name">Guest Name</label>
+            <InputText id="guest_name" v-model="reservationForm.guest_name"
+              :class="{ 'p-invalid': errors.guest_name }" class="" />
+            <InlineMessage v-if="errors.guest_name" severity="error" class="mt-2">{{ errors.guest_name }}
+            </InlineMessage>
+          </div>
+          <div class=" flex flex-col">
             <label for="totalPerson">Total Number Of Person</label>
             <InputNumber id="totalPerson" v-model="reservationForm.total_person"
               :class="{ 'p-invalid': errors.total_person }" class="" />
@@ -72,6 +79,7 @@
   import Calendar from 'primevue/calendar';
   import InlineMessage from 'primevue/inlinemessage';
   import InputNumber from 'primevue/inputnumber';
+  import InputText from 'primevue/inputtext';
   import MultiSelect from 'primevue/multiselect';
   import { useToast } from "primevue/usetoast";
 
@@ -81,6 +89,7 @@
     id: Number,
     available_rooms: Array,
     room_id: Array,
+    guest_name: String,
     total_person: Number,
     total_price: Number,
     from_date: String,
