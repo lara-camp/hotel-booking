@@ -8,7 +8,6 @@ use App\Http\Requests\UpdateRoomRequest;
 use App\Models\Room;
 use App\Models\RoomType;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
@@ -65,6 +64,7 @@ class RoomController extends Controller
         $room = new Room();
         $room->room_number = $request->room_number;
         $room->number_of_bed = $request->number_of_bed;
+        $room->room_type_id  = $request->room_type_id;
         $room->price = $request->price;
         $room->bed_type = $request->bed_type;
         $room->save();
@@ -108,6 +108,7 @@ class RoomController extends Controller
         DB::beginTransaction();
         $room->room_number = $request->room_number;
         $room->number_of_bed = $request->number_of_bed;
+        $room->room_type_id  = $request->room_type_id;
         $room->price = $request->price;
         $room->bed_type = $request->bed_type;
         $room->save();
