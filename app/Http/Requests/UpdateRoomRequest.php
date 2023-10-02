@@ -28,7 +28,6 @@ class UpdateRoomRequest extends FormRequest
             'bed_type' => 'required|string',
             'number_of_bed' => 'required|integer',
             'price' => 'required|integer',
-            'available' => 'required|boolean',
         ];
     }
 }
