@@ -29,7 +29,6 @@
         {{ formatCurrency(slotProps.data.price) }}
       </template>
     </Column>
-    <Column field="available" header="Availability"></Column>
     <Column header="Actions">
       <template #body="slotProps">
         <Button icon="pi pi-pencil" aria-label="Submit" size="small" outlined class="mr-2"
