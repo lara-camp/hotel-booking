@@ -77,7 +77,7 @@
       icon: 'pi pi-info-circle',
       acceptClass: 'p-button-danger',
       accept() {
-        axios.delete(route('admin.rooms.destroy', id)).then(data => {
+        axios.delete(route('admin.rooms.force-delete', id)).then(data => {
           toast.add({
             severity: "success",
             summary: "Deleted successfully",
