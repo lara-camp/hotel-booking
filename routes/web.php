@@ -44,6 +44,14 @@ Route::middleware(['auth', 'admin'])->prefix("admin")->as("admin.")->group(funct
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post("/profile/image", [ProfileController::class, 'updateProfileImage'])->name("profile.updateProfileImage");
 
+    Route::get('room-types/{id}/restore', [RoomTypeController::class, 'restore'])->name('room-types.restore');
+    Route::delete('room-types/{id}/force-delete', [RoomTypeController::class, 'forceDelete'])->name('room-types.force-delete');
+    Route::get('room-types/archives', [RoomTypeController::class, 'archives'])->name('room-types.archives');
+
+    Route::get('rooms/{id}/restore', [RoomController::class, 'restore'])->name('rooms.restore');
+    Route::delete('rooms/{id}/force-delete', [RoomController::class, 'forceDelete'])->name('rooms.force-delete');
+    Route::get('rooms/archives', [RoomController::class, 'archives'])->name('rooms.archives');
+
     // Resources
     Route::resource('reservations', ReservationController::class);
     Route::resource('rooms', RoomController::class);

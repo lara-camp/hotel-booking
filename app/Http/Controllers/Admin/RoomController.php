@@ -132,7 +132,11 @@ class RoomController extends Controller
                             ->paginate(5)
                             ->through(fn($room) => [
                                 'id' => $room->id,
-                                'room_number' => $room->room_number
+                                'room_number' => $room->room_number,
+                                'room_type' => $room->roomType->name,
+                                'bed_type' => $room->bed_type,
+                                'number_of_bed' => $room->number_of_bed,
+                                'price' => $room->price,
                             ]),
         ]);
     }
