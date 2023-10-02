@@ -17,7 +17,7 @@
     </template>
     <Column field="id" header="Id"></Column>
     <Column field="room_number" header="Room Number"></Column>
-    <Column field="roomtype.name" header="Room Type"></Column>
+    <Column field="room_type" header="Room Type"></Column>
     <Column field="bed_type" header="Bed type"></Column>
     <Column field="number_of_bed" header="Number of Beds"></Column>
     <Column field="price" header="Price">
@@ -77,7 +77,7 @@
       icon: 'pi pi-info-circle',
       acceptClass: 'p-button-danger',
       accept() {
-        axios.delete(route('admin.rooms.destroy', id)).then(data => {
+        axios.delete(route('admin.rooms.force-delete', id)).then(data => {
           toast.add({
             severity: "success",
             summary: "Deleted successfully",
