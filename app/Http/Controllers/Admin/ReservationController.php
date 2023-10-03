@@ -139,11 +139,10 @@ class ReservationController extends Controller
             'from_date' => $reservation->from_date,
             'to_date' => $reservation->to_date,
             'room_id' => $reservation->rooms()->pluck('room_id')->toArray(),
-            'checkin_time' => $reservation->checkin_time ?? Carbon::now(),
-            'checkout_time' => $reservation->checkout_time ?? Carbon::now(),
-            'available_rooms' => Room::all(['id', 'room_number']),
+            'checkin_time' => $reservation->checkin_time ?? "",
+            'checkout_time' => $reservation->checkout_time ?? "",
+            'rooms' => Room::all(['id', 'room_number', "price"]),
             'reservation_details' => $reservation->reservationDetails,
-
         ]);
     }
 
