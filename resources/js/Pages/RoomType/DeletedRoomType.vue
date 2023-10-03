@@ -38,7 +38,6 @@
     </template>
   </DataTable>
   <Toast position="bottom-right" />
-  <ConfirmDialog />
   <DynamicDialog />
 </template>
 
@@ -47,7 +46,6 @@
   import { router, useForm } from "@inertiajs/vue3";
   import Button from 'primevue/button';
   import Column from 'primevue/column';
-  import ConfirmDialog from 'primevue/confirmdialog';
   import DataTable from 'primevue/datatable';
   import DynamicDialog from 'primevue/dynamicdialog';
   import Toast from "primevue/toast";

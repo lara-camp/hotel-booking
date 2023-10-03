@@ -80,7 +80,6 @@
   </DataTable>
   <Toast position="bottom-right" />
   <DynamicDialog />
-  <ConfirmDialog></ConfirmDialog>
 </template>
 
 <script setup>
@@ -90,7 +89,6 @@
   import axios from 'axios';
   import Button from 'primevue/button';
   import Column from 'primevue/column';
-  import ConfirmDialog from 'primevue/confirmdialog';
   import DataTable from 'primevue/datatable';
   import DynamicDialog from 'primevue/dynamicdialog';
   import Toast from 'primevue/toast';
