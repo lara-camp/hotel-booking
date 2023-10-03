@@ -34,6 +34,7 @@ class ReservationController extends Controller
                 ->withQueryString()
                 ->through(fn($reservation) => [
                     'id' => $reservation->id,
+                    'guest_name' => $reservation->guest_name,
                     'room_id' => $reservation->rooms->pluck('room_number'),
                     'total_person' => $reservation->total_person,
                     'total_price' => $reservation->total_price,
@@ -83,6 +84,7 @@ class ReservationController extends Controller
         try {
             $reservation = new Reservation();
             $reservation->user_id = Auth::user()->id;
+            $reservation->guest_name = $request->guest_name;
             $reservation->total_person = $request->total_person;
             $reservation->total_price = $request->total_price;
             $reservation->from_date = date('Y-m-d', strtotime($request->from_date));
@@ -111,6 +113,7 @@ class ReservationController extends Controller
     $reservation->load('rooms');//also retrieve data from detail
         return Inertia::render('Reservation/Show', [
             'id' => $reservation->id,
+            'guest_name' => $reservation->guest_name,
             'total_person' => $reservation->total_person,
             'total_price' => $reservation->total_price,
             'from_date' => $reservation->from_date,
@@ -130,16 +133,16 @@ class ReservationController extends Controller
 
         return Inertia::render('Reservation/Edit', [
             'id' => $reservation->id,
+            'guest_name' => $reservation->guest_name,
             'total_person' => $reservation->total_person,
             'total_price' => $reservation->total_price,
             'from_date' => $reservation->from_date,
             'to_date' => $reservation->to_date,
             'room_id' => $reservation->rooms()->pluck('room_id')->toArray(),
-            'checkin_time' => $reservation->checkin_time ?? Carbon::now(),
-            'checkout_time' => $reservation->checkout_time ?? Carbon::now(),
-            'available_rooms' => Room::all(['id', 'room_number']),
+            'checkin_time' => $reservation->checkin_time ?? "",
+            'checkout_time' => $reservation->checkout_time ?? "",
+            'rooms' => Room::all(['id', 'room_number', "price"]),
             'reservation_details' => $reservation->reservationDetails,
-
         ]);
     }
 
@@ -150,6 +153,7 @@ class ReservationController extends Controller
     {
         $request->validate([
             'room_id.*' => 'required|exists:rooms,id',
+            'guest_name' => 'required|min:3|max:256',
             'total_person' => 'required|integer|min:1',
             'total_price' => 'required|integer',
             'from_date' => 'required|date',
@@ -159,6 +163,7 @@ class ReservationController extends Controller
         ]);
 
         //update the data from reservation
+        $reservation->guest_name=$request->guest_name;
         $reservation->total_person=$request->total_person;
         $reservation->total_price=$request->total_price;
         $reservation->from_date = Carbon::parse($request->from_date);
