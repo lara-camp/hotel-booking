@@ -47,7 +47,9 @@ Route::middleware(['auth', 'admin'])->prefix("admin")->as("admin.")->group(funct
     // Resources
     Route::resource('reservations', ReservationController::class);
     Route::resource('rooms', RoomController::class);
-    Route::get('room-types/archives', [RoomTypeController::class, 'archives'])->name('room-types.archives');
+    Route::get('/room-types/archives', [RoomTypeController::class, 'archives'])->name('room-types.archives');
+    Route::get("/room-types/restore/{room-types}", [RoomTypeController::class, "restore"])->name("room-types.restore");
+    Route::get("/room-types/force-delete/{room-types", [RoomTypeController::class, "forceDelete"])->name("room-types.force-delete");
     Route::resource('room-types', RoomTypeController::class)->except(['create', 'edit']);
     Route::get('/available-rooms', AvailableRoomController::class);
     Route::get('/popular-room-types', PopularRoomTypeController::class);
