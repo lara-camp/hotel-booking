@@ -4,29 +4,29 @@
     <div class="[&>div]:mt-2">
       <div class="mb-3">
         <h2 class="mb-2 text-3xl font-normal">Room</h2>
-        <div class="gap-x-3 flex mb-3">
-          <div class="flex flex-col w-1/3">
+        <div class="gap-x-3 flex flex-wrap mb-3">
+          <div class="md:w-1/2 flex flex-col flex-1 flex-shrink-0 w-full">
             <label for="room">Room Number</label>
             <MultiSelect v-model="reservationForm.room_id" id="room" :options="rooms" optionLabel="room_number"
               optionValue="id" filter placeholder="Select rooms" :maxSelectedLabels="5" class=" w-full"
               :class="{ 'p-invalid': errors.room_id }" />
             <InlineMessage v-if="errors.room_id" severity="error" class="mt-2">{{ errors.room_id }}</InlineMessage>
           </div>
-          <div class=" flex flex-col w-1/3">
+          <div class=" md:w-1/2 flex flex-col flex-1 flex-shrink-0 w-full">
             <label for="guest_name">Guest Name</label>
-            <InputText id="guest_name" v-model="reservationForm.guest_name"
-              :class="{ 'p-invalid': errors.guest_name }" class="" />
+            <InputText id="guest_name" v-model="reservationForm.guest_name" :class="{ 'p-invalid': errors.guest_name }"
+              class="" />
             <InlineMessage v-if="errors.guest_name" severity="error" class="mt-2">{{ errors.guest_name }}
             </InlineMessage>
           </div>
-          <div class=" flex flex-col w-1/3">
+          <div class=" md:w-1/2 flex flex-col flex-1 flex-shrink-0 w-full">
             <label for="totalPerson">Total Number Of Person</label>
             <InputNumber id="totalPerson" v-model="reservationForm.total_person"
               :class="{ 'p-invalid': errors.total_person }" class="" />
             <InlineMessage v-if="errors.total_person" severity="error" class="mt-2">{{ errors.total_person }}
             </InlineMessage>
           </div>
-          <div class="flex flex-col w-1/3">
+          <div class=" flex flex-col flex-shrink-0 w-full">
             <label for="pricePerDay">Price Per Day</label>
             <InputNumber id="pricePerDay" disabled mode="currency" currency="MMK" v-model="pricePerDay" :pt="{
               input: {
@@ -119,7 +119,7 @@
 
   const reservationForm = useForm({
     room_id: [],
-    guest_name: [],
+    guest_name: "",
     total_person: 0,
     total_price: 0,
     from_date: "",
