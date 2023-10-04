@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ReservationRequest;
+use App\Mail\BookingNotificationMail;
 use App\Models\Reservation;
 use App\Models\Room;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
@@ -97,6 +99,7 @@ class ReservationController extends Controller
 
             DB::commit();
 
+            Mail::to(Auth::user()->email)->send(new BookingNotificationMail($reservation));
             return redirect()->route('admin.reservations.index');
 
         } catch (\Exception $e) {
