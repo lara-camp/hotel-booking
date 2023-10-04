@@ -10,7 +10,7 @@
 
           </div>
           <div class="mr-3" v-if="user">
-            <Link href="/profile">
+            <Link :href="route('user.profile')">
             <span class="text-lg font-bold text-white">{{ user.name }}</span>
             </Link>
           </div>

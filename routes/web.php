@@ -34,6 +34,10 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::middleware(["auth"])->as("user.")->group(function () {
+    Route::inertia("/profile", "User/Profile")->name("profile");
+});
+
 Route::middleware(['auth', 'admin'])->prefix("admin")->as("admin.")->group(function () {
     Route::get("/", function () {
         return Inertia::render("Dashboard");
