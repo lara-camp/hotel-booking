@@ -36,6 +36,9 @@ Route::get('/dashboard', function () {
 
 Route::middleware(["auth"])->as("user.")->group(function () {
     Route::inertia("/profile", "User/Profile")->name("profile");
+    Route::patch("/profile", [ProfileController::class, "update"])->name("profile.edit");
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post("/profile/image", [ProfileController::class, 'updateProfileImage'])->name("profile.updateProfileImage");
 });
 
 Route::middleware(['auth', 'admin'])->prefix("admin")->as("admin.")->group(function () {

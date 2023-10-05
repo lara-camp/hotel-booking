@@ -1,7 +1,8 @@
 <script setup>
+  import Logout from "@/Pages/Profile/Partials/Logout.vue";
   import UpdatePasswordForm from "@/Pages/Profile/Partials/UpdatePasswordForm.vue";
   import UpdateProfile from "@/Pages/Profile/Partials/UpdateProfile.vue";
-  import Logout from "@/Pages/Profile/Partials/Logout.vue";
+  import Head from "@inertiajs/vue3";
   defineProps({
     mustVerifyEmail: {
       type: Boolean,
@@ -10,6 +11,7 @@
       type: String,
     },
   });
+
 </script>
 
 <template>
