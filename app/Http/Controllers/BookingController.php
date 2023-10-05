@@ -4,9 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreBookingRequest;
 use App\Models\Reservation;
+use App\Models\Room;
+use App\Reporting\DashboardReporting;
+use Carbon\Carbon;
 use Exception;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class BookingController extends Controller
 {
@@ -15,7 +20,31 @@ class BookingController extends Controller
      */
     public function index()
     {
-        return [];
+        // dd(Carbon::parse("2023-10-03T03:39:16.042Z")->format('Y-m-d h:i'));
+        $report = new DashboardReporting();
+        $popularRoomTypes = $report->popularRoomTypes();
+        
+        $filters = ['from_date' =>"2023-10-04", 'to_date'=> "2023-10-05"];
+
+        $availableRooms = Room::search($filters)->get();
+
+        
+        if(request()->has('from_date')  && request()->has('to_date')) {
+            
+            $searchRooms = [];
+            foreach ($availableRooms as $availableRoom) {
+                if(!isset($searchRooms[$availableRoom->room_type_id])) $searchRooms[$availableRoom->room_type_id] = $availableRoom;
+            }
+            return Inertia::render('Booking/Index',[
+                'searchRooms' => $searchRooms
+            ]);
+        } else {
+            return Inertia::render('Index',[
+                'popularRoomTypes' => $popularRoomTypes
+            ]);
+        }
+
+        
     }
 
     /**
@@ -31,6 +60,7 @@ class BookingController extends Controller
      */
     public function store(StoreBookingRequest $request)
     {
+        dd($request->all());
         DB::beginTransaction();
 
         try {

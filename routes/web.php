@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ReservationController;
 use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\RoomTypeController;
 use App\Http\Controllers\Admin\PopularRoomTypeController;
+use App\Http\Controllers\BookingController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -34,6 +35,8 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::middleware('auth')->resource('bookings',BookingController::class)->only(['index', 'create', 'store']);
+
 Route::middleware(['auth', 'admin'])->group(function () {
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -57,7 +60,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::delete('room-types/{id}/force-delete', [RoomTypeController::class, 'forceDelete'])->name('room-types.force-delete');
         Route::resource('room-types', RoomTypeController::class)->except(['create', 'edit']);
 
-        Route::get('/available-rooms', AvailableRoomController::class);
+        Route::get('available-rooms', AvailableRoomController::class);
         Route::get('popular-room-types', PopularRoomTypeController::class);
     });
 });
