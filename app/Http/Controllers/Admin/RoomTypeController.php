@@ -57,6 +57,7 @@ class RoomTypeController extends Controller
     }
 
     public function restore($id) {
+        ddd($id);
         $room_type = RoomType::onlyTrashed()->findOrFail($id);
         $room_type->restore();
 
@@ -64,6 +65,7 @@ class RoomTypeController extends Controller
     }
 
     public function forceDelete($id) {
+        ddd($id);
         $room_type = RoomType::onlyTrashed()->findOrFail($id);
         $room_type->forceDelete();
 
