@@ -16,7 +16,6 @@
           <Button label="Create" icon="pi pi-plus" outlined class="mr-3" />
           </Link>
         </div>
-        <Button label="Create" icon="pi pi-plus" outlined @click="() => router.visit(route('admin.rooms.create'))" />
       </div>
     </template>
     <Column field="id" header="Id"></Column>
@@ -29,7 +28,6 @@
         {{ formatCurrency(slotProps.data.price) }}
       </template>
     </Column>
-    <Column field="available" header="Availability"></Column>
     <Column header="Actions">
       <template #body="slotProps">
         <Button icon="pi pi-pencil" aria-label="Submit" size="small" outlined class="mr-2"

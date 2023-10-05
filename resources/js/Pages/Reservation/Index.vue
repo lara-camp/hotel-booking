@@ -33,6 +33,11 @@
         </span>
       </template>
     </Column>
+    <Column field="guest_name" header="Guest Name">
+      <template #body="slotProps">
+        {{ formatCurrency(slotProps.data.guest_name) }}
+      </template>
+    </Column>
     <Column header="Total Person" field="total_person">
     </Column>
     <Column field="total_price" header="Price">

@@ -23,6 +23,7 @@ class ReservationRequest extends FormRequest
     {
         return [
             'room_id.*' => 'required|exists:rooms,id',
+            'guest_name' => 'required|min:3|max:256',
             'total_person' => 'required|integer|min:1',
             'total_price' => 'required|integer',
             'from_date' => 'required|date',

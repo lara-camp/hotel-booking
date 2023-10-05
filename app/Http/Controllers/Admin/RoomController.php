@@ -8,7 +8,6 @@ use App\Http\Requests\UpdateRoomRequest;
 use App\Models\Room;
 use App\Models\RoomType;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
@@ -40,15 +39,9 @@ class RoomController extends Controller
                 'bed_type' => $room->bed_type,
                 'number_of_bed' => $room->number_of_bed,
                 'price' => $room->price,
-                'available' => (boolean)$room->available,
-                'can' => [
-                    'update_room' => Auth::user()->can('update', $room),
-                ]
+
             ]),
             'room_types' => RoomType::with('rooms')->get(['id', 'name']),
-            'can' =>[
-                'create_room' => Auth::user()->can('create', Room::class),
-            ]
         ]);
     }
 
@@ -71,9 +64,9 @@ class RoomController extends Controller
         $room = new Room();
         $room->room_number = $request->room_number;
         $room->number_of_bed = $request->number_of_bed;
+        $room->room_type_id  = $request->room_type_id;
         $room->price = $request->price;
         $room->bed_type = $request->bed_type;
-        $room->available = $request->available;
         $room->save();
         DB::commit();
 
@@ -102,7 +95,6 @@ class RoomController extends Controller
             'price' => $room->price,
             'bed_type' => $room->bed_type,
             'room_type_id' => $room->room_type_id,
-            'available' => (boolean)$room->available,
             'room_type' => RoomType::all(['id', 'name'])
         ]);
     }
@@ -116,9 +108,9 @@ class RoomController extends Controller
         DB::beginTransaction();
         $room->room_number = $request->room_number;
         $room->number_of_bed = $request->number_of_bed;
+        $room->room_type_id  = $request->room_type_id;
         $room->price = $request->price;
         $room->bed_type = $request->bed_type;
-        $room->available = $request->available;
         $room->save();
         DB::commit();
 

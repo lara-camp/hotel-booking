@@ -19,7 +19,6 @@ class RoomSeeder extends Seeder
             'bed_type' => 'Single',
             'number_of_bed' => 1,
             'price' => 40000,
-            'available' => true,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -30,7 +29,6 @@ class RoomSeeder extends Seeder
             'bed_type' => 'Double',
             'number_of_bed' => 1,
             'price' => 60000,
-            'available' => true,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -41,7 +39,6 @@ class RoomSeeder extends Seeder
             'bed_type' => 'Single',
             'number_of_bed' => 1,
             'price' => 800000,
-            'available' => true,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -52,7 +49,6 @@ class RoomSeeder extends Seeder
             'bed_type' => 'Double',
             'number_of_bed' => 1,
             'price' => 100000,
-            'available' => true,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -63,7 +59,6 @@ class RoomSeeder extends Seeder
             'bed_type' => 'Double',
             'number_of_bed' => 1,
             'price' => 150000,
-            'available' => true,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
