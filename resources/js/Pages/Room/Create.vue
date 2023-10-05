@@ -1,16 +1,15 @@
 <template>
   <div>
-    <h1 class="my-2 text-2xl">Create A New Room</h1>
+    <h1 class="my-2 text-5xl font-bold">Create A New Room</h1>
     <div class="flex flex-col mb-3">
-      <label for="roomnumber" class="my-2">room number</label>
+      <label for="roomnumber" class="my-2">Room Number</label>
       <InputNumber v-model="roomForm.room_number" id="roomnumber" inputId="integeronly" />
       <InlineMessage v-if="errors.room_number" severity="error" class="mt-2">{{
         errors.room_number
-
       }}</InlineMessage>
     </div>
     <div class="flex flex-col">
-      <label for="numOfBeds" class="my-2">number of beds</label>
+      <label for="numOfBeds" class="my-2">Number Of Beds</label>
 
       <InputNumber v-model="roomForm.number_of_bed" id="numOfBeds" inputId="integeronly" />
       <InlineMessage v-if="errors.number_of_bed" severity="error" class="mt-2">{{
@@ -18,14 +17,14 @@
       }}</InlineMessage>
     </div>
     <div class="flex flex-col">
-      <label for="integeronly" class="my-2">price</label>
+      <label for="integeronly" class="my-2">Price</label>
       <InputNumber v-model="roomForm.price" inputId="integeronly" mode="currency" currency="MMK" />
       <InlineMessage v-if="errors.price" severity="error" class="mt-2">{{
         errors.price
       }}</InlineMessage>
     </div>
     <div class="flex flex-col">
-      <label for="bedType" class="my-2">bed type</label>
+      <label for="bedType" class="my-2">Bed Type</label>
       <InputText id="bedType" v-model="roomForm.bed_type" />
       <InlineMessage v-if="errors.bed_type" severity="error" class="mt-2">{{
         errors.bed_type
@@ -37,22 +36,6 @@
         placeholder="Select a room type" class="md:w-14rem w-full" option-value="id" />
       <InlineMessage v-if="errors.room_type_id" severity="error" class="mt-2">{{
         errors.room_type_id
-      }}</InlineMessage>
-    </div>
-    <div class="flex flex-col flex-wrap gap-3 my-2">
-      <label for="">status</label>
-      <div class="flex gap-3">
-        <div class="align-items-center flex">
-          <RadioButton v-model="roomForm.available" inputId="available" name="available" :value="true" />
-          <label for="available" class="ml-2">available</label>
-        </div>
-        <div class="align-items-center flex">
-          <RadioButton v-model="roomForm.available" inputId="taken" name="taken" :value="false" />
-          <label for="taken" class="ml-2">taken</label>
-        </div>
-      </div>
-      <InlineMessage v-if="errors.available" severity="error" class="mt-2">{{
-        errors.available
       }}</InlineMessage>
     </div>
     <div class="my-3">
@@ -79,7 +62,6 @@
   const roomForm = useForm({
     room_number: 0,
     price: 0,
-    available: true,
     room_type_id: 0,
     bed_type: "",
     number_of_bed: 0,
@@ -88,7 +70,7 @@
   const toast = useToast();
 
   function submitForm() {
-    roomForm.post("/admin/rooms", {
+    roomForm.post(route('admin.rooms.store'), {
       onSuccess: () => toast.add({ severity: "success", summary: "Success", detail: "Created a room successfully", life: 3000 }),
     });
   }

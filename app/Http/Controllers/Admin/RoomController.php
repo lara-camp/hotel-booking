@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreRoomRequest;
+use App\Http\Requests\UpdateRoomRequest;
 use App\Models\Room;
 use App\Models\RoomType;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class RoomController extends Controller
@@ -23,24 +24,24 @@ class RoomController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         return Inertia::render('Room/Index', [
-            'rooms' => Room::with('roomType')->paginate(5)->through(fn($room) => [
+            'rooms' => Room::with('roomType')
+                ->when($request->filter_room_types ?? false, function($query, $filter_room_types) {
+                    $query->whereIn('room_type_id', $filter_room_types);
+                })
+                ->paginate(5)
+                ->through(fn($room) => [
                 'id' => $room->id,
                 'room_number' => $room->room_number,
                 'room_type' => $room->roomType->name,
                 'bed_type' => $room->bed_type,
                 'number_of_bed' => $room->number_of_bed,
                 'price' => $room->price,
-                'available' => (boolean)$room->available,
-                'can' => [
-                    'update_room' => Auth::user()->can('update', $room),
-                ]
+
             ]),
-            'can' =>[
-                'create_room' => Auth::user()->can('create', Room::class),
-            ]
+            'room_types' => RoomType::with('rooms')->get(['id', 'name']),
         ]);
     }
 
@@ -50,26 +51,24 @@ class RoomController extends Controller
     public function create()
     {
         return Inertia::render('Room/Create', [
-            'room_type' => RoomType::all(['id', 'name'])
+            'room_type' => RoomType::with('rooms')->get(['id', 'name'])
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRoomRequest $request)
     {
-
-        $validated = $request->validate([
-            'room_number' => 'required|integer|unique:rooms,room_number',
-            'room_type_id' => 'required|exists:room_types,id',
-            'bed_type' => 'required|string',
-            'number_of_bed' => 'required|integer',
-            'price' => 'required|integer',
-            'available' => 'required|boolean',
-        ]);
-
-        Room::create($validated);
+        DB::beginTransaction();
+        $room = new Room();
+        $room->room_number = $request->room_number;
+        $room->number_of_bed = $request->number_of_bed;
+        $room->room_type_id  = $request->room_type_id;
+        $room->price = $request->price;
+        $room->bed_type = $request->bed_type;
+        $room->save();
+        DB::commit();
 
         return redirect()->route('admin.rooms.index');
     }
@@ -96,7 +95,6 @@ class RoomController extends Controller
             'price' => $room->price,
             'bed_type' => $room->bed_type,
             'room_type_id' => $room->room_type_id,
-            'available' => (boolean)$room->available,
             'room_type' => RoomType::all(['id', 'name'])
         ]);
     }
@@ -104,19 +102,17 @@ class RoomController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Room $room)
+    public function update(UpdateRoomRequest $request, Room $room)
     {
 
-        $validated = $request->validate([
-            'room_number' => 'required|unique:rooms,room_number,'.$room->id,
-            'room_type_id' => 'required|exists:room_types,id',
-            'bed_type' => 'required|string',
-            'number_of_bed' => 'required|integer',
-            'price' => 'required|integer',
-            'available' => 'required|boolean',
-        ]);
-
-        $room->update($validated);
+        DB::beginTransaction();
+        $room->room_number = $request->room_number;
+        $room->number_of_bed = $request->number_of_bed;
+        $room->room_type_id  = $request->room_type_id;
+        $room->price = $request->price;
+        $room->bed_type = $request->bed_type;
+        $room->save();
+        DB::commit();
 
         return redirect()->route('admin.rooms.index');
     }

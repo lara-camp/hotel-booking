@@ -12,7 +12,6 @@ class AvailableRoomController extends Controller
 {
     public function __invoke()
     {
-
         $report = new DashboardReporting();
         $availableRoomTypes = $report->availableRooms();
 

@@ -6,9 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRoomTypeRequest;
 use App\Http\Requests\UpdateRoomTypeRequest;
 use App\Models\RoomType;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class RoomTypeController extends Controller
@@ -63,7 +60,7 @@ class RoomTypeController extends Controller
         $room_type = RoomType::onlyTrashed()->findOrFail($id);
         $room_type->restore();
 
-        return redirect()->route('admin.room-types.index')->with('status', 'The room is restored');
+        return redirect()->route('admin.room-types.archives')->with('status', 'The room is restored');
     }
 
     public function forceDelete($id) {
@@ -71,6 +68,6 @@ class RoomTypeController extends Controller
         $room_type->forceDelete();
 
         // Toast not shown yet
-        return redirect()->route('admin.room-types.index');
+        return redirect()->route('admin.room-types.archives');
     }
 }

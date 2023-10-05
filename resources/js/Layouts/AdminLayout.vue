@@ -10,19 +10,34 @@
       <!-- Options -->
       <div class="h-5/6 flex flex-col justify-between">
         <div class="">
-          <NavigationButton url="/admin/reservations" icon="pi pi-calendar">Reservation</NavigationButton>
-          <NavigationButton url="/admin/rooms" icon="pi pi-home">Room</NavigationButton>
+          <NavigationButton url="/admin" icon="pi pi-home">Home</NavigationButton>
+          <NavigationButton url="/admin/reservations" icon="pi pi-calendar">Reservations</NavigationButton>
+          <NavigationButton url="/admin/rooms" icon="pi pi-inbox">Rooms</NavigationButton>
+          <NavigationButton url="/admin/room-types" icon="pi pi-bars">Room Types</NavigationButton>
           <NavigationExpand>
             <template #default>
-              Rooms
+              Profile
             </template>
             <template #contents>
-              <NavigationButton icon="pi pi-home" url="/room">View</NavigationButton>
-              <NavigationButton icon=" pi pi-plus" url="/room/create">Create</NavigationButton>
+              <NavigationButton icon="pi pi-user" url="/admin/profile">View</NavigationButton>
+              <div
+                class="hover:text-indigo-600 hover:bg-white xl:block hidden p-3 mb-2 text-white transition duration-300 rounded cursor-pointer"
+                @click="confirmLogout">
+                <div class="flex items-baseline justify-start">
+                  <div class="w-1/6 ml-6 mr-4">
+                    <span class="pi pi-sign-out"></span>
+                  </div>
+                  <p class="text-xl font-semibold">
+                    Logout
+                  </p>
+                </div>
+              </div>
+              <div
+                class="xl:hidden hover:bg-white hover:text-indigo-600 flex items-baseline justify-center px-3 py-4 mb-2 transition-all duration-300 cursor-pointer">
+                <span class="pi pi-sign-out"></span>
+              </div>
             </template>
           </NavigationExpand>
-          <NavigationButton url="/admin/room-types" icon="pi pi-bars">Room Type</NavigationButton>
-          <NavigationButton url="/admin/profile" icon="pi pi-user">Profile</NavigationButton>
         </div>
         <div class="">
           <UserSection />
@@ -38,10 +53,18 @@
       </div>
       <div class="h-5/6 flex flex-col justify-between">
         <div class="">
-          <NavigationButton url="/admin/reservations" icon="pi pi-calendar" title="Reservation">Reservation
+          <NavigationButton url="/admin" icon="pi pi-home">Home</NavigationButton>
+          <NavigationButton url="/admin/reservations" icon="pi pi-calendar" title="Reservation">
+            Reservation
           </NavigationButton>
-          <NavigationButton url="/admin/rooms" icon="pi pi-home" title="Room">Room</NavigationButton>
+          <NavigationButton url="/admin/rooms" icon="pi pi-inbox" title="Room">Room</NavigationButton>
+          <NavigationButton url="/admin/room-types" icon="pi pi-bars">Room Types</NavigationButton>
           <NavigationButton url="/admin/profile" icon="pi pi-user" title="Profile">Profile</NavigationButton>
+        </div>
+        <div class="hover:bg-white md:p-3 transition-colors duration-300 rounded cursor-pointer" @click="()=>router.visit(route('admin.profile.edit'))">
+          <div class="">
+            <img :src="user.profile_image_path" class="object-cover w-full h-full rounded-full" alt="">
+          </div>
         </div>
       </div>
     </div>
@@ -49,14 +72,29 @@
       <slot />
     </div>
   </div>
+  <ConfirmDialog />
 </template>
 <script setup>
   import NavigationExpand from '@/Components/Dashboard/NavigationExpand.vue';
   import UserSection from '@/Components/Dashboard/UserSection.vue';
-  import { Link, usePage } from '@inertiajs/vue3';
+  import { Link, router, usePage } from '@inertiajs/vue3';
+  import ConfirmDialog from 'primevue/confirmdialog';
+  import { useConfirm } from 'primevue/useconfirm';
   import { computed } from 'vue';
   import NavigationButton from "../Components/Dashboard/NavigationButton.vue";
 
-
   const user = computed(() => usePage().props.auth.user)
+
+  const confirm = useConfirm();
+  function confirmLogout() {
+    confirm.require({
+      icon: 'pi pi-info-circle',
+      acceptClass: 'p-button-danger',
+      message: 'Are you sure you want to logout?',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        router.post(route('logout'));
+      },
+    });
+  };
 </script>

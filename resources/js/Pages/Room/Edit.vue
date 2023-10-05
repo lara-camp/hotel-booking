@@ -9,7 +9,6 @@
 
       }}</InlineMessage>
     </div>
-
     <div class="flex flex-col">
       <label for="numOfBeds" class="my-2">number of beds</label>
       <InputNumber v-model="roomForm.number_of_bed" id="numOfBeds" inputId="integeronly" />
@@ -31,28 +30,12 @@
         errors.bed_type
       }}</InlineMessage>
     </div>
-      <div class="flex flex-col">
-          <label for="roomType" class="my-2">Room type</label>
-          <Dropdown v-model="roomForm.room_type_id" :options="props.room_type" optionLabel="name"
-                    placeholder="Select a room type" class="md:w-14rem w-full" option-value="id" />
-          <InlineMessage v-if="errors.room_type_id" severity="error" class="mt-2">{{
-                  errors.room_type_id
-              }}</InlineMessage>
-      </div>
-    <div class="flex flex-col flex-wrap gap-3 my-2">
-      <label for="">status</label>
-      <div class="flex gap-3">
-        <div class="align-items-center flex">
-          <RadioButton v-model="roomForm.available" inputId="available" name="available" :value="true" />
-          <label for="availables" class="ml-2">available</label>
-        </div>
-        <div class="align-items-center flex">
-          <RadioButton v-model="roomForm.available" inputId="taken" name="taken" :value="false" />
-          <label for="taken" class="ml-2">taken</label>
-        </div>
-      </div>
-      <InlineMessage v-if="errors.available" severity="error" class="mt-2">{{
-        errors.available
+    <div class="flex flex-col">
+      <label for="roomType" class="my-2">Room type</label>
+      <Dropdown v-model="roomForm.room_type_id" :options="props.room_type" optionLabel="name"
+        placeholder="Select a room type" class="md:w-14rem w-full" option-value="id" />
+      <InlineMessage v-if="errors.room_type_id" severity="error" class="mt-2">{{
+        errors.room_type_id
       }}</InlineMessage>
     </div>
     <div class="my-3">
@@ -73,21 +56,19 @@
 
   const props = defineProps({
     id: Number,
-    room_number: Number,
+    room_number: String,
     number_of_bed: Number,
     price: Number,
     bed_type: String,
     room_type_id: Number,
-    available: Boolean,
     errors: Object,
     room_type: Array,
   });
 
   const roomForm = useForm(
     {
-      room_number: props.room_number,
+      room_number: Number(props.room_number),
       price: props.price,
-      available: props.available,
       bed_type: props.bed_type,
       number_of_bed: props.number_of_bed,
       room_type_id: props.room_type_id,
