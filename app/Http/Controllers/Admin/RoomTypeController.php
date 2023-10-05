@@ -57,19 +57,17 @@ class RoomTypeController extends Controller
     }
 
     public function restore($id) {
-        ddd($id);
         $room_type = RoomType::onlyTrashed()->findOrFail($id);
         $room_type->restore();
 
-        return redirect()->route('admin.room-types.index')->with('status', 'The room is restored');
+        return redirect()->route('admin.room-types.archives')->with('status', 'The room is restored');
     }
 
     public function forceDelete($id) {
-        ddd($id);
         $room_type = RoomType::onlyTrashed()->findOrFail($id);
         $room_type->forceDelete();
 
         // Toast not shown yet
-        return redirect()->route('admin.room-types.index');
+        return redirect()->route('admin.room-types.archives');
     }
 }
