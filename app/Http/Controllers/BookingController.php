@@ -28,10 +28,11 @@ class BookingController extends Controller
 
         $availableRooms = Room::search($filters)->get();
 
-        
+        //Check if there is search query or not
         if(request()->has('from_date')  && request()->has('to_date')) {
             
             $searchRooms = [];
+            //avaiable rooms but only one room for a particular room-type
             foreach ($availableRooms as $availableRoom) {
                 if(!isset($searchRooms[$availableRoom->room_type_id])) $searchRooms[$availableRoom->room_type_id] = $availableRoom;
             }
