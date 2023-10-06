@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ReservationRequest;
 use App\Mail\BookingNotificationMail;
+use App\Mail\BookingUpdateMail;
 use App\Models\Reservation;
 use App\Models\Room;
 use Carbon\Carbon;
@@ -194,6 +195,10 @@ class ReservationController extends Controller
 
         //save the changes
         $reservation->save();
+
+        if(Auth::user()->role_id===2){
+            Mail::to(Auth::user()->email)->send(new BookingUpdateMail($reservation));
+        }
 
         //redirect, may need to update later
         return redirect()->route('admin.reservations.index');
