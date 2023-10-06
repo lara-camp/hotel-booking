@@ -1,11 +1,9 @@
 <?php
 
-use App\Http\Controllers\Admin\AvailableRoomController;
-use App\Http\Controllers\Admin\PopularRoomTypeController;
+use App\Http\Controllers\Admin\ReportingController;
 use App\Http\Controllers\Admin\ReservationController;
 use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\RoomTypeController;
-use App\Http\Controllers\Admin\PopularRoomTypeController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -57,8 +55,7 @@ Route::middleware(['auth', 'admin'])->prefix("admin")->as("admin.")->group(funct
     Route::get("/room-types/test", [RoomTypeController::class, "test"])->name("room-types.test");
     Route::patch("/room-types/{room_types}/restore", [RoomTypeController::class, "restore"])->name("room-types.restore");
     Route::delete("/room-types/{room_types}/force-delete", [RoomTypeController::class, "forceDelete"])->name("room-types.force-delete");
-    Route::get('/available-rooms', AvailableRoomController::class);
-    Route::get('/popular-room-types', PopularRoomTypeController::class);
+    Route::get('/reporting', ReportingController::class);
 
 });
 
