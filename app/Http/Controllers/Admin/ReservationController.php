@@ -10,6 +10,7 @@ use App\Models\Reservation;
 use App\Models\Room;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
@@ -30,8 +31,8 @@ class ReservationController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Reservation/Index', [
-            'reservations' => Reservation::with('user', 'rooms:room_number')
+        $reservations = Cache::remember('reservation_list',now()->addMinute(30),function(){
+            return Reservation::with('user', 'rooms:room_number')
                 ->search(request(['from_date', 'to_date']))
                 ->paginate(5)
                 ->withQueryString()
@@ -45,7 +46,10 @@ class ReservationController extends Controller
                     'to_date' => $reservation->to_date,
                     'checkin_time' => $reservation->checkin_time,
                     'checkout_time' => $reservation->checkout_time,
-                ])
+                ]);
+        });
+        return Inertia::render('Reservation/Index', [
+            'reservations' => $reservations
         ]);
     }
 
@@ -99,7 +103,7 @@ class ReservationController extends Controller
             $reservation->rooms()->attach($request->room_id);
 
             DB::commit();
-
+            Cache::forget('reservation_list');
             Mail::to(Auth::user()->email)->send(new BookingNotificationMail($reservation));
             return redirect()->route('admin.reservations.index');
 
@@ -195,7 +199,7 @@ class ReservationController extends Controller
 
         //save the changes
         $reservation->save();
-
+        Cache::forget('reservation_list');
         if(Auth::user()->role_id===2){
             Mail::to(Auth::user()->email)->send(new BookingUpdateMail($reservation));
         }
@@ -212,7 +216,8 @@ class ReservationController extends Controller
         DB::table('reservation_room')->where('reservation_id',$reservation->id)->delete();
         $reservation->delete();
 
-        //redirect, may need to update later
+        Cache::forget('reservation_list');
+        
         return redirect()->route('admin.reservations.index')->isSuccessful();
     }
 }
