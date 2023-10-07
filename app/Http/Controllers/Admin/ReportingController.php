@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Reporting\DashboardReporting;
+use Inertia\Inertia;
 
 class ReportingController extends Controller
 {
@@ -17,7 +18,9 @@ class ReportingController extends Controller
         $availableRoomTypes = $report->availableRooms();
         $popularRoomTypes = $report->popularRoomTypes();
 
-        return ['availableRoomTypes' => $availableRoomTypes,
-                'popularRoomTypes' => $popularRoomTypes];
+        return Inertia::render("Dashboard", [
+            'availableRoomTypes' =>$availableRoomTypes,
+            'popularRoomTypes'=>$popularRoomTypes
+        ]);
     }
 }
