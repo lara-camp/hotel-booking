@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\RoomTypeController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ProfileController;
+use App\Reporting\DashboardReporting;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -30,16 +31,14 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return Inertia::render('Dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->resource('bookings',BookingController::class)->only(['index', 'create', 'store']);
 
 Route::middleware(['auth', 'admin'])->prefix("admin")->as("admin.")->group(function () {
-    Route::get("/", function () {
-        return Inertia::render("Dashboard");
-    })->name("index");
+    Route::get("/", ReportingController::class)->name("index");
 
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -55,8 +54,6 @@ Route::middleware(['auth', 'admin'])->prefix("admin")->as("admin.")->group(funct
     Route::get("/room-types/test", [RoomTypeController::class, "test"])->name("room-types.test");
     Route::patch("/room-types/{room_types}/restore", [RoomTypeController::class, "restore"])->name("room-types.restore");
     Route::delete("/room-types/{room_types}/force-delete", [RoomTypeController::class, "forceDelete"])->name("room-types.force-delete");
-    Route::get('/reporting', ReportingController::class);
-
 });
 
 require __DIR__ . '/auth.php';

@@ -18,7 +18,7 @@
         <InlineMessage v-if="form.errors.email" severity="error" class="mt-2">{{ form.errors.email }}</InlineMessage>
       </div>
       <div class="">
-        <Button label="Save" icon="pi pi-save" outlined :loading="form.processing" type="submit" />
+        <Button label="Save" icon="pi pi-save" outlined :disabled="!form.isDirty" :loading="form.processing" type="submit" />
         <InlineMessage v-if="form.errors.email" severity="error" class="mt-2">{{ form.errors.email }}</InlineMessage>
       </div>
     </form>

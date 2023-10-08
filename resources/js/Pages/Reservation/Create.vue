@@ -41,7 +41,7 @@
         <div class="gap-x-3 flex mt-2">
           <div class="flex flex-col w-1/2">
             <label for="reservedFrom">From</label>
-            <Calendar v-model="reservationForm.from_date" :minDate="minDate" :manualInput="false" id="reservedFrom"
+            <Calendar v-model="fromDate" :minDate="minDate" :manualInput="false" id="reservedFrom"
               :class="{ 'p-invalid': errors.from_date }" class="w-full" :pt="{
                 input: {
                   class: 'p-4 rounded'
@@ -102,14 +102,14 @@
 
 <script setup>
   import { useForm } from '@inertiajs/vue3';
-  import Button from 'primevue/button';
-  import Calendar from 'primevue/calendar';
-  import InlineMessage from 'primevue/inlinemessage';
-  import InputNumber from 'primevue/inputnumber';
-  import InputText from 'primevue/inputtext';
-  import MultiSelect from 'primevue/multiselect';
-  import { useToast } from "primevue/usetoast";
-  import { computed, ref, watchEffect } from 'vue';
+import Button from 'primevue/button';
+import Calendar from 'primevue/calendar';
+import InlineMessage from 'primevue/inlinemessage';
+import InputNumber from 'primevue/inputnumber';
+import InputText from 'primevue/inputtext';
+import MultiSelect from 'primevue/multiselect';
+import { useToast } from "primevue/usetoast";
+import { computed, ref, watchEffect } from 'vue';
 
 
   const props = defineProps({
@@ -127,6 +127,16 @@
     checkin_time: "",
     checkout_time: "",
   })
+
+  // Round from date because it is causing problem in total price calculation
+    const fromDate = ref('');
+    watchEffect(() => {
+        // Getting fromDate from calendar input
+        let getDate = new Date(fromDate.value);
+        // Getting only date from that value
+        let newDate = new Date(getDate.toDateString());
+        reservationForm.from_date = fromDate.value ? newDate : "";
+    })
 
   const checkinTime = ref("");
   const checkoutTime = ref("");

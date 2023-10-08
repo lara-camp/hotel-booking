@@ -1,19 +1,26 @@
-<script setup>
-    import { Head } from '@inertiajs/vue3';
-</script>
-
 <template>
     <Head title="Dashboard" />
-    <div class="py-12">
-        <div class="max-w-7xl sm:px-6 lg:px-8 mx-auto">
-            <div class="sm:rounded-lg overflow-hidden bg-white shadow-sm">
-                <div class="p-6 text-gray-900">You're logged in!</div>
-            </div>
+    <h1 class="text-900 mb-6 text-5xl font-bold">Dashboard</h1>
+    <div class="max-w-7xl">
+        <div class="flex w-full">
+            <AvailableRoomType :available-room-types="availableRoomTypes" class=" md:w-1/3 w-full" />
+            <PopularRoomType :popular-room-types="popularRoomTypes" class=" md:w-2/3 w-full" />
         </div>
     </div>
 </template>
+<script setup>
+    import AvailableRoomType from '@/Components/Dashboard/AvailableRoomType.vue';
+    import { Head } from '@inertiajs/vue3';
+
+    const props = defineProps({
+        availableRoomTypes: Object,
+        popularRoomTypes: Object
+    })
+
+</script>
 <script>
     import AdminLayout from "@/Layouts/AdminLayout.vue";
+    import PopularRoomType from '@/Components/Dashboard/PopularRoomType.vue';
     export default {
         layout: AdminLayout
     }
