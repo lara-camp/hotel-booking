@@ -1,11 +1,11 @@
 <?php
 
 use App\Http\Controllers\Admin\AvailableRoomController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\PopularRoomTypeController;
 use App\Http\Controllers\Admin\ReservationController;
 use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\RoomTypeController;
-use App\Http\Controllers\Admin\PopularRoomTypeController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -28,7 +28,7 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name("index");
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
