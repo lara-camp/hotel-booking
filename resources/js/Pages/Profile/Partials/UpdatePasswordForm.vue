@@ -40,7 +40,7 @@
             </p>
         </header>
 
-        <form @submit.prevent="updatePassword" class="mt-6 space-y-6">
+        <form @submit.prevent="updatePassword" class="mt-6 space-y-3">
             <div class="flex flex-col mb-2">
                 <label for="current_password">Current Password</label>
                 <Password v-model="form.current_password" toggle-mask :feedback="false" id="current_password" size="small"
@@ -65,7 +65,7 @@
                 </InlineMessage>
             </div>
             <div class="">
-                <Button label="Save" icon="pi pi-save" outlined="" :loading="form.processing" type="submit" />
+                <Button label="Save" icon="pi pi-save" outlined="" :loading="form.processing" type="submit" :disabled="!form.isDirty"/>
             </div>
         </form>
         <Toast position="bottom-right" />
