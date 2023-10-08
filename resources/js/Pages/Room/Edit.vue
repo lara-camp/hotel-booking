@@ -1,4 +1,5 @@
 <template>
+  <Head :title="`Edit Room #${id}`" />
   <div>
     <h1 class="my-2 text-2xl">Edit the Room</h1>
     <div class="flex flex-col mb-3">
@@ -62,7 +63,7 @@
 </template>
 
 <script setup>
-  import { useForm } from "@inertiajs/vue3";
+  import { useForm,Head } from "@inertiajs/vue3";
   import Button from "primevue/button";
   import InlineMessage from "primevue/inlinemessage";
   import InputNumber from "primevue/inputnumber";

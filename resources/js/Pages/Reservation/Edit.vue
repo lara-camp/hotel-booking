@@ -1,4 +1,5 @@
 <template>
+  <Head :title="`Edit Reservation #${id}`" />
   <div>
     <h1 class="text-3xl font-light">Edit Reservation #{{ props.id }}</h1>
     <div class="[&>div]:mt-2">
@@ -7,8 +8,8 @@
         <div class="gap-x-3 flex mb-2 [&>div]:w-60">
           <div class="flex flex-col">
             <label for="room">Room Number</label>
-            <MultiSelect v-model="reservationForm.room_id" :options="available_rooms" optionLabel="room_number" optionValue="id" filter
-              placeholder="Select rooms" :maxSelectedLabels="5" class=" w-full"
+            <MultiSelect v-model="reservationForm.room_id" :options="available_rooms" optionLabel="room_number"
+              optionValue="id" filter placeholder="Select rooms" :maxSelectedLabels="5" class=" w-full"
               :class="{ 'p-invalid': errors.room_id }" />
             <InlineMessage v-if="errors.room_id" severity="error" class="mt-2">{{ errors.room_id }}</InlineMessage>
           </div>
@@ -60,14 +61,14 @@
         </div>
       </div>
       <div class="mb-3">
-        <Button label="Update Reservation" outlined @click="submitForm" :loading="reservationForm.processing"/>
+        <Button label="Update Reservation" outlined @click="submitForm" :loading="reservationForm.processing" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-  import { useForm } from '@inertiajs/vue3';
+  import { useForm, Head } from '@inertiajs/vue3';
   import Button from 'primevue/button';
   import Calendar from 'primevue/calendar';
   import InlineMessage from 'primevue/inlinemessage';

@@ -1,7 +1,6 @@
 <script setup>
   import WelcomeFiler from "@/Components/Welcome/WelcomeFilter.vue";
-  import { Head, router } from '@inertiajs/vue3';
-  import { reactive, ref } from 'vue';
+  import { Head } from '@inertiajs/vue3';
 
   defineProps({
     canLogin: {

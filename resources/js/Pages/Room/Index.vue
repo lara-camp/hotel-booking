@@ -1,4 +1,5 @@
 <template>
+  <Head title="Rooms" />
   <DataTable :value="rooms.data" class="bg-slate-100/80" tableStyle="min-width: 50rem" striped-rows :pt="{
     header: (options) => ({
       class: [
@@ -55,16 +56,16 @@
 
 <script setup>
   import CustomPaginator from "@/Components/CustomPaginator.vue";
-import { Link, router } from '@inertiajs/vue3';
-import axios from 'axios';
-import Button from 'primevue/button';
-import Column from 'primevue/column';
-import ConfirmDialog from 'primevue/confirmdialog';
-import DataTable from 'primevue/datatable';
-import DynamicDialog from 'primevue/dynamicdialog';
-import Toast from 'primevue/toast';
-import { useConfirm } from "primevue/useconfirm";
-import { useToast } from 'primevue/usetoast';
+  import { Link, router, Head } from '@inertiajs/vue3';
+  import axios from 'axios';
+  import Button from 'primevue/button';
+  import Column from 'primevue/column';
+  import ConfirmDialog from 'primevue/confirmdialog';
+  import DataTable from 'primevue/datatable';
+  import DynamicDialog from 'primevue/dynamicdialog';
+  import Toast from 'primevue/toast';
+  import { useConfirm } from "primevue/useconfirm";
+  import { useToast } from 'primevue/usetoast';
 
   const props = defineProps({
     rooms: Object
