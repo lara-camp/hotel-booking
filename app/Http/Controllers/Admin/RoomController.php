@@ -130,8 +130,8 @@ class RoomController extends Controller
     public function destroy(Room $room)
     {
         $room->delete();
-
-        return redirect()->route('admin.rooms.index');
+        Cache::flush();
+        return response("Successfully Deleted")->status(200);
     }
 
     public function archives() {
