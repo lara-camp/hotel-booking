@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateRoomRequest;
 use App\Models\Room;
 use App\Models\RoomType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
@@ -26,21 +27,27 @@ class RoomController extends Controller
      */
     public function index(Request $request)
     {
+        if(Cache::has('room_list'.request('page',1))){
+            $rooms = Cache::get('room_list'.request('page',1));
+        }
+        else{
+            $rooms = Room::with('roomType')
+            ->when($request->filter_room_types ?? false, function($query, $filter_room_types) {
+                $query->whereIn('room_type_id', $filter_room_types);
+            })
+            ->paginate(5)
+            ->through(fn($room) => [
+            'id' => $room->id,
+            'room_number' => $room->room_number,
+            'room_type' => $room->roomType->name,
+            'bed_type' => $room->bed_type,
+            'number_of_bed' => $room->number_of_bed,
+            'price' => $room->price,
+            ]);
+            Cache::put('room_list'.request('page',1),$rooms,now()->addMinutes(30));
+        }
         return Inertia::render('Room/Index', [
-            'rooms' => Room::with('roomType')
-                ->when($request->filter_room_types ?? false, function($query, $filter_room_types) {
-                    $query->whereIn('room_type_id', $filter_room_types);
-                })
-                ->paginate(5)
-                ->through(fn($room) => [
-                'id' => $room->id,
-                'room_number' => $room->room_number,
-                'room_type' => $room->roomType->name,
-                'bed_type' => $room->bed_type,
-                'number_of_bed' => $room->number_of_bed,
-                'price' => $room->price,
-
-            ]),
+            'rooms' => $rooms,
             'room_types' => RoomType::with('rooms')->get(['id', 'name']),
         ]);
     }
@@ -69,7 +76,7 @@ class RoomController extends Controller
         $room->bed_type = $request->bed_type;
         $room->save();
         DB::commit();
-
+        Cache::flush();
         return redirect()->route('admin.rooms.index');
     }
 
@@ -113,7 +120,7 @@ class RoomController extends Controller
         $room->bed_type = $request->bed_type;
         $room->save();
         DB::commit();
-
+        Cache::flush();
         return redirect()->route('admin.rooms.index');
     }
 
@@ -123,8 +130,8 @@ class RoomController extends Controller
     public function destroy(Room $room)
     {
         $room->delete();
-
-        return redirect()->route('admin.rooms.index');
+        Cache::flush();
+        return response("Successfully Deleted")->status(200);
     }
 
     public function archives() {
@@ -141,14 +148,14 @@ class RoomController extends Controller
     public function restore($id) {
         $room = Room::onlyTrashed()->findOrFail($id);
         $room->restore();
-
+        Cache::flush();
         return redirect()->route('admin.rooms.index')->with('status', 'The room is restored');
     }
 
     public function forceDelete($id) {
         $room = Room::onlyTrashed()->findOrFail($id);
         $room->forceDelete();
-
+        Cache::flush();
         // Toast not shown yet
         return redirect()->route('admin.rooms.index');
     }

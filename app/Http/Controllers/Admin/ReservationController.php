@@ -4,11 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ReservationRequest;
+use App\Mail\BookingNotificationMail;
+use App\Mail\BookingUpdateMail;
 use App\Models\Reservation;
 use App\Models\Room;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
@@ -27,22 +31,29 @@ class ReservationController extends Controller
      */
     public function index()
     {
+        if(Cache::has('reservation_list'.request('page',1))){
+            $reservations = Cache::get('reservation_list'.request('page',1));
+        }
+        else{
+            $reservations = Reservation::with('user', 'rooms:room_number')
+            ->search(request(['from_date', 'to_date']))
+            ->paginate(5)
+            ->withQueryString()
+            ->through(fn($reservation) => [
+                'id' => $reservation->id,
+                'guest_name' => $reservation->guest_name,
+                'room_id' => $reservation->rooms->pluck('room_number'),
+                'total_person' => $reservation->total_person,
+                'total_price' => $reservation->total_price,
+                'from_date' => $reservation->from_date,
+                'to_date' => $reservation->to_date,
+                'checkin_time' => $reservation->checkin_time,
+                'checkout_time' => $reservation->checkout_time,
+            ]);
+            Cache::put('reservation_list'.request('page',1),$reservations,now()->addMinute(30));
+        }
         return Inertia::render('Reservation/Index', [
-            'reservations' => Reservation::with('user', 'rooms:room_number')
-                ->search(request(['from_date', 'to_date']))
-                ->paginate(5)
-                ->withQueryString()
-                ->through(fn($reservation) => [
-                    'id' => $reservation->id,
-                    'guest_name' => $reservation->guest_name,
-                    'room_id' => $reservation->rooms->pluck('room_number'),
-                    'total_person' => $reservation->total_person,
-                    'total_price' => $reservation->total_price,
-                    'from_date' => $reservation->from_date,
-                    'to_date' => $reservation->to_date,
-                    'checkin_time' => $reservation->checkin_time,
-                    'checkout_time' => $reservation->checkout_time,
-                ])
+            'reservations' => $reservations
         ]);
     }
 
@@ -96,7 +107,8 @@ class ReservationController extends Controller
             $reservation->rooms()->attach($request->room_id);
 
             DB::commit();
-
+            Cache::flush();
+            Mail::to(Auth::user()->email)->send(new BookingNotificationMail($reservation));
             return redirect()->route('admin.reservations.index');
 
         } catch (\Exception $e) {
@@ -191,6 +203,10 @@ class ReservationController extends Controller
 
         //save the changes
         $reservation->save();
+        Cache::flush();
+        if(Auth::user()->role_id===2){
+            Mail::to(Auth::user()->email)->send(new BookingUpdateMail($reservation));
+        }
 
         //redirect, may need to update later
         return redirect()->route('admin.reservations.index');
@@ -204,7 +220,8 @@ class ReservationController extends Controller
         DB::table('reservation_room')->where('reservation_id',$reservation->id)->delete();
         $reservation->delete();
 
-        //redirect, may need to update later
+        Cache::flush();
+        
         return redirect()->route('admin.reservations.index')->isSuccessful();
     }
 }

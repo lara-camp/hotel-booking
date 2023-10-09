@@ -86,6 +86,7 @@
             detail: `Room #${id} is deleted successfully`,
             life: 3000,
           })
+          router.reload({ preserveState: false });
         })
       }
     })
