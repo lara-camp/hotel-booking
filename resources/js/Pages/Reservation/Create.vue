@@ -165,11 +165,12 @@ import { computed, ref, watchEffect } from 'vue';
 
   // Calculate total price
   watchEffect(() => {
-    let fromDate = new Date(reservationForm.from_date);
-    let toDate = new Date(reservationForm.to_date)
-    let diff = Math.abs(toDate.getTime() - fromDate.getTime())
-    let days = diff / (1000 * 60 * 60 * 24);
-    reservationForm.total_price = (days + 1) * pricePerDay.value || 0
+    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const firstDate = new Date(reservationForm.from_date);
+    const secondDate = new Date(reservationForm.to_date);
+    const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay));
+    console.log({ oneDay, firstDate, secondDate, diffDays: diffDays + 1 });
+    reservationForm.total_price = (diffDays + 1) * pricePerDay.value || 0;
   })
 </script>
 <script>
