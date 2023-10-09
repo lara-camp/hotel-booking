@@ -76,7 +76,7 @@ class RoomController extends Controller
         $room->bed_type = $request->bed_type;
         $room->save();
         DB::commit();
-        $this->clearCache();
+        Cache::flush();
         return redirect()->route('admin.rooms.index');
     }
 
@@ -120,7 +120,7 @@ class RoomController extends Controller
         $room->bed_type = $request->bed_type;
         $room->save();
         DB::commit();
-        $this->clearCache();
+        Cache::flush();
         return redirect()->route('admin.rooms.index');
     }
 
@@ -148,27 +148,15 @@ class RoomController extends Controller
     public function restore($id) {
         $room = Room::onlyTrashed()->findOrFail($id);
         $room->restore();
-
+        Cache::flush();
         return redirect()->route('admin.rooms.index')->with('status', 'The room is restored');
     }
 
     public function forceDelete($id) {
         $room = Room::onlyTrashed()->findOrFail($id);
         $room->forceDelete();
-
+        Cache::flush();
         // Toast not shown yet
         return redirect()->route('admin.rooms.index');
-    }
-
-    private function clearCache(){
-        for($i = 1; $i<=999; $i++){
-            $key = 'room_list'.$i;
-            if(Cache::has($key)){
-                Cache::forget($key);
-            }
-            else{
-                break;
-            }
-        }
     }
 }
