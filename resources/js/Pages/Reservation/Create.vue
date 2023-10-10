@@ -41,7 +41,7 @@
         <div class="gap-x-3 flex mt-2">
           <div class="flex flex-col w-1/2">
             <label for="reservedFrom">From</label>
-            <Calendar v-model="fromDate" :minDate="minDate" :manualInput="false" id="reservedFrom"
+            <Calendar v-model="reservationForm.from_date" :minDate="minDate" :manualInput="false" id="reservedFrom"
               :class="{ 'p-invalid': errors.from_date }" class="w-full" :pt="{
                 input: {
                   class: 'p-4 rounded'
@@ -102,14 +102,14 @@
 
 <script setup>
   import { useForm } from '@inertiajs/vue3';
-import Button from 'primevue/button';
-import Calendar from 'primevue/calendar';
-import InlineMessage from 'primevue/inlinemessage';
-import InputNumber from 'primevue/inputnumber';
-import InputText from 'primevue/inputtext';
-import MultiSelect from 'primevue/multiselect';
-import { useToast } from "primevue/usetoast";
-import { computed, ref, watchEffect } from 'vue';
+  import Button from 'primevue/button';
+  import Calendar from 'primevue/calendar';
+  import InlineMessage from 'primevue/inlinemessage';
+  import InputNumber from 'primevue/inputnumber';
+  import InputText from 'primevue/inputtext';
+  import MultiSelect from 'primevue/multiselect';
+  import { useToast } from "primevue/usetoast";
+  import { computed, ref, watchEffect } from 'vue';
 
 
   const props = defineProps({
@@ -128,15 +128,18 @@ import { computed, ref, watchEffect } from 'vue';
     checkout_time: "",
   })
 
-  // Round from date because it is causing problem in total price calculation
-    const fromDate = ref('');
-    watchEffect(() => {
-        // Getting fromDate from calendar input
-        let getDate = new Date(fromDate.value);
-        // Getting only date from that value
-        let newDate = new Date(getDate.toDateString());
-        reservationForm.from_date = fromDate.value ? newDate : "";
-    })
+  // Change date to yyyy-mm-dd
+  function formatDate(date) {
+    let d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
 
   const checkinTime = ref("");
   const checkoutTime = ref("");
@@ -150,7 +153,11 @@ import { computed, ref, watchEffect } from 'vue';
 
   const toast = useToast();
   function submitForm() {
-    reservationForm.post(route("admin.reservations.store"), {
+    reservationForm.transform((data) => ({
+      ...data,
+      from_date: formatDate(data.from_date),
+      to_date: formatDate(data.to_date)
+    })).post(route("admin.reservations.store"), {
       onSuccess: () => toast.add({ severity: 'success', summary: 'Success', detail: 'Added Reservation Successfully', life: 3000 }),
     })
   }
@@ -165,11 +172,11 @@ import { computed, ref, watchEffect } from 'vue';
 
   // Calculate total price
   watchEffect(() => {
-    let fromDate = new Date(reservationForm.from_date);
-    let toDate = new Date(reservationForm.to_date)
-    let diff = Math.abs(toDate.getTime() - fromDate.getTime())
-    let days = diff / (1000 * 60 * 60 * 24);
-    reservationForm.total_price = (days + 1) * pricePerDay.value || 0
+    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const firstDate = new Date(reservationForm.from_date);
+    const secondDate = new Date(reservationForm.to_date);
+    const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay));
+    reservationForm.total_price = (diffDays + 1) * pricePerDay.value || 0;
   })
 </script>
 <script>
