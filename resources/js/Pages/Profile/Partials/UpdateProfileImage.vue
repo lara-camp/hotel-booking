@@ -12,7 +12,7 @@
     <Button icon="pi pi-pencil" class="!absolute bottom-0 left-0 bg-indigo-700 hover:bg-indigo-700"
       @click="() => profilePictureInputRef.click()" />
     <Button icon="pi pi-save" class="!absolute bottom-0 left-16 bg-indigo-700 hover:bg-indigo-700"
-      :loading="form.processing" @click="submit" />
+      :loading="form.processing" @click="submit" :disabled="!form.isDirty"/>
   </form>
 </template>
 

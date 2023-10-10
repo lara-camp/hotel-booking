@@ -17,7 +17,6 @@
           <Button label="Create" icon="pi pi-plus" outlined class="mr-3" />
           </Link>
         </div>
-        <Button label="Create" icon="pi pi-plus" outlined @click="() => router.visit(route('admin.rooms.create'))" />
       </div>
     </template>
     <Column field="id" header="Id"></Column>
@@ -30,7 +29,6 @@
         {{ formatCurrency(slotProps.data.price) }}
       </template>
     </Column>
-    <Column field="available" header="Availability"></Column>
     <Column header="Actions">
       <template #body="slotProps">
         <Button icon="pi pi-pencil" aria-label="Submit" size="small" outlined class="mr-2"
@@ -51,21 +49,19 @@
   </DataTable>
   <Toast position="bottom-right" />
   <DynamicDialog />
-  <ConfirmDialog></ConfirmDialog>
 </template>
 
 <script setup>
   import CustomPaginator from "@/Components/CustomPaginator.vue";
-  import { Link, router, Head } from '@inertiajs/vue3';
-  import axios from 'axios';
-  import Button from 'primevue/button';
-  import Column from 'primevue/column';
-  import ConfirmDialog from 'primevue/confirmdialog';
-  import DataTable from 'primevue/datatable';
-  import DynamicDialog from 'primevue/dynamicdialog';
-  import Toast from 'primevue/toast';
-  import { useConfirm } from "primevue/useconfirm";
-  import { useToast } from 'primevue/usetoast';
+import { Head, Link, router } from '@inertiajs/vue3';
+import axios from 'axios';
+import Button from 'primevue/button';
+import Column from 'primevue/column';
+import DataTable from 'primevue/datatable';
+import DynamicDialog from 'primevue/dynamicdialog';
+import Toast from 'primevue/toast';
+import { useConfirm } from "primevue/useconfirm";
+import { useToast } from 'primevue/usetoast';
 
   const props = defineProps({
     rooms: Object
@@ -91,6 +87,7 @@
             detail: `Room #${id} is deleted successfully`,
             life: 3000,
           })
+          router.reload({ preserveState: false });
         })
       }
     })

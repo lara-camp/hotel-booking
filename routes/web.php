@@ -41,10 +41,11 @@ Route::middleware(["auth"])->as("user.")->group(function () {
     Route::post("/profile/image", [ProfileController::class, 'updateProfileImage'])->name("profile.updateProfileImage");
 });
 
+Route::middleware('auth')->resource('bookings',BookingController::class)->only(['index', 'create', 'store']);
+
 Route::middleware(['auth', 'admin'])->prefix("admin")->as("admin.")->group(function () {
-    Route::get("/", function () {
-        return Inertia::render("Dashboard");
-    })->name("index");
+    Route::get("/", ReportingController::class)->name("index");
+
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -54,10 +55,11 @@ Route::middleware(['auth', 'admin'])->prefix("admin")->as("admin.")->group(funct
     // Resources
     Route::resource('reservations', ReservationController::class);
     Route::resource('rooms', RoomController::class);
-    Route::get('room-types/archives', [RoomTypeController::class, 'archives'])->name('room-types.archives');
-    Route::resource('room-types', RoomTypeController::class)->except(['create', 'edit']);
-    Route::get('/available-rooms', AvailableRoomController::class);
-    Route::get('/popular-room-types', PopularRoomTypeController::class);
+    Route::resource('room-types', RoomTypeController::class)->except(['create', 'edit','show']);
+    Route::get('/room-types/archives', [RoomTypeController::class, 'archives'])->name('room-types.archives');
+    Route::get("/room-types/test", [RoomTypeController::class, "test"])->name("room-types.test");
+    Route::patch("/room-types/{room_types}/restore", [RoomTypeController::class, "restore"])->name("room-types.restore");
+    Route::delete("/room-types/{room_types}/force-delete", [RoomTypeController::class, "forceDelete"])->name("room-types.force-delete");
 });
 
 require __DIR__ . '/auth.php';

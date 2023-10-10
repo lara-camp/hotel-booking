@@ -34,6 +34,11 @@
         </span>
       </template>
     </Column>
+    <Column field="guest_name" header="Guest Name">
+      <template #body="slotProps">
+        {{ formatCurrency(slotProps.data.guest_name) }}
+      </template>
+    </Column>
     <Column header="Total Person" field="total_person">
     </Column>
     <Column field="total_price" header="Price">
@@ -81,7 +86,6 @@
   </DataTable>
   <Toast position="bottom-right" />
   <DynamicDialog />
-  <ConfirmDialog></ConfirmDialog>
 </template>
 
 <script setup>
@@ -91,7 +95,6 @@
   import axios from 'axios';
   import Button from 'primevue/button';
   import Column from 'primevue/column';
-  import ConfirmDialog from 'primevue/confirmdialog';
   import DataTable from 'primevue/datatable';
   import DynamicDialog from 'primevue/dynamicdialog';
   import Toast from 'primevue/toast';

@@ -38,5 +38,25 @@ class RoomTypeSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+        DB::table('room_types')->insert([
+            'name' => 'Suite',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        DB::table('room_types')->insert([
+            'name' => 'Family Room',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        DB::table('room_types')->insert([
+            'name' => 'Connecting Room',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        DB::table('room_types')->insert([
+            'name' => 'Business Room',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 }

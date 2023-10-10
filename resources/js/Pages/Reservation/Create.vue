@@ -5,8 +5,8 @@
     <div class="[&>div]:mt-2">
       <div class="mb-3">
         <h2 class="mb-2 text-3xl font-normal">Room</h2>
-        <div class="gap-x-3 flex mb-3">
-          <div class="flex flex-col w-1/3">
+        <div class="gap-x-3 flex flex-wrap mb-3">
+          <div class="md:w-1/2 flex flex-col flex-1 flex-shrink-0 w-full">
             <label for="room">Room Number</label>
             <MultiSelect v-model="reservationForm.room_id" id="room" :options="rooms" optionLabel="room_number"
               optionValue="id" filter placeholder="Select rooms" :maxSelectedLabels="5" class=" w-full"
@@ -14,14 +14,21 @@
             <InlineMessage v-if="errors.room_id" severity="error" class="mt-2">{{ errors.room_id }}
             </InlineMessage>
           </div>
-          <div class=" flex flex-col w-1/3">
+          <div class=" md:w-1/2 flex flex-col flex-1 flex-shrink-0 w-full">
+            <label for="guest_name">Guest Name</label>
+            <InputText id="guest_name" v-model="reservationForm.guest_name" :class="{ 'p-invalid': errors.guest_name }"
+              class="" />
+            <InlineMessage v-if="errors.guest_name" severity="error" class="mt-2">{{ errors.guest_name }}
+            </InlineMessage>
+          </div>
+          <div class=" md:w-1/2 flex flex-col flex-1 flex-shrink-0 w-full">
             <label for="totalPerson">Total Number Of Person</label>
             <InputNumber id="totalPerson" v-model="reservationForm.total_person"
               :class="{ 'p-invalid': errors.total_person }" class="" />
             <InlineMessage v-if="errors.total_person" severity="error" class="mt-2">{{ errors.total_person }}
             </InlineMessage>
           </div>
-          <div class="flex flex-col w-1/3">
+          <div class=" flex flex-col flex-shrink-0 w-full">
             <label for="pricePerDay">Price Per Day</label>
             <InputNumber id="pricePerDay" disabled mode="currency" currency="MMK" v-model="pricePerDay" :pt="{
               input: {
@@ -103,6 +110,7 @@
   import Calendar from 'primevue/calendar';
   import InlineMessage from 'primevue/inlinemessage';
   import InputNumber from 'primevue/inputnumber';
+  import InputText from 'primevue/inputtext';
   import MultiSelect from 'primevue/multiselect';
   import { useToast } from "primevue/usetoast";
   import { computed, ref, watchEffect } from 'vue';
@@ -115,6 +123,7 @@
 
   const reservationForm = useForm({
     room_id: [],
+    guest_name: "",
     total_person: 0,
     total_price: 0,
     from_date: "",
@@ -122,6 +131,19 @@
     checkin_time: "",
     checkout_time: "",
   })
+
+  // Change date to yyyy-mm-dd
+  function formatDate(date) {
+    let d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
 
   const checkinTime = ref("");
   const checkoutTime = ref("");
@@ -135,7 +157,11 @@
 
   const toast = useToast();
   function submitForm() {
-    reservationForm.post(route("admin.reservations.store"), {
+    reservationForm.transform((data) => ({
+      ...data,
+      from_date: formatDate(data.from_date),
+      to_date: formatDate(data.to_date)
+    })).post(route("admin.reservations.store"), {
       onSuccess: () => toast.add({ severity: 'success', summary: 'Success', detail: 'Added Reservation Successfully', life: 3000 }),
     })
   }
@@ -150,11 +176,11 @@
 
   // Calculate total price
   watchEffect(() => {
-    let fromDate = new Date(reservationForm.from_date);
-    let toDate = new Date(reservationForm.to_date)
-    let diff = Math.abs(toDate.getTime() - fromDate.getTime())
-    let days = diff / (1000 * 60 * 60 * 24);
-    reservationForm.total_price = (days + 1) * pricePerDay.value || 0
+    const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+    const firstDate = new Date(reservationForm.from_date);
+    const secondDate = new Date(reservationForm.to_date);
+    const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay));
+    reservationForm.total_price = (diffDays + 1) * pricePerDay.value || 0;
   })
 </script>
 <script>

@@ -5,13 +5,11 @@
     </header>
     <Button label="Logout" severity="danger" @click.prevent="confirmLogout" />
   </section>
-  <ConfirmDialog />
 </template>
 
 <script setup>
   import { router } from '@inertiajs/vue3';
   import Button from 'primevue/button';
-  import ConfirmDialog from 'primevue/confirmdialog';
   import { useConfirm } from "primevue/useconfirm";
 
   const confirm = useConfirm();
