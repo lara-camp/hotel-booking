@@ -14,8 +14,9 @@ class Room extends Model
 
     public function scopeSearch($query, array $filters) {
 
-        $query->when($filters['from_date'] && $filters['to_date'] , function($query) use($filters) {
-           $query->whereDoesntHave('reservations',function($query) use ($filters) {
+        $query->when($filters['from_date'] ?? false, function($query) use($filters) {
+            $query->when($filters['to_date'] ?? false, function($query) use($filters) {
+                $query->whereDoesntHave('reservations',function($query) use ($filters) {
                     $query->whereBetween('from_date',[$filters['from_date'], $filters['to_date']])
                     ->orWhereBetween('to_date', [$filters['from_date'], $filters['to_date']])
                     ->orWhere('from_date', '=', $filters['from_date'])
@@ -28,8 +29,8 @@ class Room extends Model
                             ->where('to_date', '>=', $filters['to_date']);
                     });
                 });
-        });
-        
+            });
+        });  
     }
 
     public function reservations() {
