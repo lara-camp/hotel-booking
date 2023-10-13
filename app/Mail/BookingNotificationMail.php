@@ -11,7 +11,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Auth;
 
-class BookingNotificationMail extends Mailable
+class BookingNotificationMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
     public $reservation;
@@ -39,10 +39,11 @@ class BookingNotificationMail extends Mailable
      */
     public function content(): Content
     {
-        $user = Auth::user();
+//        dd(Auth::user()->name);
+//        $user = Auth::user();
         return new Content(
             markdown: 'emails.bookings.completed',
-            with: ['name'=>$user->name]
+            with: ['name'=>$this->reservation->guest_name]
         );
     }
 

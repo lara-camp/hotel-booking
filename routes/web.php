@@ -6,8 +6,7 @@ use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\RoomTypeController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ProfileController;
-use App\Reporting\DashboardReporting;
-use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -22,18 +21,28 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+// Route::get('/', function () {
+//     return Inertia::render('Welcome', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//         'laravelVersion' => Application::VERSION,
+//         'phpVersion' => PHP_VERSION,
+//     ]);
+// })->name("index");
+Route::get("/", [BookingController::class, "index"])->name("index");
 
-// Route::get('/dashboard', function () {
-//     return Inertia::render('Dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware(["auth"])->as("user.")->group(function () {
+    Route::inertia("/profile", "User/Profile")->name("profile");
+    Route::patch("/profile", [ProfileController::class, "update"])->name("profile.edit");
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post("/profile/image", [ProfileController::class, 'updateProfileImage'])->name("profile.updateProfileImage");
+
+    Route::post("/reserve",[BookingController::class,"store"])->name("reserve");
+});
 
 Route::middleware('auth')->resource('/',BookingController::class)->only(['index', 'create', 'store']);
 
@@ -49,7 +58,7 @@ Route::middleware(['auth', 'admin'])->prefix("admin")->as("admin.")->group(funct
     // Resources
     Route::resource('reservations', ReservationController::class);
     Route::resource('rooms', RoomController::class);
-    Route::resource('room-types', RoomTypeController::class)->except(['create', 'edit','show']);
+    Route::resource('room-types', RoomTypeController::class)->except(['create', 'edit', 'show']);
     Route::get('/room-types/archives', [RoomTypeController::class, 'archives'])->name('room-types.archives');
     Route::get("/room-types/test", [RoomTypeController::class, "test"])->name("room-types.test");
     Route::patch("/room-types/{room_types}/restore", [RoomTypeController::class, "restore"])->name("room-types.restore");
