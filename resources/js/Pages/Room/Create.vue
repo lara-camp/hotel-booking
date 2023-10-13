@@ -1,4 +1,5 @@
 <template>
+  <Head title="Create Room" />
   <div>
     <h1 class="my-2 text-5xl font-bold">Create A New Room</h1>
     <div class="flex flex-col mb-3">
@@ -45,7 +46,7 @@
 </template>
 
 <script setup>
-  import { useForm } from "@inertiajs/vue3";
+  import { useForm, Head } from "@inertiajs/vue3";
   import Button from "primevue/button";
   import Dropdown from 'primevue/dropdown';
   import InlineMessage from "primevue/inlinemessage";

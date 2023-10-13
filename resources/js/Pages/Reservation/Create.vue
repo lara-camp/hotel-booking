@@ -1,4 +1,5 @@
 <template>
+  <Head title="Create Reservation" />
   <div>
     <h1 class="mb-3 text-5xl font-bold">Create New Reservation</h1>
     <div class="[&>div]:mt-2">
@@ -10,7 +11,8 @@
             <MultiSelect v-model="reservationForm.room_id" id="room" :options="rooms" optionLabel="room_number"
               optionValue="id" filter placeholder="Select rooms" :maxSelectedLabels="5" class=" w-full"
               :class="{ 'p-invalid': errors.room_id }" />
-            <InlineMessage v-if="errors.room_id" severity="error" class="mt-2">{{ errors.room_id }}</InlineMessage>
+            <InlineMessage v-if="errors.room_id" severity="error" class="mt-2">{{ errors.room_id }}
+            </InlineMessage>
           </div>
           <div class=" md:w-1/2 flex flex-col flex-1 flex-shrink-0 w-full">
             <label for="guest_name">Guest Name</label>
@@ -47,7 +49,8 @@
                   class: 'p-4 rounded'
                 }
               }" />
-            <InlineMessage v-if="errors.from_date" severity="error" class="mt-2">{{ errors.from_date }}</InlineMessage>
+            <InlineMessage v-if="errors.from_date" severity="error" class="mt-2">{{ errors.from_date }}
+            </InlineMessage>
           </div>
           <div class="flex flex-col w-1/2">
             <label for="reservedTo">To</label>
@@ -57,7 +60,8 @@
                   class: 'p-4 rounded'
                 }
               }" />
-            <InlineMessage v-if="errors.to_date" severity="error" class="mt-2">{{ errors.to_date }}</InlineMessage>
+            <InlineMessage v-if="errors.to_date" severity="error" class="mt-2">{{ errors.to_date }}
+            </InlineMessage>
           </div>
         </div>
       </div>
@@ -101,7 +105,7 @@
 </template>
 
 <script setup>
-  import { useForm } from '@inertiajs/vue3';
+  import { useForm, Head } from '@inertiajs/vue3';
   import Button from 'primevue/button';
   import Calendar from 'primevue/calendar';
   import InlineMessage from 'primevue/inlinemessage';
@@ -109,6 +113,7 @@
   import InputText from 'primevue/inputtext';
   import MultiSelect from 'primevue/multiselect';
   import { useToast } from "primevue/usetoast";
+  import formatDate from "../../functions/formatDate"
   import { computed, ref, watchEffect } from 'vue';
 
 
@@ -128,18 +133,7 @@
     checkout_time: "",
   })
 
-  // Change date to yyyy-mm-dd
-  function formatDate(date) {
-    let d = new Date(date),
-      month = '' + (d.getMonth() + 1),
-      day = '' + d.getDate(),
-      year = d.getFullYear();
 
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
-
-    return [year, month, day].join('-');
-  }
 
   const checkinTime = ref("");
   const checkoutTime = ref("");

@@ -55,7 +55,7 @@
   });
 
   function submitForm() {
-    form.patch(route('admin.profile.update'), {
+    form.patch(route(user.role_id === 1 ? 'admin.profile.update' : 'user.profile.update'), {
       onSuccess() {
         toast.add({
           severity: "success",
