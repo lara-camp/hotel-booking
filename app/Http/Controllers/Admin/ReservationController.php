@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ReservationRequest;
+use App\Jobs\SendBookingMailJob;
 use App\Mail\BookingNotificationMail;
 use App\Mail\BookingUpdateMail;
 use App\Models\Reservation;
@@ -105,10 +106,11 @@ class ReservationController extends Controller
             $reservation->save();
 
             $reservation->rooms()->attach($request->room_id);
+            SendBookingMailJob::dispatch($reservation, Auth::user()->email);
+
 
             DB::commit();
             Cache::flush();
-            Mail::to(Auth::user()->email)->send(new BookingNotificationMail($reservation));
             return redirect()->route('admin.reservations.index');
 
         } catch (\Exception $e) {
@@ -221,7 +223,7 @@ class ReservationController extends Controller
         $reservation->delete();
 
         Cache::flush();
-        
+
         return redirect()->route('admin.reservations.index')->isSuccessful();
     }
 }

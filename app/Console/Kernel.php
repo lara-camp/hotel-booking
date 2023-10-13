@@ -13,6 +13,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+        // Run php artisan schedule:run first so that the queue is run every minute.
+        $schedule->command('queue:work')->everyMinute();
     }
 
     /**
