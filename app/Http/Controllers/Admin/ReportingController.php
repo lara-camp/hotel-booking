@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Reservation;
+use App\Models\Room;
 use App\Reporting\DashboardReporting;
 use Inertia\Inertia;
 
@@ -40,7 +41,9 @@ class ReportingController extends Controller
             'todayReservedRooms'=>$todayReservedRooms,
             'monthlyPopularRoomTypes'=>$monthlyPopularRoomTypes,
             'monthlyGuests'=>$monthlyGuests,
-            'monthlyAmount'=>$monthlyAmount
+            'monthlyAmount'=>$monthlyAmount,
+            'adminReservedReservations'=>Reservation::where('user_id', 1)->count(),
+            'userReservedReservations'=>Reservation::where('user_id', 0)->count()
         ]);
     }
 }

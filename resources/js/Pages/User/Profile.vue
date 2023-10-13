@@ -2,7 +2,8 @@
   import Logout from "@/Pages/Profile/Partials/Logout.vue";
   import UpdatePasswordForm from "@/Pages/Profile/Partials/UpdatePasswordForm.vue";
   import UpdateProfile from "@/Pages/Profile/Partials/UpdateProfile.vue";
-  import Head from "@inertiajs/vue3";
+  import ConfirmDialog from "primevue/confirmdialog";
+  import { Head } from "@inertiajs/vue3";
   defineProps({
     mustVerifyEmail: {
       type: Boolean,
@@ -31,6 +32,7 @@
       </div>
     </div>
   </div>
+  <ConfirmDialog/>
 </template>
 <script>
   import IndexLayout from "@/Layouts/IndexLayout.vue";

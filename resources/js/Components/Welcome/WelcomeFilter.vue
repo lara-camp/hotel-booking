@@ -1,4 +1,5 @@
 <template>
+  <h3 class="mb-3 text-3xl font-semibold">Find your room</h3>
   <div class="flex">
     <div class=" flex items-baseline mr-3">
       <label for="checkin" class="mr-3">From</label>
@@ -17,9 +18,9 @@
 
 <script setup>
   import { router } from '@inertiajs/vue3';
-  import Button from 'primevue/button';
-  import Calendar from 'primevue/calendar';
-  import { reactive, ref, watchEffect } from 'vue';
+import Button from 'primevue/button';
+import Calendar from 'primevue/calendar';
+import { reactive, ref, watchEffect } from 'vue';
 
   // Get Date from the query
   const searchParams = new URLSearchParams(document.location.search);
