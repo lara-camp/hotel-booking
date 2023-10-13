@@ -28,7 +28,7 @@
   })
 
   function submit() {
-    form.post(route('admin.profile.updateProfileImage'), {
+    form.post(route(user.role_id===1 ? 'admin.profile.updateProfileImage' : 'user.profile.updateProfileImage'), {
       onSuccess() {
         toast.add({
           severity: "success",

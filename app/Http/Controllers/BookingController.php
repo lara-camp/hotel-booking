@@ -10,10 +10,10 @@ use App\Reporting\DashboardReporting;
 use Carbon\Carbon;
 use Illuminate\Validation\ValidationException;
 use Exception;
-use Illuminate\Contracts\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class BookingController extends Controller
@@ -65,9 +65,9 @@ class BookingController extends Controller
             $reservation->total_price = $total_price;
             $reservation->from_date =date('Y-m-d',strtotime($request->from_date));
             $reservation->to_date = date('Y-m-d',strtotime($request->to_date));
-            $reservation->checkin_time = $request->checkin_time;
-            $reservation->checkout_time = $request->checkout_time;
+
             $reservation->save();
+            ddd($reservation);
 
             $reservation->rooms()->attach($request->room_id);
 

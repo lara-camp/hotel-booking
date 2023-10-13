@@ -1,4 +1,5 @@
 <template>
+  <Head title="Reservations"/>
   <DataTable scrollable :value="reservations.data" tableStyle="min-width: 75rem" striped-rows class="bg-slate-100/80" :pt="{
     header: (options) => ({
       class: [
@@ -90,7 +91,7 @@
 <script setup>
   import CustomPaginator from "@/Components/CustomPaginator.vue";
   import Filter from "@/Components/Filter.vue";
-  import { Link, router } from '@inertiajs/vue3';
+  import { Link, router,Head } from '@inertiajs/vue3';
   import axios from 'axios';
   import Button from 'primevue/button';
   import Column from 'primevue/column';
