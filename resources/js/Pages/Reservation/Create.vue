@@ -113,6 +113,7 @@
   import InputText from 'primevue/inputtext';
   import MultiSelect from 'primevue/multiselect';
   import { useToast } from "primevue/usetoast";
+  import formatDate from "../../functions/formatDate"
   import { computed, ref, watchEffect } from 'vue';
 
 
@@ -132,18 +133,7 @@
     checkout_time: "",
   })
 
-  // Change date to yyyy-mm-dd
-  function formatDate(date) {
-    let d = new Date(date),
-      month = '' + (d.getMonth() + 1),
-      day = '' + d.getDate(),
-      year = d.getFullYear();
 
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
-
-    return [year, month, day].join('-');
-  }
 
   const checkinTime = ref("");
   const checkoutTime = ref("");
