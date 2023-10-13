@@ -5,7 +5,7 @@
         <div class="mb-9 flex w-full gap-3">
             <div class="bg-slate-100/80 hover:bg-slate-200/80 w-1/2 p-3 transition-colors duration-300 rounded shadow">
                 <h1 class="mb-3 text-2xl font-bold text-center">Total Guest This Month</h1>
-                <h2 class="text-5xl font-semibold text-center text-indigo-500">{{ monthlyGuests }}</h2>
+                <h2 class="text-5xl font-semibold text-center text-indigo-500">{{ Number(monthlyGuests).toLocaleString("en")}}</h2>
             </div>
             <div class="bg-slate-100/80 hover:bg-slate-200/80 w-1/2 p-3 transition-colors duration-300 rounded shadow">
                 <h1 class="mb-3 text-2xl font-bold text-center">Total Earned This Month</h1>
@@ -17,7 +17,7 @@
             <AvailableRoomType :available-room-types="todayAvailableRoomTypes"
                 class=" md:w-1/3 bg-slate-100/80 hover:bg-slate-200/80 w-full p-3 transition-colors duration-300 rounded shadow" />
             <AvailableRoom
-                :available-rooms="{ 'Available Rooms': props.todayAvailableRooms.length, 'Reserved Rooms': props.todayReservedRooms.length }"
+                :available-rooms="{ 'Available Rooms': props.todayAvailableRooms?.length, 'Reserved Rooms': props.todayReservedRooms?.length }"
                 class="md:w-1/3 bg-slate-100/80 hover:bg-slate-200/80 w-full p-3 transition-colors duration-300 rounded shadow" />
             <PopularRoomType :popular-room-types="monthlyPopularRoomTypes"
                 class="bg-slate-100/80 hover:bg-slate-200/80 w-full p-3 transition-colors duration-300 rounded shadow" />
