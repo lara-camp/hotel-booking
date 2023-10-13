@@ -35,7 +35,7 @@ Route::get('/', function () {
 //     return Inertia::render('Dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->resource('bookings',BookingController::class)->only(['index', 'create', 'store']);
+Route::middleware('auth')->resource('/',BookingController::class)->only(['index', 'create', 'store']);
 
 Route::middleware(['auth', 'admin'])->prefix("admin")->as("admin.")->group(function () {
     Route::get("/", ReportingController::class)->name("index");
