@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <header class="drop-shadow-xl sticky inset-0 top-0 z-20 px-3 m-3 bg-indigo-600 rounded" v-memo="[user]">
-      <div class="flex max-w-2xl md:max-w-[75rem] items-center justify-between px-3 h-16 mx-auto ">
+      <div class="flex max-w-2xl md:max-w-[75rem] items-center justify-between px-3 min-h-[4rem] mx-auto">
         <Link href="/" class="block">
         <h1 class="text-3xl font-extrabold text-white">Laracamp Booking</h1>
         </Link>
@@ -9,8 +9,13 @@
           <div class="mr-3">
 
           </div>
-          <div class="mr-3" v-if="user">
-            <Link href="/profile">
+          <div class="flex items-center w-full h-full p-3 mr-3 transition-colors duration-300 rounded cursor-pointer" v-if="user">
+            <LayoutButton @click="router.visit(route('admin.index'))" class="ml-3" v-if="user.role_id===1">Go To Dashboard</LayoutButton>
+            <div class="w-10 h-10 ml-6 mr-4">
+              <img :src="user.profile_image_path" class="object-cover w-full h-full rounded-full"
+                :alt="`Profile image of ${user.name}`" v-if="user.profile_image_path">
+            </div>
+            <Link :href="user.role_id === 1 ? route('admin.profile.edit') : route('user.profile')">
             <span class="text-lg font-bold text-white">{{ user.name }}</span>
             </Link>
           </div>
@@ -32,7 +37,6 @@
   import { Link, router, usePage } from '@inertiajs/vue3';
   import Button from 'primevue/button';
   import { computed } from 'vue';
-
 
   const user = computed(() => usePage().props.auth.user)
 </script>

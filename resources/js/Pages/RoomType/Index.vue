@@ -1,4 +1,5 @@
 <template>
+    <Head title="Room Types"/>
   <DataTable :value="room_types.data" tableStyle="min-width: 50rem" striped-rows v-memo="[room_types]"
     class="bg-slate-100/80" :pt="{
       header: (options) => ({
@@ -46,7 +47,7 @@
 </template>
 <script setup>
   import CustomPaginator from "@/Components/CustomPaginator.vue";
-  import { Link, router, useForm } from "@inertiajs/vue3";
+  import { router, useForm, Link,Head } from "@inertiajs/vue3";
   import Button from 'primevue/button';
   import Column from 'primevue/column';
   import DataTable from 'primevue/datatable';

@@ -1,12 +1,11 @@
 <?php
 
-use App\Http\Controllers\Admin\ReportingController;
+use App\Http\Controllers\Admin\AvailableRoomController;
+use App\Http\Controllers\Admin\PopularRoomTypeController;
 use App\Http\Controllers\Admin\ReservationController;
 use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\RoomTypeController;
-use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ProfileController;
-use App\Reporting\DashboardReporting;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -29,11 +28,18 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name("index");
 
-// Route::get('/dashboard', function () {
-//     return Inertia::render('Dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware(["auth"])->as("user.")->group(function () {
+    Route::inertia("/profile", "User/Profile")->name("profile");
+    Route::patch("/profile", [ProfileController::class, "update"])->name("profile.edit");
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post("/profile/image", [ProfileController::class, 'updateProfileImage'])->name("profile.updateProfileImage");
+});
 
 Route::middleware('auth')->resource('bookings',BookingController::class)->only(['index', 'create', 'store']);
 
