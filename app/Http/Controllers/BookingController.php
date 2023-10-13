@@ -22,41 +22,16 @@ class BookingController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        // dd(Carbon::parse("2023-10-03T03:39:16.042Z")->format('Y-m-d h:i'));
-        $report = new DashboardReporting();
-        $popularRoomTypes = $report->popularRoomTypes();
-        
-        $filters = ['from_date' =>"2023-10-04", 'to_date'=> "2023-10-05"];
-
-        $availableRooms = Room::search($filters)->get();
-
-        //Check if there is search query or not
-        if(request()->has('from_date')  && request()->has('to_date')) {
-            
-            $searchRooms = [];
-            //avaiable rooms but only one room for a particular room-type
-            foreach ($availableRooms as $availableRoom) {
-                if(!isset($searchRooms[$availableRoom->room_type_id])) $searchRooms[$availableRoom->room_type_id] = $availableRoom;
-            }
-            return Inertia::render('Booking/Index',[
-                'searchRooms' => $searchRooms
-            ]);
-        } else {
-            return Inertia::render('Index',[
-                'popularRoomTypes' => $popularRoomTypes
-            ]);
+    {      
+        $rooms = Room::search(request(['from_date', 'to_date']))->get();
+        $searchRooms = [];
+        //avaiable rooms but only one room for a particular room-type
+        foreach ($rooms as $room) {
+            if(!isset($searchRooms[$room->room_type_id])) $searchRooms[$room->room_type_id] = $room;
         }
-
-        
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return Inertia::render('Booking/Index',[
+            'searchRooms' => $searchRooms
+        ]);
     }
 
     /**
@@ -79,7 +54,6 @@ class BookingController extends Controller
                 throw ValidationException::withMessages(['room_id' => "Some of the rooms are reserved on given date."]);
             }
         }
-
 
         DB::beginTransaction();
 
