@@ -7,6 +7,9 @@
         },
 
       }">
+      <template #empty>
+        <h3 class="text-lg font-normal text-center">No room is found.</h3>
+      </template>
       <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
       <Column field="room_number" header="Room Number"></Column>
       <Column field="bed_type" header="Bed Type"></Column>
@@ -17,11 +20,11 @@
   </div>
   <div class="mt-6">
     <h1 class="text-2xl font-semibold">Reserve Your Room</h1>
-    <form class="gap-y-3" @submit.prevent="submitForm">
+    <form class="gap-y-3" @submit.prevent="openDialog">
       <div class="flex gap-3">
         <div class="md:w-1/3 flex flex-col w-full">
           <label for="room_number">Room Number</label>
-          <div class="border-black/40 h-[57.6px] p-4 bg-white border rounded">
+          <div class="border-black/40 h-[57.6px] p-4 bg-white border rounded cursor-not-allowed">
             {{ displayRoomNumbers }}
           </div>
         </div>
@@ -63,25 +66,28 @@
           <InlineMessage v-if="errors.to_date" severity="error" class="mt-2">{{ errors.to_date }}
           </InlineMessage>
         </div>
-        <div class="md:w-1/3 flex flex-col w-full">
+        <div class="md:w-1/3 flex flex-col w-full cursor-not-allowed">
           <label for="totalPrice">Total Price</label>
           <div class="border-black/40 h-[57.6px] p-4 bg-white border rounded fontFamily">
             {{ totalPrice }}
           </div>
         </div>
       </div>
-      <Button label="Reserve" :loading="reservationForm.processing" outlined class="my-3" type="submit" v-if="user" />
+      <Button label="Reserve" outlined class="my-3" type="submit" v-if="user" />
       <InlineMessage severity="info" class="font-extralight w-full my-3 bg-white" :icon="null" v-else>Please login or
         register to make a
         reservation.</InlineMessage>
     </form>
   </div>
+  <Toast position="bottom-right" />
+  <DynamicDialog @success="console.log('success')" @error="console.log('error')" />
 </template>
 
 <script setup>
-  import { useForm, usePage } from "@inertiajs/vue3";
+  import { router, useForm, usePage } from "@inertiajs/vue3";
   import Button from "primevue/button";
   import Calendar from "primevue/calendar";
+  import DynamicDialog from 'primevue/dynamicdialog';
   import Column from "primevue/column";
   import DataTable from "primevue/datatable";
   import InlineMessage from "primevue/inlinemessage";
@@ -90,7 +96,13 @@
   import { useToast } from "primevue/usetoast";
   import { computed, onMounted, ref, watchEffect } from "vue";
   import formatDate from "../../functions/formatDate";
-  import axios from "axios";
+  import Toast from "primevue/toast";
+  import { useDialog } from "primevue/usedialog";
+  import { defineAsyncComponent } from "vue";
+  import ReservationConfirm from "./ReservationConfirm.vue";
+  import { watch } from "vue";
+
+  //   const ReservationConfirm = defineAsyncComponent("./ReservationConfirm.vue");
 
   const props = defineProps({
     searchRooms: Object,
@@ -103,10 +115,9 @@
 
   const selectedRooms = ref([]);
   const rooms = ref();
-
   const reservationForm = useForm({
     room_id: [],
-    guest_name: "",
+    guest_name: user.value.name,
     total_person: 0,
     from_date: searchParams.get("from_date") ? (new Date(searchParams.get("from_date"))) : "",
     to_date: searchParams.get("to_date") ? new Date(searchParams.get("to_date")) : ""
@@ -138,26 +149,25 @@
     return ((diffDays + 1) * pricePerDay.value).toLocaleString() || 0;
   })
 
-  const toast = useToast();
-  function submitForm() {
-    reservationForm.transform((data) => ({
-      ...data,
-      from_date: formatDate(data.from_date),
-      to_date: formatDate(data.to_date)
-    })).post(route("user.reserve"), {
-      onSuccess: () => toast.add({ severity: 'success', summary: 'Success', detail: 'Added Reservation Successfully', life: 3000 }),
-      onFinish: () => console.log("test"),
+  // Dialog for reservation confirmation
+  const dialog = useDialog();
+  function openDialog() {
+    dialog.open(ReservationConfirm, {
+      data: {
+        form: reservationForm,
+        roomNumber: displayRoomNumbers.value,
+        totalPrice: totalPrice.value,
+      },
+      props: {
+        header: "Confirm Your Reservation",
+        modal: true,
+      }
     })
-    // axios.post(route("user.reserve"), {
-    //   room_id: reservationForm.room_id,
-    //   guest_name: reservationForm.guest_name,
-    //   total_person: reservationForm.total_person,
-    //   from_date: reservationForm.from_date,
-    //   to_date: reservationForm.to_date
-    //   }, {
-
-    // }).then((data)=>console.log(data))
   }
+
+  watch(reservationForm, () => {
+    reservationForm.wasSuccessful && setTimeout(router.reload(), 3000);
+  })
 </script>
 
 <style scoped>

@@ -3,15 +3,16 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
-class ReservationRequest extends FormRequest
+class StoreBookingRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return Auth::user()->role_id === 1;
     }
 
     /**
@@ -22,14 +23,11 @@ class ReservationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'room_id.*' => 'required|exists:rooms,id',
-            'guest_name' => 'required|min:3|max:256',
-            'total_person' => 'required|integer|min:1',
-            // 'total_price' => 'required|integer',
-            'from_date' => 'required|date',
-            'to_date' => 'required|date',
-            'checkin_time' => "date|nullable",
-            'checkout_time' => 'date|nullable',
+            'room_id.*' => 'nullable|exists:rooms,id',
+            "guest_name"=>"nullable",
+            'total_person'=>"nullable",
+            'from_date' => 'nullable|date',
+            'to_date' => 'nullable|date',
         ];
     }
 }
