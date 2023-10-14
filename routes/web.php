@@ -31,13 +31,9 @@ use Inertia\Inertia;
 // })->name("index");
 Route::get("/", [BookingController::class, "index"])->name("index");
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware(["auth"])->as("user.")->group(function () {
     Route::inertia("/profile", "User/Profile")->name("profile");
-    Route::patch("/profile", [ProfileController::class, "update"])->name("profile.edit");
+    Route::patch("/profile", [ProfileController::class, "update"])->name("profile.update");
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post("/profile/image", [ProfileController::class, 'updateProfileImage'])->name("profile.updateProfileImage");
 

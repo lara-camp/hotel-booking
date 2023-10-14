@@ -15,6 +15,9 @@
       required: false
     }
   });
+
+  const searchParams = new URLSearchParams(document.location.search);
+
 </script>
 <template>
   <Head title="Welcome" />
@@ -25,7 +28,8 @@
         <h2 class="text-3xl font-normal">We offer the world-class hospitality with luxury experience.</h2>
       </div>
       <WelcomeFiler />
-      <SearchRooms :search-rooms="searchRooms" :errors="errors" v-if="searchRooms"/>
+      <SearchRooms :search-rooms="searchRooms" :errors="errors" v-if="searchRooms&& searchRooms.length!==0"/>
+      <h1 class="my-16 text-2xl font-semibold text-center" v-else-if="searchParams.get('to_date')||searchParams.get('from_date')">No room is found</h1>
     </div>
   </div>
 </template>

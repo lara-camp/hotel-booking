@@ -58,8 +58,8 @@ class User extends Authenticatable {
     public function getRedirectRoute()
     {
         return match((int)$this->role_id) {
-            1 => 'admin/reservations',
-            2 => 'user/dashboard',
+            1 => 'admin',
+            2 => '/',
         };
     }
 }
