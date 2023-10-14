@@ -29,7 +29,7 @@ class BookingController extends Controller
         foreach ($rooms as $room) {
             if(!isset($searchRooms[$room->room_type_id])) $searchRooms[$room->room_type_id] = $room;
         }
-        return Inertia::render('Booking/Index',[
+        return Inertia::render('Welcome',[
             'searchRooms' => $searchRooms
         ]);
     }
