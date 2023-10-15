@@ -25,7 +25,7 @@ class BookingController extends Controller
     public function index()
     {
         if(request()->has("from_date") || request()->has("to_date")){
-            $rooms = Room::search(request(['from_date', 'to_date']))->get();
+            $rooms = Room::search(request(['from_date', 'to_date']))->with('roomType')->get();
             $searchRooms = [];
             //avaiable rooms but only one room for a particular room-type
             foreach ($rooms as $room) {
@@ -49,11 +49,11 @@ class BookingController extends Controller
         $report = new DashboardReporting();
         $availableRooms = $report->availableRooms($from_date, $to_date);
 
-        $total_price = 0;
-
+        $price = 0;
+        $duration = date('d', strtotime($request->to_date))-date('d', strtotime($request->from_date))+1;
         foreach($request->room_id as $room) {
             if($availableRooms->find($room)) {
-                $total_price += $availableRooms->find($room)->price;
+                $price += $availableRooms->find($room)->price;
             } else {
                 throw ValidationException::withMessages(['room_id' => "Some of the rooms are reserved on given date."]);
             }
@@ -66,7 +66,7 @@ class BookingController extends Controller
             $reservation->user_id = Auth::user()->id;
             $reservation->guest_name = $request->guest_name;
             $reservation->total_person = $request->total_person;
-            $reservation->total_price = $total_price;
+            $reservation->total_price = $price * $duration;
             $reservation->from_date =date('Y-m-d',strtotime($request->from_date));
             $reservation->to_date = date('Y-m-d',strtotime($request->to_date));
             $reservation->save();
