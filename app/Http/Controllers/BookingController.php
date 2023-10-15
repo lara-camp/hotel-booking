@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ReservationRequest;
+use App\Http\Requests\StoreBookingRequest;
 use App\Mail\BookingNotificationMail;
 use App\Models\Reservation;
 use App\Models\Room;
 use App\Reporting\DashboardReporting;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Validation\ValidationException;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class BookingController extends Controller
@@ -41,7 +39,7 @@ class BookingController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ReservationRequest $request)
+    public function store(StoreBookingRequest $request)
     {
         $from_date = date('Y-m-d', strtotime($request->from_date));
         $to_date = date('Y-m-d', strtotime($request->to_date));
@@ -70,7 +68,6 @@ class BookingController extends Controller
             $reservation->from_date =date('Y-m-d',strtotime($request->from_date));
             $reservation->to_date = date('Y-m-d',strtotime($request->to_date));
             $reservation->save();
-            // ddd($reservation);
             $reservation->rooms()->attach($request->room_id);
 
             Cache::flush();

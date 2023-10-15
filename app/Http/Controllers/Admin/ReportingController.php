@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Reservation;
-use App\Models\Room;
 use App\Reporting\DashboardReporting;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 
@@ -47,7 +46,9 @@ class ReportingController extends Controller
             'monthlyPopularRoomTypes'=>$monthlyPopularRoomTypes,
             'monthlyGuests'=>$monthlyGuests,
             'monthlyAmount'=>$monthlyAmount,
-            'totalRooms'=>$totalRooms
+            'totalRooms'=>$totalRooms,
+            'adminReservedReservations'=>Reservation::where('user_id', 1)->count(),
+            'userReservedReservations'=>Reservation::where('user_id', 2)->count()
         ];
         Cache::put('cache_data',$data,now()->addMinutes(30));
         }
