@@ -165,16 +165,6 @@ class ReservationController extends Controller
      */
     public function update(ReservationRequest $request, Reservation $reservation)
     {
-        $request->validate([
-            'room_id.*' => 'required|exists:rooms,id',
-            'guest_name' => 'required|min:3|max:256',
-            'total_person' => 'required|integer|min:1',
-            'total_price' => 'required|integer',
-            'from_date' => 'required|date',
-            'to_date' => 'required|date',
-            'checkin_time' => 'date',
-            'checkout_time' => 'date',
-        ]);
 
         //update the data from reservation
         $reservation->guest_name=$request->guest_name;
