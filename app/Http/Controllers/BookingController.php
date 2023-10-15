@@ -81,5 +81,12 @@ class BookingController extends Controller
         }
     }
 
-
+    public function reservations() {
+        $reservations = Cache::remember("user.reservations", now()->addMinutes(30), function () {
+            return Reservation::where("user_id", Auth::id())->latest()->get();
+        });
+        return Inertia::render("User/Reservations", [
+            "reservations" => $reservations
+        ]);
+    }
 }

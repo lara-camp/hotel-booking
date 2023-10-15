@@ -12,7 +12,7 @@ class StoreBookingRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::user()->role_id === 1;
+        return Auth::user()->role_id === 2;
     }
 
     /**
@@ -24,8 +24,8 @@ class StoreBookingRequest extends FormRequest
     {
         return [
             'room_id.*' => 'nullable|exists:rooms,id',
-            "guest_name"=>"nullable",
-            'total_person'=>"nullable",
+            "guest_name"=>"nullable|min:3|max:256",
+            'total_person'=>"nullable|integer|min:1",
             'from_date' => 'nullable|date',
             'to_date' => 'nullable|date',
         ];
