@@ -68,4 +68,7 @@ class DashboardReporting {
         return $availableRoomTypes;
     }
 
+    public function totalRooms() : int {
+       return Room::all()->count();
+    }
 }

@@ -31,6 +31,7 @@ class ReportingController extends Controller
             $todayAvailableRoomTypes = $report->availableRoomTypes();
         $todayAvailableRooms = $report->availableRooms();
         $todayReservedRooms = $report->reservedRooms();
+        $totalRooms = $report->totalRooms();
 
         $monthlyPopularRoomTypes = $report->popularRoomTypes($start_date, $end_date);
         $monthlyGuests = Reservation::whereBetween('from_date',[$start_date,$end_date])
@@ -45,7 +46,8 @@ class ReportingController extends Controller
             'todayReservedRooms'=>$todayReservedRooms,
             'monthlyPopularRoomTypes'=>$monthlyPopularRoomTypes,
             'monthlyGuests'=>$monthlyGuests,
-            'monthlyAmount'=>$monthlyAmount
+            'monthlyAmount'=>$monthlyAmount,
+            'totalRooms'=>$totalRooms
         ];
         Cache::put('cache_data',$data,now()->addMinutes(30));
         }
