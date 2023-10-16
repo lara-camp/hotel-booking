@@ -12,7 +12,7 @@ class StoreBookingRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::user()->role_id === 1;
+        return Auth::user()->role_id === 2;
     }
 
     /**
