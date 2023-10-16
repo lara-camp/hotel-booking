@@ -6,9 +6,7 @@ use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\RoomTypeController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +30,7 @@ use Inertia\Inertia;
 Route::get("/", [BookingController::class, "index"])->name("index");
 
 Route::middleware(["auth"])->as("user.")->group(function () {
+    Route::get("/my-reservations",[BookingController::class,"reservations"])->name("reservations");
     Route::inertia("/profile", "User/Profile")->name("profile");
     Route::patch("/profile", [ProfileController::class, "update"])->name("profile.update");
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

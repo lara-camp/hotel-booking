@@ -11,6 +11,7 @@
           </div>
           <div class="flex items-center w-full h-full p-3 mr-3 transition-colors duration-300 rounded cursor-pointer" v-if="user">
             <LayoutButton @click="router.visit(route('admin.index'))" class="ml-3 mr-3" v-if="user.role_id===1">Go To Dashboard</LayoutButton>
+            <LayoutButton @click="router.visit(route('user.reservations'))" class="mx-3 text-lg" v-else>My Reservations</LayoutButton>
             <div class="w-10 h-10 ml-6 mr-4" v-if="user.profile_image_path">
               <img :src="user.profile_image_path" class="object-cover w-full h-full rounded-full"
                 :alt="`Profile image of ${user.name}`" v-if="user.profile_image_path">

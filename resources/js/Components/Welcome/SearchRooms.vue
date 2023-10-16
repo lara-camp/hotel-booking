@@ -87,20 +87,16 @@
   import { router, useForm, usePage } from "@inertiajs/vue3";
   import Button from "primevue/button";
   import Calendar from "primevue/calendar";
-  import DynamicDialog from 'primevue/dynamicdialog';
   import Column from "primevue/column";
   import DataTable from "primevue/datatable";
+  import DynamicDialog from 'primevue/dynamicdialog';
   import InlineMessage from "primevue/inlinemessage";
   import InputNumber from "primevue/inputnumber";
   import InputText from "primevue/inputtext";
-  import { useToast } from "primevue/usetoast";
-  import { computed, onMounted, ref, watchEffect } from "vue";
-  import formatDate from "../../functions/formatDate";
   import Toast from "primevue/toast";
   import { useDialog } from "primevue/usedialog";
-  import { defineAsyncComponent } from "vue";
+  import { computed, onMounted, ref, watch, watchEffect } from "vue";
   import ReservationConfirm from "./ReservationConfirm.vue";
-  import { watch } from "vue";
 
   //   const ReservationConfirm = defineAsyncComponent("./ReservationConfirm.vue");
 
@@ -137,7 +133,6 @@
 
   // Calculate price per day
   let pricePerDay = computed(() => {
-    // return props.searchRooms.filter((item) => reservationForm.room_id.indexOf(item.id) >= 0).reduce((initialPrice, item) => initialPrice + item.price, 0)
     return Object.values(props.searchRooms).filter((item) => reservationForm.room_id.indexOf(item.id) >= 0).reduce((initialPrice, item) => initialPrice + item.price, 0);
   })
   //   Calculate total price
