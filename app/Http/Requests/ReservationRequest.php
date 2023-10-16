@@ -25,7 +25,7 @@ class ReservationRequest extends FormRequest
             'room_id.*' => 'required|exists:rooms,id',
             'guest_name' => 'required|min:3|max:256',
             'total_person' => 'required|integer|min:1',
-            // 'total_price' => 'required|integer',
+            'total_price' => 'required|integer',
             'from_date' => 'required|date',
             'to_date' => 'required|date',
             'checkin_time' => "date|nullable",
