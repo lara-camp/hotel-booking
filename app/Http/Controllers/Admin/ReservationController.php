@@ -76,7 +76,7 @@ class ReservationController extends Controller
         $from_date = Carbon::parse($request->from_date);
         $to_date = Carbon::parse($request->to_date);
 
-        $availableRooms = Room::whereHas('reservations', function($query) use($from_date, $to_date) {
+        $reservedRooms = Room::whereHas('reservations', function($query) use($from_date, $to_date) {
             $query->whereBetween('from_date', [$from_date, $to_date])
                 ->orWhereBetween('to_date', [$from_date, $to_date])
                 ->orWhere(function($query) use ($from_date, $to_date) {
@@ -86,7 +86,7 @@ class ReservationController extends Controller
         })->get();
 
         foreach($request->room_id as $room) {
-            if($availableRooms->find($room)) {
+            if($reservedRooms->find($room)) {
                 throw ValidationException::withMessages(['room_id' => "Some of the rooms are reserved on given date."]);
             }
         }
@@ -115,7 +115,6 @@ class ReservationController extends Controller
 
         } catch (\Exception $e) {
             DB::rollback();
-            dd($e->getMessage());
         }
     }
 
