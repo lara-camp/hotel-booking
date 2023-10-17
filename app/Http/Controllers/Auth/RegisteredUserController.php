@@ -35,13 +35,14 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'profile_image' => 'image',
+            'profile_image' => 'nullable|image',
         ]);
 
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
+        $user->role_id  = 2;
 
         if($request->profile_image) {
             $profile_image = $request->file('profile_image');

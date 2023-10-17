@@ -40,6 +40,8 @@
             <div class="h-80 w-full" v-if="previewProfilePhoto">
                 <img :src="previewProfilePhoto" class="object-cover w-full h-full rounded">
             </div>
+            <InlineMessage v-if="form.errors.profile_image" severity="error" class="w-full mt-2">{{ form.errors.profile_image }}</InlineMessage>
+
             <Button class="absolute bottom-0 left-0 px-3 md:px-4 md:py-2.5 mt-1 !w-full "
                 @click="() => profilePictureInputRef.click()" :icon="`pi ${form.profile_image ? 'pi-pencil' : 'pi-plus'}`"
                 outlined label="Profile Picture">

@@ -19,14 +19,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return Inertia::render('Welcome', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//         'laravelVersion' => Application::VERSION,
-//         'phpVersion' => PHP_VERSION,
-//     ]);
-// })->name("index");
 Route::get("/", [BookingController::class, "index"])->name("index");
 
 Route::middleware(["auth"])->as("user.")->group(function () {
