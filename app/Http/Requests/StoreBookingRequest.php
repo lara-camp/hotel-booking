@@ -23,11 +23,11 @@ class StoreBookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'room_id.*' => 'nullable|exists:rooms,id',
-            "guest_name"=>"nullable|min:3|max:256",
-            'total_person'=>"nullable|integer|min:1",
-            'from_date' => 'nullable|date',
-            'to_date' => 'nullable|date',
+            'room_id.*' => 'required|exists:rooms,id',
+            "guest_name"=>"required|min:3|max:255",
+            'total_person'=>"required|integer|min:1",
+            'from_date' => 'required|date',
+            'to_date' => 'required|date'
         ];
     }
 }

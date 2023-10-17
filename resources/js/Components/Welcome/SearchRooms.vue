@@ -1,90 +1,100 @@
 <template>
-  <div class="w-full mt-16">
-    <DataTable v-model:selection="selectedRooms" class="rounded" :value="rooms" size="large" dataKey="id"
-      tableStyle="min-width: 50rem" :pt="{
-        thead: {
-          class: 'text-xl'
-        },
-
-      }">
-      <template #empty>
-        <h3 class="text-lg font-normal text-center">No room is found.</h3>
-      </template>
-      <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-      <Column field="room_number" header="Room Number"></Column>
-      <Column field="bed_type" header="Bed Type"></Column>
-      <Column field="number_of_bed" header="Number Of Bed"></Column>
-      <Column field="room_type.name" header="Room Type"></Column>
-      <Column field="price" header="Price"></Column>
-    </DataTable>
-  </div>
-  <div class="mt-6">
-    <h1 class="text-2xl font-semibold">Reserve Your Room</h1>
-    <form class="gap-y-3" @submit.prevent="openDialog">
-      <div class="flex gap-3">
-        <div class="md:w-1/3 flex flex-col w-full">
-          <label for="room_number">Room Number</label>
-          <div class="border-black/40 h-[57.6px] p-4 bg-white border rounded cursor-not-allowed">
-            {{ displayRoomNumbers }}
+  <template v-if="user.role_id === 2">
+    <div class="w-full mt-16">
+      <DataTable v-model:selection="selectedRooms" class="rounded" :value="rooms" size="large" dataKey="id"
+        tableStyle="min-width: 50rem" :pt="{
+          thead: {
+            class: 'text-xl'
+          },
+        }">
+        <template #empty>
+          <h3 class="text-lg font-normal text-center">No room is found.</h3>
+        </template>
+        <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+        <Column field="room_number" header="Room Number"></Column>
+        <Column field="bed_type" header="Bed Type"></Column>
+        <Column field="number_of_bed" header="Number Of Bed"></Column>
+        <Column field="room_type.name" header="Room Type"></Column>
+        <Column field="price" header="Price"></Column>
+      </DataTable>
+    </div>
+    <div class="mt-6">
+      <h1 class="text-2xl font-semibold">Reserve Your Room</h1>
+      <form class="gap-y-3" @submit.prevent="openDialog">
+        <div class="flex gap-3">
+          <div class="md:w-1/3 flex flex-col w-full">
+            <label for="room_number">Room Number</label>
+            <div class="border-black/40 h-[57.6px] p-4 bg-white border rounded cursor-not-allowed">
+              {{ displayRoomNumbers }}
+            </div>
+          </div>
+          <div class=" md:w-1/3 flex flex-col w-full">
+            <label for="guest_name">Guest Name</label>
+            <InputText id="guest_name" v-model="reservationForm.guest_name" :class="{ 'p-invalid': errors.guest_name }"
+              class="" />
+            <InlineMessage v-if="errors.guest_name" severity="error" class="mt-2">{{ errors.guest_name }}
+            </InlineMessage>
+          </div>
+          <div class=" md:w-1/3 flex flex-col w-full">
+            <label for="totalPerson">Total Number Of Person</label>
+            <InputNumber id="totalPerson" v-model="reservationForm.total_person"
+              :class="{ 'p-invalid': errors.total_person }" class="" />
+            <InlineMessage v-if="errors.total_person" severity="error" class="mt-2">{{ errors.total_person }}
+            </InlineMessage>
           </div>
         </div>
-        <div class=" md:w-1/3 flex flex-col w-full">
-          <label for="guest_name">Guest Name</label>
-          <InputText id="guest_name" v-model="reservationForm.guest_name" :class="{ 'p-invalid': errors.guest_name }"
-            class="" />
-          <InlineMessage v-if="errors.guest_name" severity="error" class="mt-2">{{ errors.guest_name }}
-          </InlineMessage>
-        </div>
-        <div class=" md:w-1/3 flex flex-col w-full">
-          <label for="totalPerson">Total Number Of Person</label>
-          <InputNumber id="totalPerson" v-model="reservationForm.total_person"
-            :class="{ 'p-invalid': errors.total_person }" class="" />
-          <InlineMessage v-if="errors.total_person" severity="error" class="mt-2">{{ errors.total_person }}
-          </InlineMessage>
-        </div>
-      </div>
-      <div class="flex gap-3">
-        <div class="md:w-1/3 flex flex-col w-full">
-          <label for="reservedFrom">Reserve From</label>
-          <Calendar v-model="reservationForm.from_date" :minDate="minDate" :manualInput="false" id="reservedFrom"
-            :class="{ 'p-invalid': errors.from_date }" class="w-full" :pt="{
-              input: {
-                class: 'p-4 rounded'
-              }
-            }" />
-          <InlineMessage v-if="errors.from_date" severity="error" class="mt-2">{{ errors.from_date }}
-          </InlineMessage>
-        </div>
-        <div class="md:w-1/3 flex flex-col w-full">
-          <label for="reservedTo">Reserve To</label>
-          <Calendar v-model="reservationForm.to_date" :minDate="reservationForm.from_date || null" :manualInput="false"
-            id="reservedTo" :class="{ 'p-invalid': errors.to_date }" :pt="{
-              input: {
-                class: 'p-4 rounded'
-              }
-            }" />
-          <InlineMessage v-if="errors.to_date" severity="error" class="mt-2">{{ errors.to_date }}
-          </InlineMessage>
-        </div>
-        <div class="md:w-1/3 flex flex-col w-full cursor-not-allowed">
-          <label for="totalPrice">Total Price</label>
-          <div class="border-black/40 h-[57.6px] p-4 bg-white border rounded fontFamily">
-            {{ totalPrice }}
+        <div class="flex gap-3">
+          <div class="md:w-1/3 flex flex-col w-full">
+            <label for="reservedFrom">Reserve From</label>
+            <Calendar v-model="reservationForm.from_date" :minDate="minDate" :manualInput="false" id="reservedFrom"
+              :class="{ 'p-invalid': errors.from_date }" class="w-full" :pt="{
+                input: {
+                  class: 'p-4 rounded'
+                }
+              }" />
+            <InlineMessage v-if="errors.from_date" severity="error" class="mt-2">{{ errors.from_date }}
+            </InlineMessage>
+          </div>
+          <div class="md:w-1/3 flex flex-col w-full">
+            <label for="reservedTo">Reserve To</label>
+            <Calendar v-model="reservationForm.to_date" :minDate="reservationForm.from_date || null" :manualInput="false"
+              id="reservedTo" :class="{ 'p-invalid': errors.to_date }" :pt="{
+                input: {
+                  class: 'p-4 rounded'
+                }
+              }" />
+            <InlineMessage v-if="errors.to_date" severity="error" class="mt-2">{{ errors.to_date }}
+            </InlineMessage>
+          </div>
+          <div class="md:w-1/3 flex flex-col w-full cursor-not-allowed">
+            <label for="totalPrice">Total Price</label>
+            <div class="border-black/40 h-[57.6px] p-4 bg-white border rounded fontFamily">
+              {{ totalPrice }}
+            </div>
           </div>
         </div>
-      </div>
-      <Button label="Reserve" outlined class="my-3" type="submit" v-if="user" />
-      <InlineMessage severity="info" class="font-extralight w-full my-3 bg-white" :icon="null" v-else>Please login or
-        register to make a
-        reservation.</InlineMessage>
-    </form>
-  </div>
+        <Button label="Reserve" outlined class="my-3" type="submit" v-if="user" />
+        <InlineMessage severity="info" class="font-extralight w-full my-3 bg-white" :icon="null" v-else>Please login or
+          register to make a
+          reservation.</InlineMessage>
+      </form>
+    </div>
+  </template>
+  <template v-else>
+    <Link :href="route('admin.reservations.create')">
+    <div
+      class="group hover:bg-white w-full p-3 mt-6 transition-colors duration-300 bg-indigo-700 border border-indigo-700 rounded cursor-pointer">
+      <h1 class=" group-hover:text-indigo-700 text-xl font-semibold text-center text-white">Please Go to Admin Dashboard
+        to reserve a room</h1>
+    </div>
+    </Link>
+  </template>
   <Toast position="bottom-right" />
   <DynamicDialog @success="console.log('success')" @error="console.log('error')" />
 </template>
 
 <script setup>
-  import { router, useForm, usePage } from "@inertiajs/vue3";
+  import { router, useForm, usePage,Link } from "@inertiajs/vue3";
   import Button from "primevue/button";
   import Calendar from "primevue/calendar";
   import Column from "primevue/column";
@@ -201,5 +211,4 @@
 
   .fontFamily {
     font-family: Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
-  }
-</style>
+  }</style>
