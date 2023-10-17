@@ -7,12 +7,12 @@ use App\Mail\BookingNotificationMail;
 use App\Models\Reservation;
 use App\Models\Room;
 use App\Reporting\DashboardReporting;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Validation\ValidationException;
 use Exception;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class BookingController extends Controller
@@ -22,7 +22,7 @@ class BookingController extends Controller
      */
     public function index()
     {
-        if(request()->has("from_date") && request()->has("to_date")){
+        if(request()->has("from_date") || request()->has("to_date")){
             $rooms = Room::search(request(['from_date', 'to_date']))->with('roomType')->get();
             $searchRooms = [];
             //avaiable rooms but only one room for a particular room-type
@@ -81,5 +81,12 @@ class BookingController extends Controller
         }
     }
 
-
+    public function reservations() {
+        $reservations = Cache::remember("user.reservations", now()->addMinutes(30), function () {
+            return Reservation::where("user_id", Auth::id())->latest()->get();
+        });
+        return Inertia::render("User/Reservations", [
+            "reservations" => $reservations
+        ]);
+    }
 }

@@ -143,7 +143,6 @@
 
   // Calculate price per day
   let pricePerDay = computed(() => {
-    // return props.searchRooms.filter((item) => reservationForm.room_id.indexOf(item.id) >= 0).reduce((initialPrice, item) => initialPrice + item.price, 0)
     return Object.values(props.searchRooms).filter((item) => reservationForm.room_id.indexOf(item.id) >= 0).reduce((initialPrice, item) => initialPrice + item.price, 0);
   })
   //   Calculate total price

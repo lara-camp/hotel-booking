@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <h1 class="mb-6 text-2xl font-semibold">Available Room Types</h1>
+    <h1 class="mb-6 text-2xl font-semibold">Today's Available Room Types</h1>
     <Chart type="pie" :data="chartData" :options="chartOptions" class="w-full" />
   </div>
 </template>

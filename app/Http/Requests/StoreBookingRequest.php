@@ -24,10 +24,10 @@ class StoreBookingRequest extends FormRequest
     {
         return [
             'room_id.*' => 'required|exists:rooms,id',
-            "guest_name"=>"required",
+            "guest_name"=>"required|min:3|max:255",
             'total_person'=>"required|integer|min:1",
             'from_date' => 'required|date',
-            'to_date' => 'required|date',
+            'to_date' => 'required|date'
         ];
     }
 }
