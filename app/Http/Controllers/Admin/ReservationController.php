@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ReservationRequest;
+use App\Jobs\SendBookingMailJob;
 use App\Mail\BookingNotificationMail;
 use App\Mail\BookingUpdateMail;
 use App\Models\Reservation;
@@ -75,7 +76,7 @@ class ReservationController extends Controller
         $from_date = Carbon::parse($request->from_date);
         $to_date = Carbon::parse($request->to_date);
 
-        $availableRooms = Room::whereHas('reservations', function($query) use($from_date, $to_date) {
+        $reservedRooms = Room::whereHas('reservations', function($query) use($from_date, $to_date) {
             $query->whereBetween('from_date', [$from_date, $to_date])
                 ->orWhereBetween('to_date', [$from_date, $to_date])
                 ->orWhere(function($query) use ($from_date, $to_date) {
@@ -85,7 +86,7 @@ class ReservationController extends Controller
         })->get();
 
         foreach($request->room_id as $room) {
-            if($availableRooms->find($room)) {
+            if($reservedRooms->find($room)) {
                 throw ValidationException::withMessages(['room_id' => "Some of the rooms are reserved on given date."]);
             }
         }
@@ -105,15 +106,15 @@ class ReservationController extends Controller
             $reservation->save();
 
             $reservation->rooms()->attach($request->room_id);
+            SendBookingMailJob::dispatch($reservation, Auth::user()->email);
+
 
             DB::commit();
             Cache::flush();
-            Mail::to(Auth::user()->email)->send(new BookingNotificationMail($reservation));
             return redirect()->route('admin.reservations.index');
 
         } catch (\Exception $e) {
             DB::rollback();
-            dd($e->getMessage());
         }
     }
 
@@ -163,16 +164,6 @@ class ReservationController extends Controller
      */
     public function update(ReservationRequest $request, Reservation $reservation)
     {
-        $request->validate([
-            'room_id.*' => 'required|exists:rooms,id',
-            'guest_name' => 'required|min:3|max:256',
-            'total_person' => 'required|integer|min:1',
-            'total_price' => 'required|integer',
-            'from_date' => 'required|date',
-            'to_date' => 'required|date',
-            'checkin_time' => 'date',
-            'checkout_time' => 'date',
-        ]);
 
         //update the data from reservation
         $reservation->guest_name=$request->guest_name;
@@ -221,7 +212,7 @@ class ReservationController extends Controller
         $reservation->delete();
 
         Cache::flush();
-        
+
         return redirect()->route('admin.reservations.index')->isSuccessful();
     }
 }

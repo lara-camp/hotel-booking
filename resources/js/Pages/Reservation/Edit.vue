@@ -8,7 +8,7 @@
         <div class="gap-x-3 flex flex-wrap mb-3">
           <div class="md:w-1/2 flex flex-col flex-1 flex-shrink-0 w-full">
             <label for="room">Room Number</label>
-            <MultiSelect v-model="reservationForm.room_id" :options="available_rooms" optionLabel="room_number"
+            <MultiSelect v-model="reservationForm.room_id" :options="rooms" optionLabel="room_number"
               optionValue="id" filter placeholder="Select rooms" :maxSelectedLabels="5" class=" w-full"
               :class="{ 'p-invalid': errors.room_id }" />
             <InlineMessage v-if="errors.room_id" severity="error" class="mt-2">{{ errors.room_id }}</InlineMessage>
@@ -133,7 +133,7 @@ import { computed, ref, watchEffect } from 'vue';
   function submitForm() {
     reservationForm.put(route("admin.reservations.update", props.id), {
       preserveState: true,
-      onSuccess: () => toast.add({ severity: 'success', summary: 'Success', detail: 'Added Reservation Successfully', life: 3000 }),
+      onSuccess: () => toast.add({ severity: 'success', summary: 'Success', detail: 'Updated Reservation Successfully', life: 3000 }),
     })
   }
 
