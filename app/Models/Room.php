@@ -19,10 +19,6 @@ class Room extends Model
                 $query->whereDoesntHave('reservations',function($query) use ($filters) {
                     $query->whereBetween('from_date',[$filters['from_date'], $filters['to_date']])
                     ->orWhereBetween('to_date', [$filters['from_date'], $filters['to_date']])
-                    ->orWhere('from_date', '=', $filters['from_date'])
-                    ->orWhere('from_date', '=', $filters['to_date'])
-                    ->orWhere('to_date', '=', $filters['from_date'])
-                    ->orWhere('to_date', '=', $filters['to_date'])
                     //check if the reservation date is between from_date and to
                     ->orWhere(function ($query) use ($filters) {
                         $query->where('from_date', '<=', $filters['from_date'])
