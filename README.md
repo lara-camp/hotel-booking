@@ -47,3 +47,18 @@ Generate the key for the project first. Then, create the database for the projec
 php artian key:generate
 php artisan migrate
 ```
+Migrate and seed the database
+```
+php artisan migrate:fresh --seed
+```
+### Login Using the credentials
+Admin
+```
+Email: admin@gmail.com
+Password: password
+```
+User
+```
+Email: tom@gmail.com
+Password: password
+```
