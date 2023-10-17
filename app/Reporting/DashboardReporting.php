@@ -9,8 +9,7 @@ class DashboardReporting {
 
     public function popularRoomTypes($start_date, $end_date) : array {
 
-        $reservations = Reservation::whereBetween('from_date',[$start_date,$end_date])
-                        ->get();
+        $reservations = Reservation::whereBetween('from_date',[$start_date,$end_date])->get();
         //calculating the times of booking a specific room type
         $room_types = [];
         foreach ($reservations as $reservation) {
@@ -33,11 +32,7 @@ class DashboardReporting {
         $availableRooms = Room::whereDoesntHave('reservations', function($query) use ($from_date, $to_date) {
             $query->whereBetween('from_date',[$from_date, $to_date])
             ->orWhereBetween('to_date', [$from_date, $to_date])
-            ->orWhere('from_date', '=', $from_date)
-            ->orWhere('from_date', '=', $to_date)
-            ->orWhere('to_date', '=', $from_date)
-            ->orWhere('to_date', '=', $to_date)
-            //check if the reservation date is between from_date and to
+            //check if the reservation date is between from_date and to_date
             ->orWhere(function ($query) use ($from_date, $to_date) {
                 $query->where('from_date', '<=', $from_date)
                     ->where('to_date', '>=', $to_date);
@@ -56,9 +51,8 @@ class DashboardReporting {
     }
 
     public function availableRoomTypes($from_date = 0, $to_date = 0) : array { //[roomtype => numberOfRooms]
-        //getting availble rooms first
-        $availableRooms = $this->availableRooms($from_date, $to_date);
 
+        $availableRooms = $this->availableRooms($from_date, $to_date);
         //calculate the numbers of available rooms depending on a particular room type
         $availableRoomTypes = [];
         foreach ($availableRooms as $availableRoom) {
