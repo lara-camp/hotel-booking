@@ -1,5 +1,14 @@
 <template>
-  <template v-if="user.role_id === 2">
+  <template v-if="user?.role_id === 1">
+    <Link :href="route('admin.reservations.create')">
+    <div
+      class="group hover:bg-white w-full p-3 mt-6 transition-colors duration-300 bg-indigo-700 border border-indigo-700 rounded cursor-pointer">
+      <h1 class=" group-hover:text-indigo-700 text-xl font-semibold text-center text-white">Please Go to Admin Dashboard
+        to reserve a room</h1>
+    </div>
+    </Link>
+  </template>
+  <template v-else>
     <div class="w-full mt-16">
       <DataTable v-model:selection="selectedRooms" class="rounded" :value="rooms" size="large" dataKey="id"
         tableStyle="min-width: 50rem" :pt="{
@@ -80,21 +89,13 @@
       </form>
     </div>
   </template>
-  <template v-else>
-    <Link :href="route('admin.reservations.create')">
-    <div
-      class="group hover:bg-white w-full p-3 mt-6 transition-colors duration-300 bg-indigo-700 border border-indigo-700 rounded cursor-pointer">
-      <h1 class=" group-hover:text-indigo-700 text-xl font-semibold text-center text-white">Please Go to Admin Dashboard
-        to reserve a room</h1>
-    </div>
-    </Link>
-  </template>
+
   <Toast position="bottom-right" />
   <DynamicDialog @success="console.log('success')" @error="console.log('error')" />
 </template>
 
 <script setup>
-  import { router, useForm, usePage,Link } from "@inertiajs/vue3";
+  import { router, useForm, usePage, Link } from "@inertiajs/vue3";
   import Button from "primevue/button";
   import Calendar from "primevue/calendar";
   import Column from "primevue/column";
@@ -123,7 +124,7 @@
   const rooms = ref();
   const reservationForm = useForm({
     room_id: [],
-    guest_name: user.value.name,
+    guest_name: user.value?.name ? user.value.name : "",
     total_person: 0,
     from_date: searchParams.get("from_date") ? (new Date(searchParams.get("from_date"))) : "",
     to_date: searchParams.get("to_date") ? new Date(searchParams.get("to_date")) : ""
@@ -211,4 +212,5 @@
 
   .fontFamily {
     font-family: Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial, Lucida Grande, sans-serif;
-  }</style>
+  }
+</style>
