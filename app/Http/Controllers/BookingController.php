@@ -6,8 +6,10 @@ use App\Http\Requests\StoreBookingRequest;
 use App\Mail\BookingNotificationMail;
 use App\Models\Reservation;
 use App\Models\Room;
+use App\Models\RoomType;
 use App\Reporting\DashboardReporting;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -22,18 +24,23 @@ class BookingController extends Controller
      */
     public function index()
     {
-        if(request()->has("from_date") || request()->has("to_date")){
-            $rooms = Room::search(request(['from_date', 'to_date']))->with('roomType')->get();
+        $roomTypes = RoomType::get(["id", "name"]);
+        if (request()->has("from_date") || request()->has("to_date") || request()->has("room_type_id")) {
+            $rooms       = Room::search(request(['from_date', 'to_date']))->orWhereIn("room_type_id", explode(",", request("room_type_id")))->with('roomType')->get();
             $searchRooms = [];
             //avaiable rooms but only one room for a particular room-type
             foreach ($rooms as $room) {
-                if(!isset($searchRooms[$room->room_type_id])) $searchRooms[$room->room_type_id] = $room;
+                if (!isset($searchRooms[$room->room_type_id]))
+                    $searchRooms[$room->room_type_id] = $room;
             }
-            return Inertia::render('Welcome',[
-                'searchRooms' => $searchRooms
+            return Inertia::render('Welcome', [
+                'searchRooms' => $searchRooms,
+                'roomTypes' => $roomTypes
             ]);
         }
-        return Inertia::render("Welcome");
+        return Inertia::render("Welcome", [
+            "roomTypes" => $roomTypes
+        ]);
     }
 
     /**
