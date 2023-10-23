@@ -31,7 +31,7 @@ Route::middleware(["auth"])->as("user.")->group(function () {
     Route::post("/reserve",[BookingController::class,"store"])->name("reserve");
 });
 
-Route::middleware('auth')->resource('/',BookingController::class)->only(['index', 'create', 'store']);
+Route::middleware('auth')->resource('/',BookingController::class)->only(['create', 'store']);
 
 Route::middleware(['auth', 'admin'])->prefix("admin")->as("admin.")->group(function () {
     Route::get("/", ReportingController::class)->name("index");
