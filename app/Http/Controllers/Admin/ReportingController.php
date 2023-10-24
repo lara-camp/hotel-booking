@@ -34,7 +34,8 @@ class ReportingController extends Controller
             $monthlyGuests = Reservation::whereBetween('from_date',[$start_date,$end_date])
                                     ->sum('total_person');
 
-            $monthlyAmount = Reservation::whereBetween('from_date', [$start_date, $end_date])
+            $monthlyAmount = Reservation::withTrashed()
+                                    ->whereBetween('from_date', [$start_date, $end_date])
                                     ->sum('total_price');
 
             $data = [
