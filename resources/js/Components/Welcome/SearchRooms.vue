@@ -83,9 +83,13 @@
           </div>
         </div>
         <Button label="Reserve" outlined class="my-3" type="submit" v-if="user" />
-        <InlineMessage severity="info" class="font-extralight w-full my-3 bg-white" :icon="null" v-else>Please login or
-          register to make a
-          reservation.</InlineMessage>
+        <InlineMessage severity="info" class="font-extralight w-full my-3 bg-white" :icon="null" v-else>
+          Please
+          <Link href="/login" class="underline-offset-2 underline">login</Link>
+           or
+           <Link href="/register" class="underline-offset-2 underline">register</Link>
+            to make a reservation.
+        </InlineMessage>
       </form>
     </div>
   </template>
