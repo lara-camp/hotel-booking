@@ -44,14 +44,14 @@
 
 <script setup>
   import CustomPaginator from "@/Components/CustomPaginator.vue";
-  import { router, useForm, Head } from "@inertiajs/vue3";
-  import Button from 'primevue/button';
-  import Column from 'primevue/column';
-  import DataTable from 'primevue/datatable';
-  import DynamicDialog from 'primevue/dynamicdialog';
-  import Toast from "primevue/toast";
-  import { useConfirm } from "primevue/useconfirm";
-  import { useToast } from "primevue/usetoast";
+import { Head, router, useForm } from "@inertiajs/vue3";
+import Button from 'primevue/button';
+import Column from 'primevue/column';
+import DataTable from 'primevue/datatable';
+import DynamicDialog from 'primevue/dynamicdialog';
+import Toast from "primevue/toast";
+import { useConfirm } from "primevue/useconfirm";
+import { useToast } from "primevue/usetoast";
 
   defineProps({
     room_types: Object
@@ -93,17 +93,17 @@
 
   function confirmRestore(id, link) {
     confirm.require({
-      message: `Are you sure you want to delete room type #${id} permanently?`,
-      header: `Delete room type #${id} permanently`,
+      message: `Are you sure you want to restore room type #${id}?`,
+      header: `Restore room type #${id}`,
       icon: 'pi pi-info-circle',
-      acceptClass: 'p-button-danger',
+      acceptClass: 'p-button-primary',
       accept: () => {
         deleteRoomType.patch(link, {
           onError() {
             toast.add({
               severity: "error",
               summary: "Cannot Delete",
-              detail: `Room type #${id} is not deleted`,
+              detail: `Room type #${id} is not restored.`,
               life: 3000,
             })
           },
@@ -111,7 +111,7 @@
             toast.add({
               severity: "success",
               summary: "Deleted successfully",
-              detail: `Room type #${id} is deleted successfully`,
+              detail: `Room type #${id} is restored.`,
               life: 3000,
             })
             router.reload({ preserveState: true });
@@ -124,7 +124,6 @@
 </script>
 <script>
   import AdminLayout from '@/Layouts/AdminLayout.vue';
-import axios from "axios";
   export default {
     layout: AdminLayout
   }
