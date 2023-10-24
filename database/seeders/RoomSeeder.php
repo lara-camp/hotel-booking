@@ -62,5 +62,35 @@ class RoomSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
+        DB::table('rooms')->insert([
+          'room_number' => '126',
+          'room_type_id' => 5,
+          'bed_type' => 'Double',
+          'number_of_bed' => 1,
+          'price' => 150000,
+          'created_at' => now(),
+          'updated_at' => now(),
+      ]);
+
+      DB::table('rooms')->insert([
+        'room_number' => '127',
+        'room_type_id' => 5,
+        'bed_type' => 'Thriple',
+        'number_of_bed' => 1,
+        'price' => 150000,
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    DB::table('rooms')->insert([
+      'room_number' => '128',
+      'room_type_id' => 5,
+      'bed_type' => 'Double',
+      'number_of_bed' => 1,
+      'price' => 150000,
+      'created_at' => now(),
+      'updated_at' => now(),
+  ]);
     }
 }

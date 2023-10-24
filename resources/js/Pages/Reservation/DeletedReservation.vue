@@ -1,5 +1,5 @@
 <template>
-  <Head title="Reservations"/>
+  <Head title="Deleted Reservations" />
   <DataTable scrollable :value="reservations.data" tableStyle="min-width: 75rem" striped-rows class="bg-slate-100/80" :pt="{
     header: (options) => ({
       class: [
@@ -10,22 +10,14 @@
     <template #header>
       <div class=" flex justify-between gap-2 mb-3">
         <div class="">
-          <span class="text-900 text-5xl font-bold">Reservations</span>
+          <span class="text-900 text-5xl font-bold text-red-500">Deleted Reservations</span>
         </div>
         <div class="">
-          <Button label="Clear Filter" class="mr-3" outlined icon="pi pi-filter-slash" @click="clearFilter" />
-          <Button label="Filter" icon="pi pi-filter" class="mr-3" @click="showFilter" outlined />
-          <Link :href="route('admin.reservations.create')">
-          <Button label="Create" icon="pi pi-plus" outlined class="mr-3" />
-          </Link>
-          <Link :href="route('admin.reservations.archives')">
-          <Button label="Deleted Reservations" icon="" severity="danger" text />
-          </Link>
         </div>
       </div>
     </template>
     <template #empty>
-      <h3 class="text-lg font-normal text-center">No reservation is found.</h3>
+      <h3 class="text-lg font-normal text-center">No deleted reservation is found.</h3>
     </template>
     <Column field="id" header="id"></Column>
     <Column field="room_id" header="Room No">
@@ -74,10 +66,11 @@
     </Column>
     <Column header="Actions" class="w-52">
       <template #body="slotProps">
-        <Button icon="pi pi-pencil" aria-label="Submit" size="small" outlined class="mr-2"
-          @click="() => router.visit(route('admin.reservations.edit', slotProps.data.id))" />
-        <Button aria-label="Delete" icon="pi pi-trash" severity="danger" size="small" outlined
-          @click.prevent=" confirmDelete(slotProps.data.id)" :key="`confirmDialog${slotProps.data.id}`" />
+        <Button icon="pi pi-undo" aria-label="Submit" size="small" outlined class="mr-2"
+          @click="() => restoreSoftDelete('Reservation', slotProps.data.id, route('admin.reservations.restore', slotProps.data.id), confirm, toast, deleteRoomType, router)" />
+        <Button aria-label="Delete" icon="pi pi-times" severity="danger" size="small" outlined
+          @click.prevent="() => confirmDelete(slotProps.data.id, route('admin.room-types.force-delete', slotProps.data.id))"
+          :key="`confirmDialog${slotProps.data.id}`" />
       </template>
     </Column>
     <template #footer>
@@ -97,8 +90,7 @@
 <script setup>
   import CustomPaginator from "@/Components/CustomPaginator.vue";
   import Filter from "@/Components/Filter.vue";
-  import { Link, router,Head } from '@inertiajs/vue3';
-  import axios from 'axios';
+  import { Head, Link, router, useForm } from '@inertiajs/vue3';
   import Button from 'primevue/button';
   import Column from 'primevue/column';
   import DataTable from 'primevue/datatable';
@@ -130,24 +122,35 @@
     return null;
   }
 
-  // Delete Confirmation And Actions
+  // Delete confirmation and actions
   const confirm = useConfirm();
   const toast = useToast();
-  function confirmDelete(id) {
+  const deleteRoomType = useForm({});
+  function confirmDelete(id, link) {
     confirm.require({
-      message: `Are you sure you want to delete reservation #${id}?`,
-      header: `Delete Reservation #${id}`,
+      message: `Are you sure you want to delete reservation #${id} permanently?`,
+      header: `Delete reservation #${id} permanently`,
       icon: 'pi pi-info-circle',
       acceptClass: 'p-button-danger',
       accept: () => {
-        axios.delete(route('admin.reservations.destroy', id)).then(data => {
-          toast.add({
-            severity: "success",
-            summary: "Deleted successfully",
-            detail: `Reservation #${id} is deleted successfully`,
-            life: 3000,
-          });
-          router.reload({ preserveState: false });
+        deleteRoomType.delete(link, {
+          onError() {
+            toast.add({
+              severity: "error",
+              summary: "Cannot Delete",
+              detail: `Reservation #${id} is not deleted`,
+              life: 3000,
+            })
+          },
+          onSuccess() {
+            toast.add({
+              severity: "success",
+              summary: "Deleted successfully",
+              detail: `Reservation #${id} is deleted successfully`,
+              life: 3000,
+            })
+            router.reload({ preserveState: true });
+          }
         })
       }
     })
@@ -169,6 +172,7 @@
 </script>
 <script>
   import AdminLayout from "@/Layouts/AdminLayout.vue";
+  import restoreSoftDelete from "@/functions/restoreSoftDelete";
   export default {
     layout: AdminLayout
   }

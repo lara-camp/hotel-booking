@@ -15,9 +15,12 @@
         </div>
       </div>
     </template>
+    <template #empty>
+      <h3 class="text-lg font-normal text-center">No deleted room is found.</h3>
+    </template>
     <Column field="id" header="Id"></Column>
     <Column field="room_number" header="Room Number"></Column>
-    <Column field="roomtype.name" header="Room Type"></Column>
+    <Column field="room_type" header="Room Type"></Column>
     <Column field="bed_type" header="Bed type"></Column>
     <Column field="number_of_bed" header="Number of Beds"></Column>
     <Column field="price" header="Price">
@@ -25,13 +28,13 @@
         {{ formatCurrency(slotProps.data.price) }}
       </template>
     </Column>
-    <Column field="available" header="Availability"></Column>
     <Column header="Actions">
       <template #body="slotProps">
         <Button icon="pi pi-undo" aria-label="Submit" size="small" outlined class="mr-2"
-          @click="() => router.visit(route('admin.rooms.edit', slotProps.data.id))" />
+          @click="() => restoreSoftDelete('Room', slotProps.data.id, route('admin.rooms.restore', slotProps.data.id), confirm, toast, deleteRoom, router)" />
         <Button aria-label="Delete" icon="pi pi-times" severity="danger" size="small" outlined
-          @click.prevent=" confirmDelete(slotProps.data.id)" :key="`confirmDialog${slotProps.data.id}`" />
+          @click.prevent="() => confirmDelete(slotProps.data.id, route('admin.rooms.force-delete', slotProps.data.id))"
+          :key="`confirmDialog${slotProps.data.id}`" />
       </template>
     </Column>
     <template #footer>
@@ -49,8 +52,7 @@
 
 <script setup>
   import CustomPaginator from "@/Components/CustomPaginator.vue";
-  import { router } from '@inertiajs/vue3';
-  import axios from 'axios';
+  import { router, useForm } from "@inertiajs/vue3";
   import Button from 'primevue/button';
   import Column from 'primevue/column';
   import DataTable from 'primevue/datatable';
@@ -58,6 +60,7 @@
   import Toast from 'primevue/toast';
   import { useConfirm } from "primevue/useconfirm";
   import { useToast } from 'primevue/usetoast';
+
   defineProps({
     rooms: Object
   })
@@ -66,22 +69,35 @@
     return currency.toLocaleString('en-US', { style: 'currency', currency: 'MMK' });
   }
 
-  const toast = useToast();
+  // Delete confirmation and actions
   const confirm = useConfirm();
-  function confirmDelete(id) {
+  const toast = useToast();
+  const deleteRoom = useForm({});
+  function confirmDelete(id, link) {
     confirm.require({
       message: `Are you sure you want to delete room #${id} permanently?`,
-      header: `Delete room #${id} permanently.`,
+      header: `Delete room #${id} permanently`,
       icon: 'pi pi-info-circle',
       acceptClass: 'p-button-danger',
-      accept() {
-        axios.delete(route('admin.rooms.destroy', id)).then(data => {
-          toast.add({
-            severity: "success",
-            summary: "Deleted successfully",
-            detail: `Room #${id} is deleted successfully`,
-            life: 3000,
-          })
+      accept: () => {
+        deleteRoom.delete(link, {
+          onError() {
+            toast.add({
+              severity: "error",
+              summary: "Cannot Delete",
+              detail: `Room #${id} is not deleted`,
+              life: 3000,
+            })
+          },
+          onSuccess() {
+            toast.add({
+              severity: "success",
+              summary: "Deleted successfully",
+              detail: `Room #${id} is deleted successfully`,
+              life: 3000,
+            })
+            router.reload({ preserveState: true });
+          }
         })
       }
     })
@@ -89,6 +105,7 @@
 </script>
 <script>
   import AdminLayout from "@/Layouts/AdminLayout.vue";
+  import restoreSoftDelete from "@/functions/restoreSoftDelete";
   export default {
     layout: AdminLayout
   }

@@ -16,8 +16,14 @@
           <Link :href="route('admin.rooms.create')">
           <Button label="Create" icon="pi pi-plus" outlined class="mr-3" />
           </Link>
+          <Link :href="route('admin.rooms.archives')">
+          <Button label="Deleted Rooms" icon="" severity="danger" text />
+          </Link>
         </div>
       </div>
+    </template>
+    <template #empty>
+      <h3 class="text-lg font-normal text-center">No room is found.</h3>
     </template>
     <Column field="id" header="Id"></Column>
     <Column field="room_number" header="Room Number"></Column>
@@ -53,15 +59,15 @@
 
 <script setup>
   import CustomPaginator from "@/Components/CustomPaginator.vue";
-import { Head, Link, router } from '@inertiajs/vue3';
-import axios from 'axios';
-import Button from 'primevue/button';
-import Column from 'primevue/column';
-import DataTable from 'primevue/datatable';
-import DynamicDialog from 'primevue/dynamicdialog';
-import Toast from 'primevue/toast';
-import { useConfirm } from "primevue/useconfirm";
-import { useToast } from 'primevue/usetoast';
+  import { Head, Link, router } from '@inertiajs/vue3';
+  import axios from 'axios';
+  import Button from 'primevue/button';
+  import Column from 'primevue/column';
+  import DataTable from 'primevue/datatable';
+  import DynamicDialog from 'primevue/dynamicdialog';
+  import Toast from 'primevue/toast';
+  import { useConfirm } from "primevue/useconfirm";
+  import { useToast } from 'primevue/usetoast';
 
   const props = defineProps({
     rooms: Object

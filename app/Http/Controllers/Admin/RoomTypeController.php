@@ -69,7 +69,7 @@ class RoomTypeController extends Controller
         $room_type = RoomType::onlyTrashed()->findOrFail($id);
         $room_type->restore();
         Cache::flush();
-        return redirect()->route('admin.room-types.archives')->with('status', 'The room is restored');
+        return redirect()->route('admin.room-types.archives')->with('status', 'The room type is restored');
     }
 
     public function forceDelete($id) {
