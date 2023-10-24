@@ -210,9 +210,24 @@ class ReservationController extends Controller
     {
         DB::table('reservation_room')->where('reservation_id',$reservation->id)->delete();
         $reservation->delete();
-
         Cache::flush();
 
         return redirect()->route('admin.reservations.index')->isSuccessful();
+    }
+
+    public function archive() {
+        return Inertia::render('Reservation/DeletedReservation',[
+            'reservations' => Reservation::onlyTrashed()->get()
+        ]);
+    }
+
+    public function restore($reservation) {
+        $reservation->restore();
+        return redirect()->route('admin.reservations.index');
+    }
+
+    public function forceDelete($reservation) {
+        return $reservation->forceDelete();
+        return redirect()->route('admin.reservations.index');
     }
 }

@@ -41,6 +41,11 @@ Route::middleware(['auth', 'admin'])->prefix("admin")->as("admin.")->group(funct
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post("/profile/image", [ProfileController::class, 'updateProfileImage'])->name("profile.updateProfileImage");
+    
+    //reservations soft delete
+    Route::get("/reservations/archives", [ReservationController::class, 'archive']);
+    Route::patch("/reservations/{reservation}/restore", [RoomTypeController::class, "restore"])->name("reservations.restore");
+    Route::delete("/reservations/{reservation}/force-delete", [RoomTypeController::class, "forceDelete"])->name("reservations.force-delete");
 
     // Resources
     Route::resource('reservations', ReservationController::class);
@@ -50,6 +55,9 @@ Route::middleware(['auth', 'admin'])->prefix("admin")->as("admin.")->group(funct
     Route::get("/room-types/test", [RoomTypeController::class, "test"])->name("room-types.test");
     Route::patch("/room-types/{room_types}/restore", [RoomTypeController::class, "restore"])->name("room-types.restore");
     Route::delete("/room-types/{room_types}/force-delete", [RoomTypeController::class, "forceDelete"])->name("room-types.force-delete");
+
+
+
 });
 
 require __DIR__ . '/auth.php';
