@@ -12,23 +12,25 @@
     <Button icon="pi pi-pencil" class="!absolute bottom-0 left-0 bg-indigo-700 hover:bg-indigo-700"
       @click="() => profilePictureInputRef.click()" />
     <Button icon="pi pi-save" class="!absolute bottom-0 left-16 bg-indigo-700 hover:bg-indigo-700"
-      :loading="form.processing" @click="submit" :disabled="!form.isDirty"/>
+      :loading="form.processing" @click="submit" :disabled="!form.isDirty" />
   </form>
 </template>
 
 <script setup>
   import { useForm, usePage } from "@inertiajs/vue3";
   import Button from 'primevue/button';
+  import { useToast } from "primevue/usetoast";
   import { ref } from "vue";
 
   const user = usePage().props.auth.user;
+  const toast = useToast();
 
   const form = useForm({
     profile_image: ""
   })
 
   function submit() {
-    form.post(route(user.role_id===1 ? 'admin.profile.updateProfileImage' : 'user.profile.updateProfileImage'), {
+    form.post(route(user.role_id === 1 ? 'admin.profile.updateProfileImage' : 'user.profile.updateProfileImage'), {
       onSuccess() {
         toast.add({
           severity: "success",
