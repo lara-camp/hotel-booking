@@ -73,20 +73,10 @@ class ReservationController extends Controller
      */
     public function store(ReservationRequest $request)
     {
-        $from_date = Carbon::parse($request->from_date);
-        $to_date = Carbon::parse($request->to_date);
-
-        $reservedRooms = Room::whereHas('reservations', function($query) use($from_date, $to_date) {
-            $query->whereBetween('from_date', [$from_date, $to_date])
-                ->orWhereBetween('to_date', [$from_date, $to_date])
-                ->orWhere(function($query) use ($from_date, $to_date) {
-                    $query->where('from_date', '<=', $from_date)
-                        ->where('to_date', '>=', $to_date);
-                });
-        })->get();
+        $availableRooms = Room::availableRooms($request->from_date, $request->to_date)->get();
 
         foreach($request->room_id as $room) {
-            if($reservedRooms->find($room)) {
+            if(!$availableRooms->find($room)) {
                 throw ValidationException::withMessages(['room_id' => "Some of the rooms are reserved on given date."]);
             }
         }
