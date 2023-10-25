@@ -48,12 +48,7 @@ class BookingController extends Controller
      */
     public function store(StoreBookingRequest $request)
     {
-        $from_date = date('Y-m-d', strtotime($request->from_date));
-        $to_date = date('Y-m-d', strtotime($request->to_date));
-
-        $report = new DashboardReporting();
-        $availableRooms = $report->availableRooms($from_date, $to_date);
-
+        $availableRooms = Room::availableRooms($request->from_date, $request->to_date)->get();
         $price = 0;
         $duration = date('d', strtotime($request->to_date))-date('d', strtotime($request->from_date))+1;
         foreach($request->room_id as $room) {

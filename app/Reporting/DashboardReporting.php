@@ -13,8 +13,7 @@ class DashboardReporting {
         //calculating the times of booking a specific room type
         $room_types = [];
         foreach ($reservations as $reservation) {
-            $rooms = $reservation->rooms;
-            foreach ($rooms as $room) {
+            foreach ($reservation->rooms as $room) {
                 $room_type = $room->roomType;
                 if (!isset($room_types[$room_type->name])) $room_types[$room_type->name] = 1;
                 else $room_types[$room_type->name] ++;
@@ -23,21 +22,9 @@ class DashboardReporting {
         return $room_types;
     }
 
-    public function availableRooms($from_date = 0, $to_date = 0) : object {
-        //get reservations of today
-        $today = date('Y-m-d', strtotime('today'));
-        $from_date = $from_date ? date('Y-m-d', strtotime($from_date)) : $today;
-        $to_date = $to_date ? date('Y-m-d', strtotime($to_date)) : $today;
-
-        $availableRooms = Room::whereDoesntHave('reservations', function($query) use ($from_date, $to_date) {
-            $query->whereBetween('from_date',[$from_date, $to_date])
-            ->orWhereBetween('to_date', [$from_date, $to_date])
-            //check if the reservation date is between from_date and to_date
-            ->orWhere(function ($query) use ($from_date, $to_date) {
-                $query->where('from_date', '<=', $from_date)
-                    ->where('to_date', '>=', $to_date);
-            });
-        })->get();
+    public function availableRooms($from_date = 'today', $to_date = 'today') : object {
+        
+        $availableRooms = Room::availableRooms($from_date,$to_date)->get();
         return $availableRooms;
     }
 
@@ -50,7 +37,7 @@ class DashboardReporting {
         return $reservedRooms;
     }
 
-    public function availableRoomTypes($from_date = 0, $to_date = 0) : array { //[roomtype => numberOfRooms]
+    public function availableRoomTypes($from_date = 'today', $to_date = 'today') : array { //[roomtype => numberOfRooms]
 
         $availableRooms = $this->availableRooms($from_date, $to_date);
         //calculate the numbers of available rooms depending on a particular room type

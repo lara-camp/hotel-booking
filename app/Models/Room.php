@@ -36,4 +36,20 @@ class Room extends Model
     public function roomType() {
         return $this->belongsTo(RoomType::class)->withTrashed();
     }
+
+    public function scopeAvailableRooms($query, $from_date = 'today', $to_date = 'today') {
+
+        $from_date = date('Y-m-d', strtotime($from_date));
+        $to_date = date('Y-m-d', strtotime($to_date));
+
+        $query->whereDoesntHave('reservations', function($query) use ($from_date, $to_date) {
+            $query->whereBetween('from_date',[$from_date, $to_date])
+                ->orWhereBetween('to_date', [$from_date, $to_date])
+                ->orWhere(function ($query) use ($from_date, $to_date) {
+                   $query->where('from_date', '<=', $from_date)
+                        ->where('to_date', '>=', $to_date);
+                });
+        });
+    }
+    
 }
