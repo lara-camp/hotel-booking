@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ReservationRequest;
 use App\Jobs\SendBookingMailJob;
+use App\Jobs\SendUpdateBookingMailJob;
 use App\Mail\BookingNotificationMail;
 use App\Mail\BookingUpdateMail;
 use App\Models\Reservation;
@@ -106,8 +107,6 @@ class ReservationController extends Controller
             $reservation->save();
 
             $reservation->rooms()->attach($request->room_id);
-            SendBookingMailJob::dispatch($reservation, Auth::user()->email);
-
 
             DB::commit();
             Cache::flush();
@@ -195,8 +194,10 @@ class ReservationController extends Controller
         //save the changes
         $reservation->save();
         Cache::flush();
-        if(Auth::user()->role_id===2){
-            Mail::to(Auth::user()->email)->send(new BookingUpdateMail($reservation));
+        if(Auth::user()->role_id === 2){
+            SendUpdateBookingMailJob::dispatch($reservation, Auth::user()->email);
+        } else {
+            SendUpdateBookingMailJob::dispatch($reservation, $reservation->user->email);
         }
 
         //redirect, may need to update later
