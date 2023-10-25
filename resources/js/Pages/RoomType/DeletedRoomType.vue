@@ -17,15 +17,15 @@
         </div>
       </div>
     </template>
+    <template #empty>
+      <h3 class="text-lg font-normal text-center">No deleted room type is found.</h3>
+    </template>
     <Column field="id" header="id"></Column>
     <Column field="name" header="Type"></Column>
     <Column header="Actions">
       <template #body="slotProps">
         <Button icon="pi pi-undo" aria-label="Submit" size="small" outlined class="mr-2"
-          @click="() => confirmRestore(slotProps.data.id, route('admin.room-types.restore', slotProps.data.id))" />
-        <Button aria-label="Delete" icon="pi pi-times" severity="danger" size="small" outlined
-          @click.prevent="() => confirmDelete(slotProps.data.id, route('admin.room-types.force-delete', slotProps.data.id))"
-          :key="`confirmDialog${slotProps.data.id}`" />
+          @click="() => restoreSoftDelete('Room type', slotProps.data.id, route('admin.room-types.restore', slotProps.data.id), confirm, toast, deleteRoomType, router)" />
       </template>
     </Column>
     <template #footer>
@@ -44,7 +44,8 @@
 
 <script setup>
   import CustomPaginator from "@/Components/CustomPaginator.vue";
-  import { router, useForm, Head } from "@inertiajs/vue3";
+  import restoreSoftDelete from "@/functions/restoreSoftDelete";
+  import { Head, router, useForm } from "@inertiajs/vue3";
   import Button from 'primevue/button';
   import Column from 'primevue/column';
   import DataTable from 'primevue/datatable';
@@ -61,70 +62,9 @@
   const confirm = useConfirm();
   const toast = useToast();
   const deleteRoomType = useForm({});
-  function confirmDelete(id, link) {
-    confirm.require({
-      message: `Are you sure you want to delete room type #${id} permanently?`,
-      header: `Delete room type #${id} permanently`,
-      icon: 'pi pi-info-circle',
-      acceptClass: 'p-button-danger',
-      accept: () => {
-        deleteRoomType.delete(link, {
-          onError() {
-            toast.add({
-              severity: "error",
-              summary: "Cannot Delete",
-              detail: `Room type #${id} is not deleted`,
-              life: 3000,
-            })
-          },
-          onSuccess() {
-            toast.add({
-              severity: "success",
-              summary: "Deleted successfully",
-              detail: `Room type #${id} is deleted successfully`,
-              life: 3000,
-            })
-            router.reload({ preserveState: true });
-          }
-        })
-      }
-    })
-  }
-
-  function confirmRestore(id, link) {
-    confirm.require({
-      message: `Are you sure you want to delete room type #${id} permanently?`,
-      header: `Delete room type #${id} permanently`,
-      icon: 'pi pi-info-circle',
-      acceptClass: 'p-button-danger',
-      accept: () => {
-        deleteRoomType.patch(link, {
-          onError() {
-            toast.add({
-              severity: "error",
-              summary: "Cannot Delete",
-              detail: `Room type #${id} is not deleted`,
-              life: 3000,
-            })
-          },
-          onSuccess() {
-            toast.add({
-              severity: "success",
-              summary: "Deleted successfully",
-              detail: `Room type #${id} is deleted successfully`,
-              life: 3000,
-            })
-            router.reload({ preserveState: true });
-          }
-        })
-      }
-    })
-  }
-
 </script>
 <script>
   import AdminLayout from '@/Layouts/AdminLayout.vue';
-import axios from "axios";
   export default {
     layout: AdminLayout
   }

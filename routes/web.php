@@ -22,16 +22,16 @@ use Illuminate\Support\Facades\Route;
 Route::get("/", [BookingController::class, "index"])->name("index");
 
 Route::middleware(["auth"])->as("user.")->group(function () {
-    Route::get("/my-reservations",[BookingController::class,"reservations"])->name("reservations");
+    Route::get("/my-reservations", [BookingController::class, "reservations"])->name("reservations");
     Route::inertia("/profile", "User/Profile")->name("profile");
     Route::patch("/profile", [ProfileController::class, "update"])->name("profile.update");
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post("/profile/image", [ProfileController::class, 'updateProfileImage'])->name("profile.updateProfileImage");
 
-    Route::post("/reserve",[BookingController::class,"store"])->name("reserve");
+    Route::post("/reserve", [BookingController::class, "store"])->name("reserve");
 });
 
-Route::middleware('auth')->resource('/',BookingController::class)->only(['create', 'store']);
+Route::middleware('auth')->resource('/', BookingController::class)->only(['create', 'store']);
 
 Route::middleware(['auth', 'admin'])->prefix("admin")->as("admin.")->group(function () {
     Route::get("/", ReportingController::class)->name("index");
@@ -41,23 +41,21 @@ Route::middleware(['auth', 'admin'])->prefix("admin")->as("admin.")->group(funct
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post("/profile/image", [ProfileController::class, 'updateProfileImage'])->name("profile.updateProfileImage");
-    
-    //reservations soft delete
-    Route::get("/reservations/archives", [ReservationController::class, 'archive']);
-    Route::patch("/reservations/{reservation}/restore", [RoomTypeController::class, "restore"])->name("reservations.restore");
-    Route::delete("/reservations/{reservation}/force-delete", [RoomTypeController::class, "forceDelete"])->name("reservations.force-delete");
 
-    // Resources
+    // Reservation
+    Route::get("/reservations/archives", [ReservationController::class, 'archives'])->name("reservations.archives");
+    Route::patch("/reservations/{reservations}/restore", [ReservationController::class, "restore"])->name("reservations.restore");
     Route::resource('reservations', ReservationController::class);
+
+    // Room
+    Route::get("/rooms/archives", [RoomController::class, "archives"])->name("rooms.archives");
+    Route::patch("/rooms/{rooms}/restore", [RoomController::class, "restore"])->name("rooms.restore");
     Route::resource('rooms', RoomController::class);
-    Route::resource('room-types', RoomTypeController::class)->except(['create', 'edit', 'show']);
+
+    // Room Type
     Route::get('/room-types/archives', [RoomTypeController::class, 'archives'])->name('room-types.archives');
-    Route::get("/room-types/test", [RoomTypeController::class, "test"])->name("room-types.test");
     Route::patch("/room-types/{room_types}/restore", [RoomTypeController::class, "restore"])->name("room-types.restore");
-    Route::delete("/room-types/{room_types}/force-delete", [RoomTypeController::class, "forceDelete"])->name("room-types.force-delete");
-
-
-
+    Route::resource('room-types', RoomTypeController::class)->except(['create', 'edit', 'show']);
 });
 
 require __DIR__ . '/auth.php';

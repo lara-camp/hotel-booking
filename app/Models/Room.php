@@ -26,7 +26,7 @@ class Room extends Model
                     });
                 });
             });
-        });  
+        });
     }
 
     public function reservations() {
