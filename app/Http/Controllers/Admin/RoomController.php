@@ -155,12 +155,4 @@ class RoomController extends Controller
         Cache::flush();
         return redirect()->route('admin.rooms.index')->with('status', 'The room is restored');
     }
-
-    public function forceDelete($id) {
-        $room = Room::onlyTrashed()->findOrFail($id);
-        $room->forceDelete();
-        Cache::flush();
-        // Toast not shown yet
-        return redirect()->route('admin.rooms.index');
-    }
 }

@@ -26,9 +26,6 @@
       <template #body="slotProps">
         <Button icon="pi pi-undo" aria-label="Submit" size="small" outlined class="mr-2"
           @click="() => restoreSoftDelete('Room type', slotProps.data.id, route('admin.room-types.restore', slotProps.data.id), confirm, toast, deleteRoomType, router)" />
-        <Button aria-label="Delete" icon="pi pi-times" severity="danger" size="small" outlined
-          @click.prevent="() => confirmDelete(slotProps.data.id, route('admin.room-types.force-delete', slotProps.data.id))"
-          :key="`confirmDialog${slotProps.data.id}`" />
       </template>
     </Column>
     <template #footer>
@@ -65,35 +62,6 @@
   const confirm = useConfirm();
   const toast = useToast();
   const deleteRoomType = useForm({});
-  function confirmDelete(id, link) {
-    confirm.require({
-      message: `Are you sure you want to delete room type #${id} permanently?`,
-      header: `Delete room type #${id} permanently`,
-      icon: 'pi pi-info-circle',
-      acceptClass: 'p-button-danger',
-      accept: () => {
-        deleteRoomType.delete(link, {
-          onError() {
-            toast.add({
-              severity: "error",
-              summary: "Cannot Delete",
-              detail: `Room type #${id} is not deleted`,
-              life: 3000,
-            })
-          },
-          onSuccess() {
-            toast.add({
-              severity: "success",
-              summary: "Deleted successfully",
-              detail: `Room type #${id} is deleted successfully`,
-              life: 3000,
-            })
-            router.reload({ preserveState: true });
-          }
-        })
-      }
-    })
-  }
 </script>
 <script>
   import AdminLayout from '@/Layouts/AdminLayout.vue';

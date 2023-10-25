@@ -227,9 +227,4 @@ class ReservationController extends Controller
         Cache::flush();
         return redirect()->route('admin.reservations.index');
     }
-
-    public function forceDelete($reservation) {
-        return $reservation->forceDelete();
-        return redirect()->route('admin.reservations.index');
-    }
 }

@@ -45,19 +45,16 @@ Route::middleware(['auth', 'admin'])->prefix("admin")->as("admin.")->group(funct
     // Reservation
     Route::get("/reservations/archives", [ReservationController::class, 'archives'])->name("reservations.archives");
     Route::patch("/reservations/{reservations}/restore", [ReservationController::class, "restore"])->name("reservations.restore");
-    Route::delete("/reservations/{reservation}/force-delete", [ReservationController::class, "forceDelete"])->name("reservations.force-delete");
     Route::resource('reservations', ReservationController::class);
 
     // Room
     Route::get("/rooms/archives", [RoomController::class, "archives"])->name("rooms.archives");
     Route::patch("/rooms/{rooms}/restore", [RoomController::class, "restore"])->name("rooms.restore");
-    Route::delete("/rooms/{rooms}/force-delete", [RoomController::class, "forceDelete"])->name("rooms.force-delete");
     Route::resource('rooms', RoomController::class);
 
     // Room Type
     Route::get('/room-types/archives', [RoomTypeController::class, 'archives'])->name('room-types.archives');
     Route::patch("/room-types/{room_types}/restore", [RoomTypeController::class, "restore"])->name("room-types.restore");
-    Route::delete("/room-types/{room_types}/force-delete", [RoomTypeController::class, "forceDelete"])->name("room-types.force-delete");
     Route::resource('room-types', RoomTypeController::class)->except(['create', 'edit', 'show']);
 });
 
