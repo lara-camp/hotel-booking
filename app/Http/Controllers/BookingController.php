@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreBookingRequest;
+use App\Jobs\SendBookingMailJob;
 use App\Mail\BookingNotificationMail;
 use App\Models\Reservation;
 use App\Models\Room;
@@ -75,7 +76,8 @@ class BookingController extends Controller
             Cache::flush();
 
             DB::commit();
-            Mail::to(Auth::user()->email)->send(new BookingNotificationMail($reservation));
+            SendBookingMailJob::dispatch($reservation, Auth::user()->email);
+            // Mail::to(Auth::user()->email)->send(new BookingNotificationMail($reservation));
             return redirect()->back();
 
         } catch (Exception $e) {
