@@ -8,8 +8,8 @@ use App\Models\Room;
 class DashboardReporting {
 
     public function popularRoomTypes($start_date, $end_date) : array {
-
-        $reservations = Reservation::whereBetween('from_date',[$start_date,$end_date])->get();
+        //with('rooms.roomType') to reduce duplicated queries
+        $reservations = Reservation::whereBetween('from_date',[$start_date,$end_date])->with('rooms.roomType')->get();
         //calculating the times of booking a specific room type
         $room_types = [];
         foreach ($reservations as $reservation) {
@@ -23,14 +23,13 @@ class DashboardReporting {
     }
 
     public function availableRooms($from_date = 'today', $to_date = 'today') : object {
-        
-        $availableRooms = Room::availableRooms($from_date,$to_date)->get();
+        //with('roomType') to reduce duplicated queries when avaiableRoomTypes() is run
+        $availableRooms = Room::availableRooms($from_date,$to_date)->with('roomType:id,name')->get();
         return $availableRooms;
     }
 
-    public function availableRoomTypes($from_date = 'today', $to_date = 'today') : array { //[roomtype => numberOfRooms]
+    public function availableRoomTypes(object $availableRooms) : array { //[roomtype => numberOfRooms]
 
-        $availableRooms = $this->availableRooms($from_date, $to_date);
         //calculate the numbers of available rooms depending on a particular room type
         $availableRoomTypes = [];
         foreach ($availableRooms as $availableRoom) {
