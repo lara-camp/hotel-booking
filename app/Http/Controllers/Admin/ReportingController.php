@@ -27,8 +27,8 @@ class ReportingController extends Controller
         }
         else{
             $report = new DashboardReporting();
-            $todayAvailableRoomTypes = $report->availableRoomTypes();
             $todayAvailableRooms = $report->availableRooms();
+            $todayAvailableRoomTypes = $report->availableRoomTypes($todayAvailableRooms);
             $totalRooms = $report->totalRooms();
 
             $monthlyPopularRoomTypes = $report->popularRoomTypes($start_month, $end_month);
