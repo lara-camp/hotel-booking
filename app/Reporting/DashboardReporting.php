@@ -28,15 +28,6 @@ class DashboardReporting {
         return $availableRooms;
     }
 
-    //reserved rooms for today
-    public function reservedRooms() : object {
-        $today = date('Y-m-d', strtotime('today'));
-        $reservedRooms = Room::whereHas('reservations', function($query) use ($today) {
-            $query->where('from_date', '=', $today);
-        })->get();
-        return $reservedRooms;
-    }
-
     public function availableRoomTypes($from_date = 'today', $to_date = 'today') : array { //[roomtype => numberOfRooms]
 
         $availableRooms = $this->availableRooms($from_date, $to_date);
