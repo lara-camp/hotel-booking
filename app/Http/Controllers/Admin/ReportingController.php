@@ -18,8 +18,8 @@ class ReportingController extends Controller
     public function __invoke(Request $request)
     {
         $month = date('M');
-        $start_date = date('Y-m-d h:i:s', strtotime("$month 1"));
-        $end_date = date('Y-m-d h:i:s', strtotime('+1 month', strtotime($month)));
+        $start_month = date('Y-m-d h:i:s', strtotime("$month 1"));
+        $end_month = date('Y-m-d h:i:s', strtotime('+1 month', strtotime($month)));
         $report = new DashboardReporting();
 
         if(Cache::has('cache_data')){
@@ -29,21 +29,19 @@ class ReportingController extends Controller
             $report = new DashboardReporting();
             $todayAvailableRoomTypes = $report->availableRoomTypes();
             $todayAvailableRooms = $report->availableRooms();
-            $todayReservedRooms = $report->reservedRooms();
             $totalRooms = $report->totalRooms();
 
-            $monthlyPopularRoomTypes = $report->popularRoomTypes($start_date, $end_date);
-            $monthlyGuests = Reservation::whereBetween('from_date',[$start_date,$end_date])
+            $monthlyPopularRoomTypes = $report->popularRoomTypes($start_month, $end_month);
+            $monthlyGuests = Reservation::whereBetween('from_date',[$start_month,$end_month])
                                     ->sum('total_person');
 
             $monthlyAmount = Reservation::withTrashed()
-                                    ->whereBetween('from_date', [$start_date, $end_date])
+                                    ->whereBetween('from_date', [$start_month, $end_month])
                                     ->sum('total_price');
 
             $data = [
                 'todayAvailableRoomTypes' =>$todayAvailableRoomTypes,
                 'todayAvailableRooms'=>$todayAvailableRooms,
-                'todayReservedRooms'=>$todayReservedRooms,
                 'monthlyPopularRoomTypes'=>$monthlyPopularRoomTypes,
                 'monthlyGuests'=>$monthlyGuests,
                 'monthlyAmount'=>$monthlyAmount,
