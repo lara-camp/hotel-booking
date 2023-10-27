@@ -32,7 +32,8 @@ class ReportingController extends Controller
             $totalRooms = $report->totalRooms();
 
             $monthlyPopularRoomTypes = $report->popularRoomTypes($start_month, $end_month);
-            $monthlyGuests = Reservation::whereBetween('from_date',[$start_month,$end_month])
+            $monthlyGuests = Reservation::withTrashed()
+                                    ->whereBetween('from_date',[$start_month,$end_month])
                                     ->sum('total_person');
 
             $monthlyAmount = Reservation::withTrashed()
